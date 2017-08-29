@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+from .decorators import abstractmethod
+
+
+class DataObjectMixin:
+    __HEADERS__ = []
+
+    @classmethod
+    def from_array(cls, array):
+        assert isinstance(array, list)
+        return cls(*array)
+
+    @classmethod
+    def from_json(cls, json):
+        assert isinstance(json, dict)
+        return cls(*[json[key] for key in cls.__HEADERS__])
+
+    @classmethod
+    @abstractmethod
+    def from_line(cls, line):
+        pass
+
+
+# noinspection PyPropertyDefinition
+class DataObjectsMixin:
+    __CLASS__ = DataObjectMixin
+
+
+def dataobject(*headers):
+    assert all(isinstance(header, str) for header in headers)
+
+    def wrapper(class_):
+        # noinspection PyAbstractClass,PyArgumentList
+        class Wrapper(class_, DataObjectMixin):
+            __name__ = class_.__name__
+            __HEADERS__ = list(headers)
+
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+
+        return Wrapper
+
+    return wrapper
+
+
+def dataobjects(data_object_class):
+    assert isinstance(data_object_class, DataObjectsMixin)
+
+    def wrapper(class_):
+        class Wrapper(class_, DataObjectsMixin):
+            __name__ = class_.__name__
+            __CLASS__ = data_object_class
+
+        return Wrapper
+
+    return wrapper

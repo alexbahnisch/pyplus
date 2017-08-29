@@ -1,0 +1,11 @@
+# root:
+.cache
+.eggs
+.idea
+.tox
+build
+dist
+
+# wildcards:
+!**.gitkeep
+**.egg-info

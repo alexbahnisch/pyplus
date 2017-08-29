@@ -1,0 +1,38 @@
+language: python
+
+python:
+    - 2.7
+    - 3.5
+    - 3.6
+
+install:
+  - pip install tox-travis
+
+script:
+  - tox
+
+notifications:
+  email: true
+
+#deploy:
+#  - provider: pypi
+#    server: https://test.pypi.org/legacy/
+#    user: <user>
+#    password:
+#      secure: <encrypted-password>
+#    distributions: sdist bdist_wheel
+#    on:
+#      branch: master
+#      python: 3.6
+#      tags: false
+#
+#  - provider: pypi
+#    server: https://upload.pypi.org/legacy/
+#    user: <user>
+#    password:
+#      secure: <encrypted-password>
+#    distributions: sdist bdist_wheel
+#    on:
+#      branch: master
+#      python: 3.6
+#      tags: true
