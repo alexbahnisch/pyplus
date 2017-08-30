@@ -25,6 +25,21 @@ class DataObjectMixin:
 class DataObjectsMixin:
     __CLASS__ = DataObjectMixin
 
+    def __init__(self):
+        self.__objects = []
+
+    def __iter__(self):
+        return iter(self.__objects)
+
+    def __getitem__(self, item):
+        return self.__objects[item]
+
+    def __len__(self):
+        return len(self.__objects)
+
+    def process(self):
+        pass
+
 
 def dataobject(*headers):
     assert all(isinstance(header, str) for header in headers)

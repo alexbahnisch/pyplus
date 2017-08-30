@@ -29,12 +29,10 @@ setup(
     install_requires=[
         "future>=0.16.0"
     ],
-    setup_requires=[
+    tests_require=[
+        "pytest>=3.1.3",
         "pytest-runner>=2.11.1",
         "tox>=2.7.0"
-    ],
-    tests_require=[
-        "pytest>=3.1.3"
     ],
     test_suite="src.tests"
 )

@@ -1,48 +1,51 @@
 #!/usr/bin/env python
 from pyplus.data import dataobject, DataObjectMixin
+from pyplus.test import assert_exception
 
 
 @dataobject("index", "name", "value")
 class Object1:
     def __init__(self, index, name, value):
-        self._index = index
-        self._name = name
-        self._value = value
+        self.index = index
+        self.name = name
+        self.value = value
+
+    def __eq__(self, other):
+        try:
+            return self.index == other.index and self.name == other.name and self.value == other.value
+        except AttributeError:
+            return False
 
 
 class Object2(DataObjectMixin):
     __HEADERS__ = ["index", "name", "value"]
 
     def __init__(self, index, name, value):
-        self._index = index
-        self._name = name
-        self._value = value
+        self.index = index
+        self.name = name
+        self.value = value
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.index == other.index and self.name == other.name and self.value == other.value
+        else:
+            return False
 
 
 def test_dataobject():
-    x11 = Object1.from_array([1, "object", 1.1])
-    x12 = x11.from_json({"index": 1, "name": "object", "value": 1.1})
+    object1 = Object1(1, "object", 1.1)
+    assert object1 == Object1.from_array([1, "object", 1.1])
+    assert object1 == object1.from_json({"index": 1, "name": "object", "value": 1.1})
 
-    try:
-        x13 = Object1.from_line("")
-        assert False
-    except NotImplementedError:
-        assert True
+    assert_exception(Object1.from_line, AttributeError)
+    assert_exception(object1.from_line, AttributeError)
 
-    x14 = Object1(1, "object", 1.1)
+    object2 = Object2(1, "object", 1.1)
+    assert object2 == Object2.from_array([1, "object", 1.1])
+    assert object2 == object2.from_json({"index": 1, "name": "object", "value": 1.1})
 
-    x21 = Object2.from_array([1, "object", 1.1])
-    x22 = x21.from_json({"index": 1, "name": "object", "value": 1.1})
-
-    try:
-        x23 = Object2.from_line("")
-        assert False
-    except NotImplementedError:
-        assert True
-
-    x24 = Object2(1, "object", 1.1)
-
-    print()
+    assert_exception(Object2.from_line, AttributeError)
+    assert_exception(object2.from_line, AttributeError)
 
 
 if __name__ == "__main__":

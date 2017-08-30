@@ -51,7 +51,7 @@ def parse(string, exception=True):
         return string
 
 
-def pass_parser(parser):
+def create_parser(parser):
     if callable(parser):
         return parser
     elif parser:

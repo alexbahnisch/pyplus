@@ -1,23 +1,24 @@
 #!/usr/bin/env python
-from collections import OrderedDict
-from csv import reader
-from json import load
-from pathlib import Path
-from re import split
+from collections import OrderedDict as _OrderedDict
+from csv import reader as _reader
+from json import load as _load
+from pathlib import Path as _Path
+from re import split as _split
 
-from .parse import pass_parser
+from .parse import create_parser as _create_parser
+from .string import snake_case as _snake_case
 
 
 def string2alias(alias):
-    return filter(None, split("[.]", alias))
+    return filter(None, _split("[\[./\\\]]", alias))
 
 
 def _csv2dict(path, headers, parse, sep):
-    path, headers, parser = Path(str(path)).resolve(), bool(headers), pass_parser(parse)
-    dict_ = OrderedDict()
+    path, headers, parser = _Path(str(path)).resolve(), bool(headers), _create_parser(parse)
+    dict_ = _OrderedDict()
 
     with path.open("r") as read_file:
-        csv_reader = reader(read_file, sep=sep)
+        csv_reader = _reader(read_file, sep=sep)
 
         if headers:
             for row_index, row in enumerate(csv_reader):
@@ -46,11 +47,11 @@ def _csv2dict(path, headers, parse, sep):
 
 
 def _csv2list(path, headers, parse, sep=","):
-    path, headers, parser = Path(str(path)).resolve(), bool(headers), pass_parser(parse)
+    path, headers, parser = _Path(str(path)).resolve(), bool(headers), _create_parser(parse)
     list_ = list()
 
     with path.open("r") as read_file:
-        csv_reader = reader(read_file, sep=sep)
+        csv_reader = _reader(read_file, sep=sep)
 
         if headers:
             for row_index, row in enumerate(csv_reader):
@@ -77,10 +78,10 @@ def csv2list(path, headers=True, parse=True):
 
 
 def json2object(path, alias=None):
-    path, alias = Path(str(path)).resolve(), string2alias(alias)
+    path, alias = _Path(str(path)).resolve(), string2alias(alias)
 
     with path.open("r") as file_io:
-        json = load(file_io)
+        json = _load(file_io)
 
     for key in alias:
         try:
