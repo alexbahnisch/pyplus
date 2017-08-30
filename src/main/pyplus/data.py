@@ -2,7 +2,7 @@
 from .decorators import abstractmethod
 
 
-class DataObjectMixin:
+class DataObjectMixin(object):
     __HEADERS__ = []
 
     @classmethod
@@ -22,7 +22,7 @@ class DataObjectMixin:
 
 
 # noinspection PyPropertyDefinition
-class DataObjectsMixin:
+class DataObjectsMixin(object):
     __CLASS__ = DataObjectMixin
 
     def __init__(self):
@@ -51,7 +51,7 @@ def dataobject(*headers):
             __HEADERS__ = list(headers)
 
             def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
+                super(Wrapper, self).__init__(*args, **kwargs)
 
         return Wrapper
 

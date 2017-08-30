@@ -4,7 +4,7 @@ from pyplus.test import assert_exception
 
 
 @dataobject("index", "name", "value")
-class Object1:
+class Object1(object):
     def __init__(self, index, name, value):
         self.index = index
         self.name = name
