@@ -1,2 +1,2 @@
-# python-plus
-A python extension library.
+# pyplus
+A python extensions library.
