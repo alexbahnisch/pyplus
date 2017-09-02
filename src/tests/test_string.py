@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from collectivex.string import snake_case
+from pyplus.string import snake_case
 
 STRINGS = ["CamelCase2SnakeCase"]
 
