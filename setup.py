@@ -4,22 +4,23 @@ from setuptools import find_packages, setup
 
 setup(
     name="pyplus",
-    version="0.0.2",
-    description="A python extension library.",
+    version="0.0.1",
+    description="A library containing a collection of python extensions.",
     url="https://github.com/alexbahnisch/pyplus",
     author="Alex Bahnisch",
     author_email="alexbahnisch@gmail.com",
     license="MIT",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
         "Natural Language :: English",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7"
+        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5"
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython"
     ],
