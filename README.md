@@ -1,12 +1,12 @@
-# collectivex
+# py+
 A library containing a collection of python extensions.
 
 #### Installation 
 ```bash
-pip install collectivex
+pip install pyplus
 ```
 
 #### Usage
 ```python
-import collectivex
+import pyplus
 ```

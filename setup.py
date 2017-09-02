@@ -3,10 +3,10 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="collectivex",
+    name="pyplus",
     version="0.0.1",
     description="A library containing a collection of python extensions.",
-    url="https://github.com/alexbahnisch/collectivex",
+    url="https://github.com/alexbahnisch/pyplus",
     author="Alex Bahnisch",
     author_email="alexbahnisch@gmail.com",
     license="MIT",
@@ -24,7 +24,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython"
     ],
-    keywords="collection collective extensions python",
+    keywords="extensions plus python",
     packages=find_packages("src/main", exclude=["tests"]),
     package_dir={"": "src/main"},
     install_requires=[

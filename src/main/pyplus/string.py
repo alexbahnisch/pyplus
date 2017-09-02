@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from re import compile
 
-
 CAMEL_CASE_SPACE1 = compile(r"([A-Z])([A-Z][a-z]+)")
 CAMEL_CASE_SPACE2 = compile(r"([a-z\d])([A-Z])")
 INVALID_CHARS = compile(r"\W")
