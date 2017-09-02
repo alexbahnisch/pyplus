@@ -6,7 +6,6 @@ from pathlib import Path as _Path
 from re import split as _split
 
 from .parse import create_parser as _create_parser
-from .string import snake_case as _snake_case
 
 
 def string2alias(alias):

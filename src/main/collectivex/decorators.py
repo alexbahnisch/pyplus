@@ -33,7 +33,7 @@ def staticmethod(method):
     return wrapper
 
 
-def time(logger=print):
+def timer(logger=print):
     def decorator(method):
         @_wraps(method)
         def wrapper(*args, **kwargs):

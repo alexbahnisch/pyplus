@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from pyplus.data import dataobject, DataObjectMixin
-from pyplus.test import assert_exception
+from collectivex.data import dataobject, DataObjectMixin
+from collectivex.test import assert_exception
 
 
 @dataobject("index", "name", "value")
