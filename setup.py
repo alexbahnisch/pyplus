@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pyplus",
-    version="0.0.1",
+    version="0.0.2",
     description="A library containing a collection of python extensions.",
     url="https://github.com/alexbahnisch/pyplus",
     author="Alex Bahnisch",
@@ -24,8 +24,8 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython"
     ],
-    keywords="extensions plus python",
-    packages=find_packages("src/main", exclude=["tests"]),
+    keywords="collection extensions plus python",
+    packages=find_packages("src/main"),
     package_dir={"": "src/main"},
     install_requires=[
         "future>=0.16.0"
