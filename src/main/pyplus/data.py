@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from .decorators import abstractmethod
+from .abstract import abstractclassmethod
 
 
 class DataObjectMixin(object):
@@ -15,8 +15,7 @@ class DataObjectMixin(object):
         assert isinstance(json, dict)
         return cls(*[json[key] for key in cls.__HEADERS__])
 
-    @classmethod
-    @abstractmethod
+    @abstractclassmethod
     def from_line(cls, line):
         pass
 
