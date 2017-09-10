@@ -21,6 +21,9 @@ class LazyObject(object):
         except AttributeError:
             return False
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __setattr__(self, key, value):
         if hasattr(self, key):
             object.__setattr__(self, key, value)

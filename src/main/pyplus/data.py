@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-from .abstract import abstractclassmethod
+from .abstract import abstractclassmethod as _abstractclassmethod
 
 
+# noinspection PyMethodParameters
 class DataObjectMixin(object):
     __HEADERS__ = []
 
@@ -15,7 +16,7 @@ class DataObjectMixin(object):
         assert isinstance(json, dict)
         return cls(*[json[key] for key in cls.__HEADERS__])
 
-    @abstractclassmethod
+    @_abstractclassmethod
     def from_line(cls, line):
         pass
 
@@ -25,18 +26,18 @@ class DataObjectsMixin(object):
     __CLASS__ = DataObjectMixin
 
     def __init__(self):
-        self.__objects = []
-
-    def __iter__(self):
-        return iter(self.__objects)
+        self._objects = []
 
     def __getitem__(self, item):
-        return self.__objects[item]
+        return self._objects[item]
+
+    def __iter__(self):
+        return iter(self._objects)
 
     def __len__(self):
-        return len(self.__objects)
+        return len(self._objects)
 
-    def process(self):
+    def init(self):
         pass
 
 
@@ -45,14 +46,14 @@ def dataobject(*headers):
 
     def wrapper(class_):
         # noinspection PyAbstractClass,PyArgumentList
-        class Wrapper(class_, DataObjectMixin):
+        class Wrapped(class_, DataObjectMixin):
             __name__ = class_.__name__
             __HEADERS__ = list(headers)
 
             def __init__(self, *args, **kwargs):
-                super(Wrapper, self).__init__(*args, **kwargs)
+                super(Wrapped, self).__init__(*args, **kwargs)
 
-        return Wrapper
+        return Wrapped
 
     return wrapper
 
@@ -61,10 +62,10 @@ def dataobjects(data_object_class):
     assert isinstance(data_object_class, DataObjectsMixin)
 
     def wrapper(class_):
-        class Wrapper(class_, DataObjectsMixin):
+        class Wrapped(class_, DataObjectsMixin):
             __name__ = class_.__name__
             __CLASS__ = data_object_class
 
-        return Wrapper
+        return Wrapped
 
     return wrapper

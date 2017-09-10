@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+from .decorators import parser as _parser
 
 
-def parse_bool(string):
+def __parse_bool(string):
     string = str(string).lower()
 
     if string == "true":
@@ -12,7 +13,7 @@ def parse_bool(string):
         raise ValueError("could not convert string to bool: '%s'" % string)
 
 
-def parse_none(string):
+def __parse_none(string):
     string = str(string).lower()
 
     if string in ["", "null", "none", "undefined"]:
@@ -21,7 +22,7 @@ def parse_none(string):
         raise ValueError("could not convert string to None: '%s'" % string)
 
 
-def lazy_parse(string):
+def __lazy_parse(string):
     string = str(string)
     try:
         return eval(string)
@@ -29,19 +30,20 @@ def lazy_parse(string):
         raise ValueError("could not parse string: '%s'" % string)
 
 
+@_parser
 def parse(string, exception=True):
     try:
-        return parse_bool(string)
+        return __parse_bool(string)
     except ValueError:
         pass
 
     try:
-        return parse_none(string)
+        return __parse_none(string)
     except ValueError:
         pass
 
     try:
-        return lazy_parse(string)
+        return __lazy_parse(string)
     except ValueError:
         pass
 
@@ -51,10 +53,15 @@ def parse(string, exception=True):
         return string
 
 
-def create_parser(parser):
-    if callable(parser):
-        return parser
-    elif parser:
+def create_parser(arg):
+    if callable(arg):
+        return arg
+    elif bool(arg):
         return lambda string: parse(string, False)
     else:
         return lambda string: string
+
+
+parse_bool = _parser(__parse_bool)
+parse_none = _parser(__parse_none)
+lazy_parse = _parser(__lazy_parse)

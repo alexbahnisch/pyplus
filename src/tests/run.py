@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from pyplus.abstract import abstractmethod, abstractclassmethod, abstractproperty, abstractstaticmethod
-from pyplus.decorators import staticmethod
 
 
 class Abstract():
@@ -41,7 +40,11 @@ class Class(Abstract):
         return True
 
 
-if __name__ == "__main__":
+def fun():
+    pass
+
+
+def test_abstract():
     obj = Class()
 
     method = obj.method
@@ -58,4 +61,10 @@ if __name__ == "__main__":
     static_method = obj.static_method
     print(static_method(), obj.static_method())
 
+
+def tests_set():
     pass
+
+
+if __name__ == "__main__":
+    tests_set()

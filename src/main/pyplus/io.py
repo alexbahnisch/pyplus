@@ -97,6 +97,3 @@ def tsv2dict(path, headers=True, parse=True):
 
 def tsv2list(path, headers=True, parse=True):
     return _csv2list(path, headers, parse, "\t")
-
-
-

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+from pytest import raises
+
 from pyplus.abstract import abstractmethod, abstractclassmethod, abstractproperty, abstractstaticmethod
-from pyplus.test import assert_exception
 
 
 # noinspection PyMethodParameters
@@ -63,62 +64,58 @@ class CorrectImplementation(Abstract):
         return self.__TRUE__
 
 
+# noinspection PyStatementEffect
 def test_abstract():
     obj = Abstract()
 
-    assert_exception(
-        Abstract.class_method, AttributeError,
-        "abstract class method 'class_method' has not been overridden for 'Abstract' class"
-    )
+    with raises(AttributeError,
+                message="abstract class method 'class_method' has not been overridden for 'Abstract' class"):
+        Abstract.class_method()
 
-    assert_exception(
-        obj.class_method, AttributeError,
-        "abstract class method 'class_method' has not been overridden for 'Abstract' class"
-    )
+    with raises(AttributeError,
+                message="abstract class method 'class_method' has not been overridden for 'Abstract' class"):
+        obj.class_method()
 
-    assert_exception(
-        lambda: obj.prop, AttributeError,
-        "abstract property 'prop' has not been overridden for 'Abstract' class"
-    )
+    with raises(AttributeError,
+                message="abstract class method 'class_method' has not been overridden for 'Abstract' class"):
+        obj.class_method()
 
-    assert_exception(
-        obj.static_method, AttributeError,
-        "abstract static method 'static_method' has not been overridden"
-    )
+    with raises(AttributeError, message="abstract property 'prop' has not been overridden for 'Abstract' class"):
+        obj.prop
 
-    assert_exception(
-        obj.method, AttributeError,
-        "abstract method 'method' has not been overridden for 'Abstract' class"
-    )
+    with raises(AttributeError, message="abstract static method 'static_method' has not been overridden"):
+        obj.static_method()
+
+    with raises(AttributeError, message="abstract method 'method' has not been overridden for 'Abstract' class"):
+        obj.method()
 
 
+# noinspection PyStatementEffect
 def test_no_implementation():
     obj = NoImplementation()
 
-    assert_exception(
-        NoImplementation.class_method, AttributeError,
-        "abstract class method 'class_method' has not been overridden for 'NoImplementation' class"
-    )
+    with raises(AttributeError,
+                message="abstract class method 'class_method' has not been overridden for 'NoImplementation' class"):
+        NoImplementation.class_method()
 
-    assert_exception(
-        obj.class_method, AttributeError,
-        "abstract class method 'class_method' has not been overridden for 'NoImplementation' class"
-    )
+    with raises(AttributeError,
+                message="abstract class method 'class_method' has not been overridden for 'NoImplementation' class"):
+        obj.class_method()
 
-    assert_exception(
-        lambda: obj.prop, AttributeError,
-        "abstract property 'prop' has not been overridden for 'NoImplementation' class"
-    )
+    with raises(AttributeError,
+                message="abstract class method 'class_method' has not been overridden for 'NoImplementation' class"):
+        obj.class_method()
 
-    assert_exception(
-        obj.static_method, AttributeError,
-        "abstract static method 'static_method' has not been overridden"
-    )
+    with raises(AttributeError,
+                message="abstract property 'prop' has not been overridden for 'NoImplementation' class"):
+        obj.prop
 
-    assert_exception(
-        obj.method, AttributeError,
-        "abstract method 'method' has not been overridden for 'NoImplementation' class"
-    )
+    with raises(AttributeError, message="abstract static method 'static_method' has not been overridden"):
+        obj.static_method()
+
+    with raises(AttributeError,
+                message="abstract method 'method' has not been overridden for 'NoImplementation' class"):
+        obj.method()
 
 
 def test_correct_implementation():

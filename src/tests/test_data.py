@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from pyplus.data import dataobject, DataObjectMixin
-from pyplus.test import assert_exception
+from pytest import raises
 
 
 @dataobject("index", "name", "value")
@@ -37,15 +37,21 @@ def test_dataobject():
     assert object1 == Object1.from_array([1, "object", 1.1])
     assert object1 == object1.from_json({"index": 1, "name": "object", "value": 1.1})
 
-    assert_exception(Object1.from_line, AttributeError)
-    assert_exception(object1.from_line, AttributeError)
+    with raises(AttributeError):
+        Object1.from_line("")
+
+    with raises(AttributeError):
+        object1.from_line("")
 
     object2 = Object2(1, "object", 1.1)
     assert object2 == Object2.from_array([1, "object", 1.1])
     assert object2 == object2.from_json({"index": 1, "name": "object", "value": 1.1})
 
-    assert_exception(Object2.from_line, AttributeError)
-    assert_exception(object2.from_line, AttributeError)
+    with raises(AttributeError):
+        Object2.from_line("")
+
+    with raises(AttributeError):
+        object2.from_line("")
 
 
 if __name__ == "__main__":

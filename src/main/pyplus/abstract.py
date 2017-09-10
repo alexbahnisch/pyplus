@@ -3,6 +3,7 @@ from functools import wraps as _wraps
 
 
 def abstractclassmethod(method):
+    # noinspection PyUnusedLocal
     @_wraps(method)
     def wrapped(cls, *args, **kwargs):
         raise AttributeError(
@@ -21,6 +22,7 @@ def abstractproperty(method):
 
 
 def abstractstaticmethod(method):
+    # noinspection PyUnusedLocal
     @_wraps(method)
     def wrapped(*args, **kwargs):
         raise AttributeError("abstract static method '%s' has not been overridden" % method.__name__)
@@ -30,8 +32,8 @@ def abstractstaticmethod(method):
 def abstractmethod(method):
     # noinspection PyUnusedLocal
     @_wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def wrapped(self, *args, **kwargs):
         raise AttributeError(
             "abstract method '%s' has not been overridden for '%s' class" % (method.__name__, self.__class__.__name__)
         )
-    return wrapper
+    return wrapped
