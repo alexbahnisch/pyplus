@@ -1,70 +1,22 @@
 #!/usr/bin/env python
-from pyplus.abstract import abstractmethod, abstractclassmethod, abstractproperty, abstractstaticmethod
+from pyplus.json import json
 
 
-class Abstract():
-    __TRUE__ = True
+class Object(object):
 
-    @abstractmethod
-    def method(self):
-        pass
+    def __init__(self, *args):
+        self._args = list(args)
 
-    @abstractclassmethod
-    def class_method(cls):
-        pass
+    def __len__(self):
+        return len(self._args)
 
-    @abstractproperty
-    def prop(self):
-        pass
+    def __iter__(self):
+        return iter(self._args)
 
-    @abstractstaticmethod
-    def static_method():
-        pass
-
-
-class Class(Abstract):
-    __TRUE__ = True
-
-    def method(self):
-        return self.__TRUE__
-
-    @classmethod
-    def class_method(cls):
-        return cls.__TRUE__
-
-    def prop(self):
-        return self.__TRUE__
-
-    @staticmethod
-    def static_method():
-        return True
-
-
-def fun():
-    pass
-
-
-def test_abstract():
-    obj = Class()
-
-    method = obj.method
-    print(method(), obj.method())
-
-    class_method = Class.class_method
-    print(class_method(), Class.class_method())
-
-    class_method = obj.class_method
-    print(class_method(), obj.class_method())
-
-    print(obj.prop, obj.prop())
-
-    static_method = obj.static_method
-    print(static_method(), obj.static_method())
-
-
-def tests_set():
-    pass
+    def __getitem__(self, index):
+        return self._args[index]
 
 
 if __name__ == "__main__":
-    tests_set()
+    a = json.from_path("../resources/json/json.json")
+    pass

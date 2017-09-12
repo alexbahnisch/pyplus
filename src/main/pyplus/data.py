@@ -26,16 +26,16 @@ class DataObjectsMixin(object):
     __CLASS__ = DataObjectMixin
 
     def __init__(self):
-        self._objects = []
+        self.__objects = []
 
     def __getitem__(self, item):
-        return self._objects[item]
+        return self.__objects[item]
 
     def __iter__(self):
-        return iter(self._objects)
+        return iter(self.__objects)
 
     def __len__(self):
-        return len(self._objects)
+        return len(self.__objects)
 
     def init(self):
         pass
