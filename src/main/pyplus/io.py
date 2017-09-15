@@ -3,13 +3,9 @@ from collections import OrderedDict as _OrderedDict
 from csv import reader as _reader
 from json import load as _load
 from pathlib import Path as _Path
-from re import split as _split
 
 from .parse import create_parser as _create_parser
-
-
-def string2alias(alias):
-    return filter(None, _split("[\[./\\\]]", alias))
+from .string import alias2keys as _alias2keys
 
 
 def _csv2dict(path, headers, parse, sep):
@@ -77,7 +73,7 @@ def csv2list(path, headers=True, parse=True):
 
 
 def json2object(path, alias=None):
-    path, alias = _Path(str(path)).resolve(), string2alias(alias)
+    path, alias = _Path(str(path)).resolve(), _alias2keys(alias)
 
     with path.open("r") as file_io:
         json = _load(file_io)
