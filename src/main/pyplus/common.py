@@ -3,11 +3,15 @@ from past.builtins import basestring as _basestring
 
 
 def isintlike(obj):
-    return isinstance(obj, int) or hasattr(obj, "__int__")
+    try:
+        int(obj)
+        return True
+    except (TypeError, ValueError):
+        return False
 
 
 def isiterable(obj):
-    return hasattr(obj, "__iter__")
+    return not isinstance(obj, _basestring) and hasattr(obj, "__iter__")
 
 
 def islistlike(obj):

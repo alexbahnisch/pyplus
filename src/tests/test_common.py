@@ -22,11 +22,10 @@ class IsIterable(object):
 
 
 def test_isintlike():
-    is_int = IsIntLike()
-    assert isintlike(is_int)
     assert isintlike(1)
     assert isintlike(1.5)
     assert isintlike("1")
+    assert isintlike(IsIntLike())
     assert isintlike(True)
 
 
@@ -38,19 +37,21 @@ def test_isintlike_not():
 
 
 def test_isiterable():
-    is_iter = IsIterable()
-    assert isiterable(is_iter)
     assert isiterable(DICT)
+    assert isiterable(IsIterable())
+    assert isiterable(LIST)
+    assert isiterable(MAPPABLE)
     assert isiterable(SET)
-    assert isiterable(STRING)
+    assert isiterable(TUPLE)
 
 
 def test_notiterable():
-    assert not isiterable(OBJECT)
     assert not isiterable(1)
     assert not isiterable(1.5)
-    assert not isiterable(True)
     assert not isiterable(None)
+    assert not isiterable(OBJECT)
+    assert not isiterable(STRING)
+    assert not isiterable(True)
 
 
 if __name__ == "__main__":
