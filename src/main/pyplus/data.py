@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from .abstract import abstractclassmethod as _abstractclassmethod
-from .common import isiterable as _isiterable
 
 
 # noinspection PyMethodParameters
@@ -28,6 +27,7 @@ class DataObjectsMixin(object):
 
     def __init__(self):
         self.__objects = []
+        self.init()
 
     def __getitem__(self, item):
         return self.__objects[item]
@@ -51,13 +51,9 @@ def dataobject(*headers):
             return class_
 
         else:
-            # noinspection PyArgumentList
             class Wrapped(class_, DataObjectMixin):
                 __name__ = class_.__name__
                 __HEADERS__ = list(headers)
-
-                def __init__(self, *args, **kwargs):
-                    super(Wrapped, self).__init__(*args, **kwargs)
 
             return Wrapped
 

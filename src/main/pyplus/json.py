@@ -5,10 +5,8 @@ from pathlib import Path as _Path
 
 from past.builtins import basestring as _basestring
 
-from .common import (
-    isintlike as _isintlike, isiterable as _isiterable, ismappable as _ismappable, issequence as _issequence
-)
-from .lazy import LazyPath as _LazyPath
+from . import common as _common
+from .path import LazyPath as _LazyPath
 
 
 class _JsonMixin(object):
@@ -31,19 +29,19 @@ class Array(list, _JsonMixin):
         return type(self)(_deepcopy(item) for item in self)
 
     def __getitem__(self, index):
-        if _isintlike(index) and 0 <= int(index) < len(self):
+        if _common.isintlike(index) and 0 <= int(index) < len(self):
             return super(Array, self).__getitem__(int(index))
         else:
             return None
 
     def __setitem__(self, index, value):
-        if _isintlike(index) and 0 <= int(index) < len(self):
+        if _common.isintlike(index) and 0 <= int(index) < len(self):
             super(Array, self).__setitem__(int(index), value)
-        elif _isintlike(index) and int(index) < len(self):
+        elif _common.isintlike(index) and int(index) < len(self):
             self.push([None] * (int(index) - len(self)), value)
 
     def concat(self, items):
-        if _isiterable(items):
+        if _common.isiterable(items):
             return _copy(self).extend(items)
         else:
             return _copy(self).append(items)
@@ -71,10 +69,10 @@ class Object(dict, _JsonMixin):
 
         elif len(args) > 0 and hasattr(args[0], "__iter__"):
             for inx, items in enumerate(args[0]):
-                if _ismappable(items):
+                if _common.ispair(items):
                     if str(items[0]) not in kwargs:
                         kwargs[str(items[0])] = items[1]
-                elif _issequence(items) and len(items) > 2:
+                elif _common.issequence(items) and len(items) > 2:
                     raise ValueError("json update sequence element #%s has length %s; 2 is required" % inx, len(items))
                 else:
                     raise TypeError("cannot convert json update sequence element #%s to a sequence" % inx)
@@ -136,15 +134,15 @@ class JSON(object):
         return cls.__OBJECT__({key: cls.from_object(value) for key, value in dict_.items()})
 
     @classmethod
-    def from_list(cls, list_):
-        assert isinstance(list_, list)
-        return cls.__ARRAY__(cls.from_object(item) for item in list_)
-
-    @classmethod
     def from_file(cls, path):
         assert isinstance(path, _Path) or isinstance(path, _basestring)
         with _LazyPath(str(path)).read() as tmp_file:
             return cls.from_object(_load(tmp_file))
+
+    @classmethod
+    def from_list(cls, list_):
+        assert isinstance(list_, list)
+        return cls.__ARRAY__(cls.from_object(item) for item in list_)
 
     @classmethod
     def from_object(cls, obj):

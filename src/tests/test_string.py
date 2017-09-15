@@ -8,7 +8,11 @@ STRINGS = [
     "Test Case",
     "testCase",
     "_test_case",
-    "Test_Case",
+    "test-case",
+    "test+Case",
+    "Test.case",
+    "Test, Case",
+    "0%Test_Case",
     "#1Test_Case"
 ]
 
@@ -18,7 +22,11 @@ B_STRINGS = [
     b"Test Case",
     b"testCase",
     b"_test_case",
-    b"Test_Case",
+    b"test-case",
+    b"test+Case",
+    b"Test.case",
+    b"Test, Case",
+    b"0%Test_Case",
     b"#1Test_Case"
 ]
 
@@ -28,7 +36,11 @@ U_STRINGS = [
     u"Test Case",
     u"testCase",
     u"_test_case",
-    u"Test_Case",
+    u"test-case",
+    u"test+Case",
+    u"Test.case",
+    u"Test, Case",
+    u"0%Test_Case",
     u"#1Test_Case"
 ]
 

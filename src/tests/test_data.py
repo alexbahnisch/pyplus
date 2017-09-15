@@ -17,8 +17,8 @@ class Object1(object):
             return False
 
 
+@dataobject("index", "name", "value")
 class Object2(DataObjectMixin):
-    __HEADERS__ = ["index", "name", "value"]
 
     def __init__(self, index, name, value):
         self.index = index
@@ -34,8 +34,8 @@ class Object2(DataObjectMixin):
 
 def test_dataobject():
     object1 = Object1(1, "object", 1.1)
-    assert object1 == Object1.from_array([1, "object", 1.1])
-    assert object1 == object1.from_json({"index": 1, "name": "object", "value": 1.1})
+    assert object1 == Object1.from_list([1, "object", 1.1])
+    assert object1 == object1.from_dict({"index": 1, "name": "object", "value": 1.1})
 
     with raises(AttributeError):
         Object1.from_line("")
@@ -44,8 +44,8 @@ def test_dataobject():
         object1.from_line("")
 
     object2 = Object2(1, "object", 1.1)
-    assert object2 == Object2.from_array([1, "object", 1.1])
-    assert object2 == object2.from_json({"index": 1, "name": "object", "value": 1.1})
+    assert object2 == Object2.from_list([1, "object", 1.1])
+    assert object2 == object2.from_dict({"index": 1, "name": "object", "value": 1.1})
 
     with raises(AttributeError):
         Object2.from_line("")

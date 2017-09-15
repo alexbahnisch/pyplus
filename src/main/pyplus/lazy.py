@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from copy import deepcopy as _deepcopy
 
-from .io import csv2dict as _csv2dict
+from . import common as _common
+from . import io as _io
 from .string import snake_case as _snake_case
 
 
@@ -35,12 +36,27 @@ class LazyObject(object):
 
     @classmethod
     def from_csv(cls, path):
-        dict_ = _csv2dict(path)
-        headers = {key: _snake_case(key) for key in dict_}
-        rargs = []
+        assert _common.isstringlike(path)
+        list_ = _io.csv2list(path)
+        headers = {key: _snake_case(key) for key in list_[0]}
+        return [cls(**{header: dict_[key] for key, header in headers.items()}) for dict_ in list_]
 
-        for item in zip(dict_[key] for key in dict_):
-            rargs.append(cls(**{}))
+    @classmethod
+    def from_dict(cls, dict_):
+        assert isinstance(dict_, dict)
+        return cls(**{_snake_case(key): value for key, value in dict_.items()})
+
+    @classmethod
+    def from_list(cls, list_):
+        assert isinstance(list_, dict)
+        return cls(**{"param%s" % index: item for index, item in enumerate(list_)})
+
+    @classmethod
+    def from_tsv(cls, path):
+        assert _common.isstringlike(path)
+        list_ = _io.tsv2list(path)
+        headers = {key: _snake_case(key) for key in list_[0]}
+        return [cls(**{header: dict_[key] for key, header in headers.items()}) for dict_ in list_]
 
 
 class ImmutableLazyObject(LazyObject):

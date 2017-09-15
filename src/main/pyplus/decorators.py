@@ -20,13 +20,19 @@ def parser(method):
     return wrapped
 
 
-def time(logger=print):
-    def wrapper(method):
-        @_wraps(method)
-        def wrapped(*args, **kwargs):
-            start = _datetime.now()
-            output = method(*args, **kwargs)
-            logger("Ran '%s' method in %s" % (method.__name__, _datetime.now() - start))
-            return output
-        return wrapped
-    return wrapper
+def timer(logger=print, disabled=False):
+    if disabled:
+        def wrapper(method):
+            return method
+        return wrapper
+
+    else:
+        def wrapper(method):
+            @_wraps(method)
+            def wrapped(*args, **kwargs):
+                start = _datetime.now()
+                output = method(*args, **kwargs)
+                logger(_datetime.now() - start)
+                return output
+            return wrapped
+        return wrapper
