@@ -18,15 +18,37 @@ class IsIntLike(object):
 
 class IsIterable(object):
     def __iter__(self):
-        return iter([0, 1, 2, 3, 4, 5])
+        return iter(LIST)
+
+
+class IsListLike(object):
+    def __getitem__(self, item):
+        return 1
+
+    def __iter__(self):
+        return iter(LIST)
+
+    def __len__(self):
+        return 5
+
+    def __setitem__(self, key, value):
+        pass
+
+
+class IsPair(object):
+    def __getitem__(self, item):
+        return 1
+
+    def __len__(self):
+        return 2
 
 
 def test_isintlike():
     assert isintlike(1)
     assert isintlike(1.5)
     assert isintlike("1")
+    assert isintlike(False)
     assert isintlike(IsIntLike())
-    assert isintlike(True)
 
 
 def test_isintlike_not():
@@ -45,13 +67,39 @@ def test_isiterable():
     assert isiterable(TUPLE)
 
 
-def test_notiterable():
+def test_isiterable_not():
     assert not isiterable(1)
     assert not isiterable(1.5)
+    assert not isiterable(False)
     assert not isiterable(None)
     assert not isiterable(OBJECT)
     assert not isiterable(STRING)
-    assert not isiterable(True)
+
+
+def test_islistlike():
+    assert islistlike(DICT)
+    assert islistlike(IsListLike())
+    assert islistlike(LIST)
+    assert islistlike(MAPPABLE)
+    assert islistlike(TUPLE)
+
+
+def test_islistlike_not():
+    assert not islistlike(1)
+    assert not islistlike(1.5)
+    assert not islistlike(False)
+    assert not islistlike(None)
+    assert not islistlike(OBJECT)
+    assert not islistlike(SET)
+    assert not islistlike(STRING)
+
+
+def test_ispair():
+    pass
+
+
+def test_ispair_not():
+    pass
 
 
 if __name__ == "__main__":

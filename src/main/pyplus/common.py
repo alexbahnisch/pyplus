@@ -15,7 +15,7 @@ def isiterable(obj):
 
 
 def islistlike(obj):
-    return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and \
+    return not isinstance(obj, _basestring) and hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and \
            hasattr(obj, "__iter__") and hasattr(obj, "__setitem__")
 
 
