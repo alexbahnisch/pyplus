@@ -11,16 +11,15 @@ def isintlike(obj):
 
 
 def isiterable(obj):
-    return not isinstance(obj, _basestring) and hasattr(obj, "__iter__")
+    return hasattr(obj, "__iter__") or isinstance(obj, _basestring)
 
 
 def islistlike(obj):
-    return not isinstance(obj, _basestring) and hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and \
-           hasattr(obj, "__iter__") and hasattr(obj, "__setitem__")
+    return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and hasattr(obj, "__setitem__") and isiterable(obj)
 
 
 def ispair(obj):
-    return hasattr(obj, "__len__") and len(obj) == 2 and hasattr(obj, "__getitem__")
+    return hasattr(obj, "__len__") and len(obj) == 2 and isiterable(obj)
 
 
 def ismappable(obj):
@@ -28,7 +27,7 @@ def ismappable(obj):
 
 
 def issequence(obj):
-    return hasattr(obj, "__len__") and hasattr(obj, "__getitem__")
+    return hasattr(obj, "__len__") and isiterable(obj)
 
 
 def isstringlike(obj):
