@@ -31,7 +31,7 @@ setup(
         "future>=0.16.0"
     ],
     tests_require=[
-        "pytest>=3.1.3",
+        "pytest>=3.2.2",
         "pytest-runner>=2.11.1"
     ],
     test_suite="src.tests"
