@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pyplus",
-    version="0.0.2.dev0",
+    version="0.0.2.dev1",
     description="A library containing a collection of python extensions.",
     url="https://github.com/alexbahnisch/pyplus",
     author="Alex Bahnisch",
