@@ -10,7 +10,7 @@ def parser(method):
     @_wraps(method)
     def wrapped(*args, **kwargs):
         if isinstance(args[0], bytes):
-            args = (args[0].decode(), *args[1:len(args) + 1])
+            args = (args[0].decode(),) + args[1:len(args) + 1]
             output = method(*args, **kwargs)
             return output.encode() if isinstance(output, _unicode) else output
         elif isinstance(args[0], _unicode):
@@ -26,7 +26,7 @@ def spliter(method):
     @_wraps(method)
     def wrapped(*args, **kwargs):
         if isinstance(args[0], bytes):
-            args = (args[0].decode(), *args[1:len(args) + 1])
+            args = (args[0].decode(),) + args[1:len(args) + 1]
             items = method(*args, **kwargs)
             return [item.encode() if isinstance(item, _unicode) else item for item in items]
         elif isinstance(args[0], _unicode):

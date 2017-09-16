@@ -31,7 +31,7 @@ def issequence(obj):
 
 
 def istuplike(obj):
-    return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and hasattr(obj, "__iter__")
+    return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and isiterable(obj)
 
 
 def iterable(obj):

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import division
+
 from .decorators import parser as _parser
 
 
