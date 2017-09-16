@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-from pyplus.json import JSON
-
+from pyplus.string import alias2keys
 
 if __name__ == "__main__":
-    a = JSON.from_file("../resources/json/json.json")
-    a.to_file("../resources/json/json.copy.json")
+    a = alias2keys("a.a.a")
     pass

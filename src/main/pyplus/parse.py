@@ -7,7 +7,7 @@ def __parse_bool(string):
 
     if string == "true":
         return True
-    elif string == "":
+    elif string == "false":
         return False
     else:
         raise ValueError("could not convert string to bool: '%s'" % string)
@@ -23,15 +23,17 @@ def __parse_none(string):
 
 
 def __lazy_parse(string):
-    string = str(string)
-    try:
-        return eval(string)
-    except (NameError, SyntaxError):
+    if "string" in string:
         raise ValueError("could not parse string: '%s'" % string)
+    else:
+        try:
+            return eval(string)
+        except (NameError, SyntaxError):
+            raise ValueError("could not parse string: '%s'" % string)
 
 
 @_parser
-def parse(string, exception=True):
+def parse(string, exception=False):
     try:
         return __parse_bool(string)
     except ValueError:
@@ -47,7 +49,7 @@ def parse(string, exception=True):
     except ValueError:
         pass
 
-    if exception:
+    if bool(exception):
         raise ValueError("could not parse string: '%s'" % string)
     else:
         return string
@@ -57,7 +59,7 @@ def create_parser(arg):
     if callable(arg):
         return arg
     elif bool(arg):
-        return lambda string: parse(string, False)
+        return parse
     else:
         return lambda string: string
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-from pyplus.string import camel_case, snake_case, title_case
-
+from pyplus.string import alias2keys, camel_case, snake_case, title_case
 
 STRINGS = [
     "TestCase",
@@ -43,6 +42,36 @@ U_STRINGS = [
     u"0%Test_Case",
     u"#1Test_Case"
 ]
+
+
+def test_alias():
+    assert ["key1", "key2", "key3"] == alias2keys("key1.key2.key3")
+    assert ["key1", "key2", "key3"] == alias2keys("key1/key2/key3")
+    assert ["key1", "key2", "key3"] == alias2keys("key1\key2\key3")
+    assert ["key1", 2, "key3"] == alias2keys("key1[2].key3")
+    assert ["key1", 2, "key3"] == alias2keys("key1[2]/key3")
+    assert ["key1", 2, "key3"] == alias2keys("key1[2]\key3")
+    assert ["key1", 2, "key3"] == alias2keys("key1[2].key3")
+    assert ["key1", 2, "key3"] == alias2keys("key1[2]/key3")
+    assert ["key1", 2, "key3"] == alias2keys("key1[2]\key3")
+
+
+def test_alias_bytes():
+    assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1.key2.key3")
+    assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1/key2/key3")
+    assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1\key2\key3")
+    assert [b"key1", 2, b"key3"] == alias2keys(b"key1[2].key3")
+    assert [b"key1", 2, b"key3"] == alias2keys(b"key1[2]/key3")
+    assert [b"key1", 2, b"key3"] == alias2keys(b"key1[2]\key3")
+
+
+def test_alias_unicode():
+    assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1.key2.key3")
+    assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1/key2/key3")
+    assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1\key2\key3")
+    assert [u"key1", 2, u"key3"] == alias2keys(u"key1[2].key3")
+    assert [u"key1", 2, u"key3"] == alias2keys(u"key1[2]/key3")
+    assert [u"key1", 2, u"key3"] == alias2keys(u"key1[2]\key3")
 
 
 def test_camel_case():

@@ -19,7 +19,6 @@ class Object1(object):
 
 @dataobject("index", "name", "value")
 class Object2(DataObjectMixin):
-
     def __init__(self, index, name, value):
         self.index = index
         self.name = name

@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 from re import compile as _compile
 
-from .decorators import parser as _parser
+from .decorators import parser as _parser, spliter as _spliter
 from .parse import parse as _parse
 
 
-ALIAS_SPLIT = _compile(u"[\[./\\\]]")
-CAMEL_CASE_SPACE1 = _compile(u"([A-Z])([A-Z][a-z]+)")
-CAMEL_CASE_SPACE2 = _compile(u"([a-z\d])([A-Z])")
-CAPITALS = _compile(u"([A-Z])([A-Z])")
-CAPITAL_LOWER = _compile(u"([A-Z])([a-z])")
-INVALID_CHARS = _compile(u"\W")
-INVALID_LEAD = _compile(u"^[^a-zA-Z]+")
-REPLACEABLE_WITH_UNDERSCORE = _compile(u"[\s/,.+-]+")
-SPACE = _compile(u" ")
-UNDERSCORE = _compile(u"_")
-UNDERSCORES = _compile(u"(_)\1+")
+ALIAS_SPLIT = _compile(r"[\[./\\\]]")
+CAMEL_CASE_SPACE1 = _compile(r"([A-Z])([A-Z][a-z]+)")
+CAMEL_CASE_SPACE2 = _compile(r"([a-z\d])([A-Z])")
+CAPITALS = _compile(r"([A-Z])([A-Z])")
+CAPITAL_LOWER = _compile(r"([A-Z])([a-z])")
+INVALID_CHARS = _compile(r"\W")
+INVALID_LEAD = _compile(r"^[^a-zA-Z]+")
+REPLACEABLE_WITH_UNDERSCORE = _compile(r"[\s/,.+-]+")
+SPACE = _compile(r" ")
+UNDERSCORE = _compile(r"_")
+UNDERSCORES = _compile(r"(_)\1+")
 
 
-@_parser
+@_spliter
 def alias2keys(alias):
-    return map(lambda string: _parse(string, False), filter(None, ALIAS_SPLIT.split(alias)))
+    return [_parse(key, exception=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
 
 
 def _base_case(string):

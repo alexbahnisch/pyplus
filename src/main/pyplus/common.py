@@ -30,10 +30,6 @@ def issequence(obj):
     return hasattr(obj, "__len__") and isiterable(obj)
 
 
-def isstringlike(obj):
-    return isinstance(obj, _basestring) or (hasattr(obj, "__str__") and isinstance(str(obj), str))
-
-
 def istuplike(obj):
     return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and hasattr(obj, "__iter__")
 

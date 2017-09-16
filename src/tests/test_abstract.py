@@ -32,7 +32,6 @@ class NoImplementation(Abstract):
 
 # noinspection PyMethodParameters
 class IncorrectImplementation(Abstract):
-
     def method(self):
         return self.__TRUE__
 
@@ -47,7 +46,6 @@ class IncorrectImplementation(Abstract):
 
 
 class CorrectImplementation(Abstract):
-
     def method(self):
         return self.__TRUE__
 
@@ -120,15 +118,10 @@ def test_no_implementation():
 
 def test_correct_implementation():
     obj = CorrectImplementation()
-
     assert CorrectImplementation.class_method()
-
     assert obj.class_method()
-
     assert obj.method()
-
     assert obj.prop
-
     assert obj.static_method()
 
 

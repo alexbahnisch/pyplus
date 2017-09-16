@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from pyplus.common import *
 
-
 DICT = {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
 FLOAT = 1.5
 INT = 1
@@ -12,7 +11,7 @@ SET = {1, 2, 3, 4, 5}
 STRING = "string"
 B_STRING = b"string"
 U_STRING = u"string"
-TUPLE = [1, 2, 3, 4, 5]
+TUPLE = (1, 2, 3, 4, 5)
 
 
 class IsIntLike(object):
@@ -60,9 +59,15 @@ class IsSequence(object):
         return 3
 
 
-class IsStringLike(object):
-    def __str__(self):
-        return "string"
+class IsTupLike(object):
+    def __getitem__(self, item):
+        return 1
+
+    def __iter__(self):
+        return iter(LIST)
+
+    def __len__(self):
+        return 5
 
 
 class NotMappable(object):
@@ -112,7 +117,6 @@ def test_islistlike():
     assert islistlike(IsListLike())
     assert islistlike(LIST)
     assert islistlike(MAPPABLE)
-    assert islistlike(TUPLE)
 
 
 def test_islistlike_not():
@@ -125,6 +129,7 @@ def test_islistlike_not():
     assert not islistlike(STRING)
     assert not islistlike(B_STRING)
     assert not islistlike(U_STRING)
+    assert not islistlike(TUPLE)
 
 
 def test_ispair():
@@ -190,19 +195,35 @@ def test_issequence_not():
     assert not issequence(OBJECT)
 
 
-def test_isstring():
-    assert isstringlike(DICT)
-    assert isstringlike(FLOAT)
-    assert isstringlike(INT)
-    assert isstringlike(LIST)
-    assert isstringlike(MAPPABLE)
-    assert isstringlike(OBJECT)
-    assert isstringlike(SET)
-    assert isstringlike(STRING)
-    assert isstringlike(B_STRING)
-    assert isstringlike(U_STRING)
-    assert isstringlike(TUPLE)
+def test_istuplike():
+    assert istuplike(DICT)
+    assert istuplike(IsTupLike())
+    assert istuplike(IsListLike())
+    assert istuplike(LIST)
+    assert istuplike(MAPPABLE)
+    assert istuplike(STRING)
+    assert istuplike(B_STRING)
+    assert istuplike(U_STRING)
+    assert istuplike(TUPLE)
 
 
-def test_isstring_not():
-    pass
+def test_istuplike_not():
+    assert not istuplike(False)
+    assert not istuplike(FLOAT)
+    assert not istuplike(INT)
+    assert not istuplike(None)
+    assert not istuplike(OBJECT)
+
+
+def test_iterable():
+    assert DICT is iterable(DICT)
+    assert LIST is iterable(LIST)
+    assert MAPPABLE is iterable(MAPPABLE)
+    assert SET is iterable(SET)
+    assert STRING is iterable(STRING)
+    assert TUPLE is iterable(TUPLE)
+
+    assert [False] == iterable(False)
+    assert [FLOAT] == iterable(FLOAT)
+    assert [INT] == iterable(INT)
+    assert [None] == iterable(None)

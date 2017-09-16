@@ -8,14 +8,32 @@ from past.builtins import unicode as _unicode
 
 def parser(method):
     @_wraps(method)
-    def wrapped(string, **kwargs):
-        if isinstance(string, bytes):
-            output = method(string.decode(), **kwargs)
+    def wrapped(*args, **kwargs):
+        if isinstance(args[0], bytes):
+            args = (args[0].decode(), *args[1:len(args) + 1])
+            output = method(*args, **kwargs)
             return output.encode() if isinstance(output, _unicode) else output
-        elif isinstance(string, _unicode):
-            return method(string)
+        elif isinstance(args[0], _unicode):
+            output = method(*args, **kwargs)
+            return output.decode() if isinstance(output, bytes) else output
         else:
-            raise TypeError("TODO - raise better exception")
+            raise TypeError("'%s' object is not a string" % type(args[0]).__name__)
+
+    return wrapped
+
+
+def spliter(method):
+    @_wraps(method)
+    def wrapped(*args, **kwargs):
+        if isinstance(args[0], bytes):
+            args = (args[0].decode(), *args[1:len(args) + 1])
+            items = method(*args, **kwargs)
+            return [item.encode() if isinstance(item, _unicode) else item for item in items]
+        elif isinstance(args[0], _unicode):
+            items = method(*args, **kwargs)
+            return [item.decode() if isinstance(item, bytes) else item for item in items]
+        else:
+            raise TypeError("'%s' object is not a string" % type(args[0]).__name__)
 
     return wrapped
 
