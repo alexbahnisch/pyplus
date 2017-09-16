@@ -6,10 +6,13 @@ python:
   - 3.6
 
 install:
-  - pip install tox-travis
+  - pip install coveralls tox-travis
 
 script:
   - tox
+
+after_success:
+  - coveralls
 
 notifications:
   email: true
@@ -19,7 +22,7 @@ deploy:
     server: https://test.pypi.org/legacy/
     user: alexbahnisch
     password:
-      secure: dN1TiYB9fbivJc0mmlVh/W+hmbaVdiCTAgXTfAnx5sd2Xxp/vCI1ybbHuwhD8bTnhZItbw04SU0wQnYRcu6O/I6C6ddFUv+d92fgCUlf+NtP7g3J34aMLVUJPheagA72Vs/KT/ZOWmNUyB34lywREvzCvvI4jRVkUj3SgW44E8eVlHkW0MdjeItsraB/hSiXy5YhO2R6FF5Stc1zoaKBg1ljhJNKV4V3JfoPhPtZhlOX3+zWxx1jaTMUz6/Zdi16I+NLzxCKvvh+gcemxWHFSWHhXkw7ycBH2gel93xLS68nJ0GGlYvAY9sFV8yLSkv6njV98IngyZFacquTOsQYni5YVu4xHpPi0NBlHU/LRVLCGpbIbY4MbWGsNBI8WesebkdPZbswKBWqeowrRwQxtc06n0fGDoW74XevmPLI2hTVwsP3rjdLhsoz7hHxSky2iU8a/x3Dua1sBeds1S59VusGih8r4XkeFDGOnQdD3b5fW+72MUonZF9fsvcAQjBKRbgTkVKpN9b7TFuQnKnbZwEeCzdfyMeAzHb6vQmDQBwbrjE7TXkzWeTw0YVaQufXk5iayI9v/uhA7mXNuQFdfwyrAhWtmemX+2N5oGD+Y3r0KI+6Y32rL0jFYrU4N56OnytdDiF9l2unQ8OHjrladITyq3XvpFTAYr177XdtaJk=
+      secure: Gb3w5bHwlZaSYIDwEDWth7++rA//T8kMmWA6Ap2H7F6nMRMQ1EAC3HKvVnJudKXKcZe+6sbNmhOaRH0z/DSsm8+5HEvA+YdJ5t7vAXU+A8Myb1ZSAiY2D0Gr1rxaI/OjfK8ybivJkIRY3vnG3PQ5rPOPITRI7s5U5ScToOMcg45vskBnmXKTYtYysNtJR+dGn5M/ebWdD5hyIy8MQ0DarXPEooQPOp6tcYDZYu5gFQoU+YCfu4gpKafUZhTryQyQcKiwmxzS+U8/U1WlhmIi2oh4zmDIA+JmcxZW3ijSk1d2GTWDFz0ruWHJuPfHOBR/HshtO+nOPNcgw1TRw9HU2xQU2sMvedQjlmEvyBKGRkeBAouWqMjqNlWVFeOAXXAYge8Clmg+uMlB2Lk/zInD3yUYqT+PYC1kj2F+zL+Brq18iwAwMVXQSNkzsTBKTaAaGVEgGoAbysuWrHSRNNez/psI0SEjFLSsUeay3taEZ9m6TckN46UFTDhzNcGbvec+0Qv2Y/F74v0G3J71usEywHnsmIuTQejVgYdujP51X4f7P3iDn/w7is06r1garkNYQf9SgkZChF6zM1zoIR7n07BhSgbNKPtV5IeyEMinb2LAc6Yfrae6HRAFNGZqS52YghXx7cTtWmEzNp8bxT/bsoT3iz2E3ewnYcjBzRSzQA8=
     distributions: sdist bdist_wheel
     on:
       branch: master
@@ -30,7 +33,7 @@ deploy:
     server: https://upload.pypi.org/legacy/
     user: alexbahnisch
     password:
-      secure: dN1TiYB9fbivJc0mmlVh/W+hmbaVdiCTAgXTfAnx5sd2Xxp/vCI1ybbHuwhD8bTnhZItbw04SU0wQnYRcu6O/I6C6ddFUv+d92fgCUlf+NtP7g3J34aMLVUJPheagA72Vs/KT/ZOWmNUyB34lywREvzCvvI4jRVkUj3SgW44E8eVlHkW0MdjeItsraB/hSiXy5YhO2R6FF5Stc1zoaKBg1ljhJNKV4V3JfoPhPtZhlOX3+zWxx1jaTMUz6/Zdi16I+NLzxCKvvh+gcemxWHFSWHhXkw7ycBH2gel93xLS68nJ0GGlYvAY9sFV8yLSkv6njV98IngyZFacquTOsQYni5YVu4xHpPi0NBlHU/LRVLCGpbIbY4MbWGsNBI8WesebkdPZbswKBWqeowrRwQxtc06n0fGDoW74XevmPLI2hTVwsP3rjdLhsoz7hHxSky2iU8a/x3Dua1sBeds1S59VusGih8r4XkeFDGOnQdD3b5fW+72MUonZF9fsvcAQjBKRbgTkVKpN9b7TFuQnKnbZwEeCzdfyMeAzHb6vQmDQBwbrjE7TXkzWeTw0YVaQufXk5iayI9v/uhA7mXNuQFdfwyrAhWtmemX+2N5oGD+Y3r0KI+6Y32rL0jFYrU4N56OnytdDiF9l2unQ8OHjrladITyq3XvpFTAYr177XdtaJk=
+      secure: Gb3w5bHwlZaSYIDwEDWth7++rA//T8kMmWA6Ap2H7F6nMRMQ1EAC3HKvVnJudKXKcZe+6sbNmhOaRH0z/DSsm8+5HEvA+YdJ5t7vAXU+A8Myb1ZSAiY2D0Gr1rxaI/OjfK8ybivJkIRY3vnG3PQ5rPOPITRI7s5U5ScToOMcg45vskBnmXKTYtYysNtJR+dGn5M/ebWdD5hyIy8MQ0DarXPEooQPOp6tcYDZYu5gFQoU+YCfu4gpKafUZhTryQyQcKiwmxzS+U8/U1WlhmIi2oh4zmDIA+JmcxZW3ijSk1d2GTWDFz0ruWHJuPfHOBR/HshtO+nOPNcgw1TRw9HU2xQU2sMvedQjlmEvyBKGRkeBAouWqMjqNlWVFeOAXXAYge8Clmg+uMlB2Lk/zInD3yUYqT+PYC1kj2F+zL+Brq18iwAwMVXQSNkzsTBKTaAaGVEgGoAbysuWrHSRNNez/psI0SEjFLSsUeay3taEZ9m6TckN46UFTDhzNcGbvec+0Qv2Y/F74v0G3J71usEywHnsmIuTQejVgYdujP51X4f7P3iDn/w7is06r1garkNYQf9SgkZChF6zM1zoIR7n07BhSgbNKPtV5IeyEMinb2LAc6Yfrae6HRAFNGZqS52YghXx7cTtWmEzNp8bxT/bsoT3iz2E3ewnYcjBzRSzQA8=
     distributions: sdist bdist_wheel
     on:
       branch: master
