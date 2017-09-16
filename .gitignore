@@ -1,4 +1,5 @@
 # root:
+.coverage
 .cache
 .eggs
 .idea

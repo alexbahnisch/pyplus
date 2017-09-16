@@ -9,7 +9,7 @@ install:
   - pip install coveralls tox-travis
 
 script:
-  - coverage run tox
+  - tox
 
 after_success:
   - coveralls

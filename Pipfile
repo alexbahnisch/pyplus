@@ -3,14 +3,12 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [packages]
-
 future = "*"
-pytest-cov = "*"
-pytest-pep8 = "*"
 
 [dev-packages]
-
-tox = "*"
+coveralls = "*"
 pytest = "*"
+pytest-cov = "*"
+pytest-pep8 = "*"
 pytest-runner = "*"
-coverage = "*"
+tox = "*"
