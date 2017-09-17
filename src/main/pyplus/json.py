@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from copy import copy as _copy, deepcopy as _deepcopy
-from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads
+from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads, JSONDecodeError as _JSONDecodeError
 from pathlib import Path as _Path
 
 from past.builtins import basestring as _basestring
@@ -11,13 +11,13 @@ from .path import LazyPath as _LazyPath
 
 class _JsonMixin(object):
 
-    def stringify(self):
-        return _dumps(self)
+    def stringify(self, indent=2):
+        return _dumps(self, indent=indent)
 
-    def to_file(self, path):
+    def to_file(self, path, indent=2):
         assert isinstance(path, _Path) or isinstance(path, _basestring)
         with _LazyPath(str(path)).write() as tmp_file:
-            _dump(self, tmp_file)
+            _dump(self, tmp_file, indent=indent)
 
 
 class Array(list, _JsonMixin):
@@ -29,22 +29,30 @@ class Array(list, _JsonMixin):
         return type(self)(_deepcopy(item) for item in self)
 
     def __getitem__(self, index):
-        if _common.isintlike(index) and 0 <= int(index) < len(self):
+        if _common.isintlike(index) and 0 <= int(index) < self.length:
             return super(Array, self).__getitem__(int(index))
         else:
             return None
 
     def __setitem__(self, index, value):
-        if _common.isintlike(index) and 0 <= int(index) < len(self):
+        if _common.isintlike(index) and 0 <= int(index) < self.length:
             super(Array, self).__setitem__(int(index), value)
-        elif _common.isintlike(index) and int(index) < len(self):
-            self.push([None] * (int(index) - len(self)), value)
+        elif _common.isintlike(index) and int(index) > self.length:
+            self.extend([None] * (int(index) - self.length) + [value])
+
+    @property
+    def length(self):
+        return len(self)
 
     def concat(self, items):
         if _common.isiterable(items):
-            return _copy(self).extend(items)
+            rarg = self.copy()
+            rarg.extend(items)
+            return rarg
         else:
-            return _copy(self).append(items)
+            rarg = self.copy()
+            rarg.append(items)
+            return rarg
 
     def copy(self):
         return self.__copy__()
@@ -53,7 +61,8 @@ class Array(list, _JsonMixin):
         return self.__deepcopy__({})
 
     def push(self, *items):
-        return self.append(items)
+        self.extend(items)
+        return self.length
 
 
 class Object(dict, _JsonMixin):
@@ -109,7 +118,7 @@ class Object(dict, _JsonMixin):
 
         for other in others:
             for keys, values in other.items():
-                rarg[keys] = other
+                rarg[keys] = values
 
         return rarg
 
@@ -154,12 +163,18 @@ class JSON(object):
             return obj
 
     @classmethod
-    def parse(cls, string):
-        assert isinstance(string, _basestring)
-        rarg = _loads(string)
-        if isinstance(rarg, dict):
-            return cls.from_dict(rarg)
-        elif isinstance(rarg, list):
-            return cls.from_list(rarg)
-        else:
-            return rarg
+    def parse(cls, string, errors=False):
+        try:
+            rarg = _loads(str(string))
+            if isinstance(rarg, dict):
+                return cls.from_dict(rarg)
+            elif isinstance(rarg, list):
+                return cls.from_list(rarg)
+            else:
+                # TODO - remove this condition if is never entered
+                return rarg
+        except _JSONDecodeError as error:
+            if bool(errors):
+                raise error
+            else:
+                return string
