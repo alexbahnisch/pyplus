@@ -2,7 +2,7 @@
 from setuptools import find_packages, setup
 
 
-with open("./README.md", "r") as tmp_file:
+with open("README.md", "r") as tmp_file:
     long_description = tmp_file.read()
 
 
