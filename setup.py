@@ -2,11 +2,15 @@
 from setuptools import find_packages, setup
 
 
+with open("./README.md", "r") as tmp_file:
+    long_description = tmp_file.read()
+
+
 setup(
     name="pyplus",
-    version="0.0.2.dev3",
+    version="0.0.2.dev4",
     description="A library containing a collection of python extensions.",
-    long_description="<h1>A library containing a collection of python extensions.</h1>",
+    long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
     author="Alex Bahnisch",
     author_email="alexbahnisch@gmail.com",
