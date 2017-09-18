@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-from json import JSONDecodeError
-
 from pyplus.json import *
 from pyplus.path import LazyPath
 from pytest import raises
 
-ARRAY_INPUT = LazyPath("../resources/json/array.json")
-ARRAY_OUTPUT = LazyPath("../resources/json/array.zzz.json")
-OBJECT_INPUT = LazyPath("../resources/json/json.json")
-OBJECT_OUTPUT = LazyPath("../resources/json/json.zzz.json")
+DIR = LazyPath(__file__)
+ARRAY_INPUT = LazyPath(DIR.parent, "../resources/json/array.json")
+ARRAY_OUTPUT = LazyPath(DIR.parent, "../resources/json/array.zzz.json")
+OBJECT_INPUT = LazyPath(DIR.parent, "../resources/json/object.json")
+OBJECT_OUTPUT = LazyPath(DIR.parent, "../resources/json/object.zzz.json")
 
 DICT = {"1": 1, "2": 2}
 DICT_INT = {1: 1, 2: 2}
@@ -112,17 +111,17 @@ def test_array_set():
     assert array1 == array3
 
 
-def test_array_stringify():
+def test_array_serialize():
     text = ARRAY_INPUT.read_text()
     obj = JSON.from_file(ARRAY_INPUT)
-    assert text == obj.stringify()
+    assert text == obj.serialize()
 
 
 def test_json_parse():
     obj = JSON.parse("string")
     assert obj == "string"
 
-    with raises(JSONDecodeError):
+    with raises(ValueError):
         JSON.parse("string", True)
 
 
@@ -143,7 +142,7 @@ def test_object():
 def test_object_assign():
     obj1 = JSON.from_file(OBJECT_INPUT)
     obj2 = JSON.from_file(OBJECT_INPUT)
-    obj3 = obj1.assign(obj2, mutate=False)
+    obj3 = Object().assign(obj1, obj2)
 
     assert obj1 == obj2
     assert obj1 is not obj2
@@ -186,7 +185,7 @@ def test_object_assign_pure():
 
     obj1 = Object(dict1)
     obj2 = Object(dict2)
-    obj3 = obj1.assign(obj2, mutate=False)
+    obj3 = Object().assign(obj1, obj2)
 
     assert obj1 != obj2
     assert obj1 != obj3
@@ -265,7 +264,7 @@ def test_object_set():
     assert obj.new is 1
 
 
-def test_object_stringify():
+def test_object_serialize():
     text = OBJECT_INPUT.read_text()
     obj = JSON.from_file(OBJECT_INPUT)
-    assert text == obj.stringify()
+    assert text == obj.serialize()

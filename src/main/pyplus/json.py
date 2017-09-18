@@ -1,9 +1,5 @@
-#!/usr/bin/env python
-from copy import copy as _copy, deepcopy as _deepcopy
-from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads, JSONDecodeError as _JSONDecodeError
-from pathlib import Path as _Path
-
-from past.builtins import basestring as _basestring
+from copy import deepcopy as _deepcopy
+from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads
 
 from . import common as _common
 from .path import LazyPath as _LazyPath
@@ -11,13 +7,12 @@ from .path import LazyPath as _LazyPath
 
 class _JsonMixin(object):
 
-    def stringify(self, indent=2):
-        return _dumps(self, indent=indent)
+    def serialize(self, indent=2, sort_keys=True):
+        return _dumps(self, indent=indent, sort_keys=sort_keys)
 
-    def to_file(self, path, indent=2):
-        assert isinstance(path, _Path) or isinstance(path, _basestring)
+    def to_file(self, path, indent=2, sort_keys=True):
         with _LazyPath(str(path)).write() as tmp_file:
-            _dump(self, tmp_file, indent=indent)
+            _dump(self, tmp_file, indent=indent, sort_keys=sort_keys)
 
 
 class Array(list, _JsonMixin):
@@ -112,15 +107,13 @@ class Object(dict, _JsonMixin):
     def __setitem__(self, key, value):
         return super(Object, self).__setitem__(str(key), value)
 
-    def assign(self, *others, mutate=True):
+    def assign(self, *others):
         assert all(isinstance(other, type(self)) for other in others)
-        rarg = self if mutate else self.copy()
-
         for other in others:
             for keys, values in other.items():
-                rarg[keys] = values
+                self[keys] = values
 
-        return rarg
+        return self
 
     def copy(self):
         return self.__copy__()
@@ -144,7 +137,6 @@ class JSON(object):
 
     @classmethod
     def from_file(cls, path):
-        assert isinstance(path, _Path) or isinstance(path, _basestring)
         with _LazyPath(str(path)).read() as tmp_file:
             return cls.from_object(_load(tmp_file))
 
@@ -173,7 +165,7 @@ class JSON(object):
             else:
                 # TODO - remove this condition if is never entered
                 return rarg
-        except _JSONDecodeError as error:
+        except ValueError as error:
             if bool(errors):
                 raise error
             else:

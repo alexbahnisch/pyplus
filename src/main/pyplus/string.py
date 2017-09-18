@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from re import compile as _compile
 
 from .decorators import parser as _parser, spliter as _spliter
@@ -20,7 +19,7 @@ UNDERSCORES = _compile(r"(_)\1+")
 
 @_spliter
 def alias2keys(alias):
-    return [_parse(key, exception=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
+    return [_parse(key, errors=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
 
 
 def _base_case(string):

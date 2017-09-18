@@ -135,26 +135,26 @@ def test_parse_unicode():
 
 def test_parse_exception():
     with raises(ValueError, message="could not parse string: 'string'"):
-        parse("string", True)
+        parse("string", errors=True)
 
     with raises(ValueError, message="could not parse string: 'x'"):
-        parse("x", True)
+        parse("x", errors=True)
 
 
 def test_parse_exception_bytes():
     with raises(ValueError, message="could not parse string: 'string'"):
-        parse(b"string", True)
+        parse(b"string", errors=True)
 
     with raises(ValueError, message="could not parse string: 'x'"):
-        parse(b"x", True)
+        parse(b"x", errors=True)
 
 
 def test_parse_exception_unicode():
     with raises(ValueError, message="could not parse string: 'string'"):
-        parse(u"string", True)
+        parse(u"string", errors=True)
 
     with raises(ValueError, message="could not parse string: 'x'"):
-        parse(u"x", True)
+        parse(u"x", errors=True)
 
 
 def test_parser_bool():

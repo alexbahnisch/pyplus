@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-from __future__ import division
-
 from .decorators import parser as _parser
 
 
@@ -35,7 +32,7 @@ def __lazy_parse(string):
 
 
 @_parser
-def parse(string, exception=False):
+def parse(string, errors=False):
     try:
         return __parse_bool(string)
     except ValueError:
@@ -51,7 +48,7 @@ def parse(string, exception=False):
     except ValueError:
         pass
 
-    if bool(exception):
+    if bool(errors):
         raise ValueError("could not parse string: '%s'" % string)
     else:
         return string

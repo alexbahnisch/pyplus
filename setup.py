@@ -21,8 +21,6 @@ setup(
         "Natural Language :: English",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
@@ -31,9 +29,8 @@ setup(
     keywords="collection extensions plus python",
     packages=find_packages("src/main"),
     package_dir={"": "src/main"},
-    install_requires=[
-        "future>=0.16.0"
-    ],
+    python_requires=">=3.5",
+    install_requires=[],
     tests_require=[
         "pytest>=3.2.2",
         "pytest-runner>=2.11.1"

@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-from past.builtins import basestring as _basestring
+from sys import version_info as _version
 
 
 def isintlike(obj):
@@ -11,7 +10,7 @@ def isintlike(obj):
 
 
 def isiterable(obj):
-    return hasattr(obj, "__iter__") or isinstance(obj, _basestring)
+    return hasattr(obj, "__iter__") or isinstance(obj, str)
 
 
 def islistlike(obj):

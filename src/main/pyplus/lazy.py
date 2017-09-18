@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from copy import deepcopy as _deepcopy
 
 from . import io as _io

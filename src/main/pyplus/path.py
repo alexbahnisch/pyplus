@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from os import name as _name, remove as _remove
 from pathlib import Path as _Path, PosixPath as _PosixPath, WindowsPath as _WindowsPath
 from shutil import rmtree as _rmtree
@@ -17,8 +16,11 @@ class LazyPath(_Path):
             raise NotImplementedError("cannot instantiate %r on your system" % (cls.__name__,))
 
         self._init()
-        self._base = None
         return self
+
+    @property
+    def parent(self):
+        return type(self)(super().parent)
 
     def delete(self, recursive=False):
         if self.is_file():
@@ -36,7 +38,7 @@ class LazyPath(_Path):
             return None
 
     def write(self, mode="w", buffering=-1, encoding=None, errors=None, newline=None):
-        parent = _Path(self.parent)
+        parent = self.parent
 
         if not parent.exists():
             parent.mkdir(parents=True, exist_ok=True)

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from collections import OrderedDict as _OrderedDict
 from csv import reader as _reader
 from json import load as _load

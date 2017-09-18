@@ -1,40 +1,40 @@
 [
   {
-    "index": 0,
-    "name": "ArrayItem1",
-    "value": 3.466317168224542,
-    "flag": false,
     "array": [
       1
     ],
+    "flag": false,
+    "index": 0,
+    "name": "ArrayItem1",
     "object": {
       "key": "value"
-    }
+    },
+    "value": 3.466317168224542
   },
   {
-    "index": 1,
-    "name": "ArrayItem2",
-    "value": 8.194815968963692,
-    "flag": true,
     "array": [
       0,
       2
     ],
+    "flag": true,
+    "index": 1,
+    "name": "ArrayItem2",
     "object": {
       "key": "value"
-    }
+    },
+    "value": 8.194815968963692
   },
   {
-    "index": 2,
-    "name": "ArrayItem3",
-    "value": 8.423455344678434,
-    "flag": false,
     "array": [
       1,
       3
     ],
+    "flag": false,
+    "index": 2,
+    "name": "ArrayItem3",
     "object": {
       "key": "value"
-    }
+    },
+    "value": 8.423455344678434
   }
 ]

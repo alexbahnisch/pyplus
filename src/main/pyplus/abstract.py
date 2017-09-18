@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from functools import wraps as _wraps
 
 
