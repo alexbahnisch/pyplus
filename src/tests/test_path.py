@@ -46,12 +46,10 @@ def test_lazy_temp_dir_context():
 
 
 def test_lazy_temp_dir_name():
-    lazy_temp_dir = LazyTempDir("suffix", "prefix", "../resources")
+    lazy_temp_dir = LazyTempDir("suffix", "prefix")
     with lazy_temp_dir:
         assert "LazyTempDir" in repr(lazy_temp_dir)
         assert "suffix" in repr(lazy_temp_dir)
         assert "prefix" in repr(lazy_temp_dir)
-        assert "resources" in repr(lazy_temp_dir)
         assert "suffix" in str(lazy_temp_dir)
         assert "prefix" in str(lazy_temp_dir)
-        assert "resources" in str(lazy_temp_dir)
