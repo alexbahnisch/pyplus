@@ -9,8 +9,8 @@ def test_lazy_path():
         LazyPath.__new__(object)
 
     with LazyTempDir() as temp_dir:
-        temp_file = LazyPath(temp_dir).joinpath("/temp/temp.txt")
-        temp_folder = LazyPath(temp_dir).joinpath("/temp")
+        temp_file = LazyPath(temp_dir).joinpath("./temp/temp.txt")
+        temp_folder = LazyPath(temp_dir).joinpath("./temp")
 
         with temp_file.write():
             pass
