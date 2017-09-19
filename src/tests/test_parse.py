@@ -54,44 +54,56 @@ def test_lazy_parse_unicode():
 
 def test_lazy_parse_exception():
     with raises(ValueError, message="could not parse string: 'string'"):
-        lazy_parse("string")
+        lazy_parse("string", errors=True)
+    assert lazy_parse("string") == "string"
 
     with raises(ValueError, message="could not parse string: 'string + 5'"):
-        lazy_parse("string + 5")
+        lazy_parse("string + 5", errors=True)
+    assert lazy_parse("string + 5") == "string + 5"
 
     with raises(ValueError, message="could not parse string: '[1, 2)'"):
-        lazy_parse("[1, 2)")
+        lazy_parse("[1, 2)", errors=True)
+    assert lazy_parse("[1, 2)") == "[1, 2)"
 
     with raises(ValueError, message="could not parse string: 'a = 5'"):
-        lazy_parse("a = 5")
+        lazy_parse("a = 5", errors=True)
+    assert lazy_parse("a = 5") == "a = 5"
 
 
 def test_lazy_parse_exception_bytes():
     with raises(ValueError, message="could not parse string: 'string'"):
-        lazy_parse(b"string")
+        lazy_parse(b"string", errors=True)
+    assert lazy_parse(b"string") == b"string"
 
     with raises(ValueError, message="could not parse string: 'string + 5'"):
-        lazy_parse(b"string + 5")
+        lazy_parse(b"string + 5", errors=True)
+    assert lazy_parse(b"string + 5") == b"string + 5"
 
     with raises(ValueError, message="could not parse string: '[1, 2)'"):
-        lazy_parse(b"[1, 2)")
+        lazy_parse(b"[1, 2)", errors=True)
+    assert lazy_parse(b"[1, 2)") == b"[1, 2)"
 
     with raises(ValueError, message="could not parse string: 'a = 5'"):
-        lazy_parse(b"a = 5")
+        lazy_parse(b"a = 5", errors=True)
+    assert lazy_parse(b"a = 5") == b"a = 5"
 
 
 def test_lazy_parse_exception_unicode():
     with raises(ValueError, message="could not parse string: 'string'"):
-        lazy_parse(u"string")
+        lazy_parse(u"string", errors=True)
+    assert lazy_parse(u"string") == "string"
 
     with raises(ValueError, message="could not parse string: 'string + 5'"):
-        lazy_parse(u"string + 5")
+        lazy_parse(u"string + 5", errors=True)
+    assert lazy_parse(u"string + 5") == u"string + 5"
 
     with raises(ValueError, message="could not parse string: '[1, 2)'"):
-        lazy_parse(u"[1, 2)")
+        lazy_parse(u"[1, 2)", errors=True)
+    assert lazy_parse(u"[1, 2)") == u"[1, 2)"
 
     with raises(ValueError, message="could not parse string: 'a = 5'"):
-        lazy_parse(u"a = 5")
+        lazy_parse(u"a = 5", errors=True)
+    assert lazy_parse(u"a = 5") == u"a = 5"
 
 
 def test_parse():
@@ -136,25 +148,31 @@ def test_parse_unicode():
 def test_parse_exception():
     with raises(ValueError, message="could not parse string: 'string'"):
         parse("string", errors=True)
+    assert parse("string") == "string"
 
     with raises(ValueError, message="could not parse string: 'x'"):
         parse("x", errors=True)
+    assert parse("x") == "x"
 
 
 def test_parse_exception_bytes():
     with raises(ValueError, message="could not parse string: 'string'"):
         parse(b"string", errors=True)
+    assert parse(b"string") == b"string"
 
     with raises(ValueError, message="could not parse string: 'x'"):
         parse(b"x", errors=True)
+    assert parse(b"x") == b"x"
 
 
 def test_parse_exception_unicode():
     with raises(ValueError, message="could not parse string: 'string'"):
         parse(u"string", errors=True)
+    assert parse(u"string") == u"string"
 
     with raises(ValueError, message="could not parse string: 'x'"):
         parse(u"x", errors=True)
+    assert parse(u"x") == u"x"
 
 
 def test_parser_bool():
@@ -186,35 +204,44 @@ def test_parser_bool_unicode():
 
 def test_parse_bool_exception():
     with raises(ValueError, message="could not convert string to bool: '0'"):
-        parse_bool("0")
+        parse_bool("0", errors=True)
+    assert parse_bool("0") == "0"
 
     with raises(ValueError, message="could not convert string to bool: 'T'"):
-        parse_bool("T")
+        parse_bool("T", errors=True)
+    assert parse_bool("T") == "T"
 
     with raises(ValueError, message="could not convert string to bool: 'None'"):
-        parse_bool("None")
+        parse_bool("None", errors=True)
+    assert parse_bool("None") == "None"
 
 
 def test_parse_bool_exception_bytes():
     with raises(ValueError, message="could not convert string to bool: '0'"):
-        parse_bool(b"0")
+        parse_bool(b"0", errors=True)
+    assert parse_bool(b"0") == b"0"
 
     with raises(ValueError, message="could not convert string to bool: 'T'"):
-        parse_bool(b"T")
+        parse_bool(b"T", errors=True)
+    assert parse_bool(b"T") == b"T"
 
     with raises(ValueError, message="could not convert string to bool: 'None'"):
-        parse_bool(b"None")
+        parse_bool(b"None", errors=True)
+    assert parse_bool(b"None") == b"None"
 
 
 def test_parse_bool_exception_unicode():
     with raises(ValueError, message="could not convert string to bool: '0'"):
-        parse_bool(u"0")
+        parse_bool(u"0", errors=True)
+    assert parse_bool(u"0") == u"0"
 
     with raises(ValueError, message="could not convert string to bool: 'T'"):
-        parse_bool(u"T")
+        parse_bool(u"T", errors=True)
+    assert parse_bool(u"T") == u"T"
 
     with raises(ValueError, message="could not convert string to bool: 'None'"):
-        parse_bool(u"None")
+        parse_bool(u"None", errors=True)
+    assert parse_bool(u"None") == u"None"
 
 
 def test_parse_none():
@@ -240,32 +267,41 @@ def test_parse_none_unicode():
 
 def test_parse_none_exception():
     with raises(ValueError, message="could not convert string to None: '0'"):
-        parse_none("0")
+        parse_none("0", errors=True)
+    assert parse_none("0") == "0"
 
     with raises(ValueError, message="could not convert string to None: 'False'"):
-        parse_none("False")
+        parse_none("False", errors=True)
+    assert parse_none("False") == "False"
 
     with raises(ValueError, message="could not convert string to None: 'n'"):
-        parse_none("n")
+        parse_none("n", errors=True)
+    assert parse_none("n") == "n"
 
 
 def test_parse_none_exception_bytes():
     with raises(ValueError, message="could not convert string to None: '0'"):
-        parse_none(b"0")
+        parse_none(b"0", errors=True)
+    assert parse_none(b"0") == b"0"
 
     with raises(ValueError, message="could not convert string to None: 'False'"):
-        parse_none(b"False")
+        parse_none(b"False", errors=True)
+    assert parse_none(b"False") == b"False"
 
     with raises(ValueError, message="could not convert string to None: 'n'"):
-        parse_none(b"n")
+        parse_none(b"n", errors=True)
+    assert parse_none(b"n") == b"n"
 
 
 def test_parse_none_exception_unicode():
-    with raises(ValueError, message="could not convert string to none: '0'"):
-        parse_none(u"0")
+    with raises(ValueError, message="could not convert string to None: '0'"):
+        parse_none(u"0", errors=True)
+    assert parse_none(u"0") == u"0"
 
-    with raises(ValueError, message="could not convert string to none: 'False'"):
-        parse_none(u"False")
+    with raises(ValueError, message="could not convert string to None: 'False'"):
+        parse_none(u"False", errors=True)
+    assert parse_none(u"False") == u"False"
 
-    with raises(ValueError, message="could not convert string to none: 'n'"):
-        parse_none(u"n")
+    with raises(ValueError, message="could not convert string to None: 'n'"):
+        parse_none(u"n", errors=True)
+    assert parse_none(u"n") == u"n"

@@ -20,7 +20,11 @@ def parser(method):
 def spliter(method):
     @_wraps(method)
     def wrapped(string, **kwargs):
-        if isinstance(string, bytes):
+        if string is None:
+            return []
+        elif isinstance(string, (float, int)) and not isinstance(string, bool):
+            return [string]
+        elif isinstance(string, bytes):
             items = method(string.decode(), **kwargs)
             return [item.encode() if isinstance(item, str) else item for item in items]
         elif isinstance(string, str):

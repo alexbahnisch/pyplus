@@ -1,0 +1,40 @@
+{
+  "0": {
+    "array": [
+      1
+    ],
+    "flag": false,
+    "id": 0,
+    "name": "ObjectItem1",
+    "object": {
+      "key": "value"
+    },
+    "value": 3.466317168224542
+  },
+  "1": {
+    "array": [
+      0,
+      2
+    ],
+    "flag": true,
+    "index": 1,
+    "name": "ObjectItem2",
+    "object": {
+      "key": "value"
+    },
+    "value": 8.194815968963692
+  },
+  "2": {
+    "array": [
+      1,
+      3
+    ],
+    "flag": false,
+    "index": 2,
+    "name": "ObjectItem3",
+    "object": {
+      "key": "value"
+    },
+    "value": 8.423455344678434
+  }
+}

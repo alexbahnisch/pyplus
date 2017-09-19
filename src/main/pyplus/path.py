@@ -1,47 +1,43 @@
 from os import name as _name, remove as _remove
 from pathlib import Path as _Path, PosixPath as _PosixPath, WindowsPath as _WindowsPath
 from shutil import rmtree as _rmtree
-from tempfile import TemporaryDirectory as _TemporaryDirectory
+from tempfile import mkdtemp as _mkdtemp
 
 
-# noinspection PyAbstractClass
+# noinspection PyAbstractClass,PyTypeChecker
 class LazyPath(_Path):
+    __POSIX__ = _PosixPath
+    __WINDOWS__ = _WindowsPath
 
     def __new__(cls, *args, **kwargs):
-        if cls is LazyPath:
-            cls = LazyWindowsPath if _name == "nt" else LazyPosixPath
-
-        self = cls._from_parts(args, init=False)
-        if not self._flavour.is_supported:
+        if issubclass(cls, LazyPath):
+            cls = cls.__WINDOWS__ if _name == "nt" else cls.__POSIX__
+            self = cls._from_parts(args, init=False)
+            self._init()
+            return self
+        else:
             raise NotImplementedError("cannot instantiate %r on your system" % (cls.__name__,))
 
-        self._init()
-        return self
+    def delete(self, recursive=False, errors=False):
+        try:
+            if self.is_file():
+                _remove(str(self))
+            elif self.is_dir():
+                if bool(recursive):
+                    _rmtree(str(self))
+                else:
+                    self.rmdir()
 
-    @property
-    def parent(self):
-        return type(self)(super().parent)
-
-    def delete(self, recursive=False):
-        if self.is_file():
-            _remove(str(self))
-        elif self.is_dir():
-            if recursive:
-                self.rmdir()
-            else:
-                _rmtree(str(self))
+        except Exception as error:
+            if bool(errors):
+                raise error
 
     def read(self, mode="r", buffering=-1, encoding=None, errors=None, newline=None):
-        if self.exists():
-            return self.open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)
-        else:
-            return None
+        return self.open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)
 
     def write(self, mode="w", buffering=-1, encoding=None, errors=None, newline=None):
-        parent = self.parent
-
-        if not parent.exists():
-            parent.mkdir(parents=True, exist_ok=True)
+        if not self.parent.exists():
+            self.parent.mkdir(parents=True, exist_ok=True)
 
         if not self.exists():
             self.touch()
@@ -59,15 +55,37 @@ class LazyWindowsPath(LazyPath, _WindowsPath):
     pass
 
 
+LazyPath.__POSIX__ = LazyPosixPath
+LazyPath.__WINDOWS__ = LazyWindowsPath
+
+
 # noinspection PyShadowingBuiltins
-class LazyTempDir(_TemporaryDirectory):
+class LazyTempDir:
+    __PATH__ = LazyPath
 
     def __init__(self, suffix=None, prefix=None, dir=None):
-        super().__init__(suffix, prefix, dir)
-        self.path = LazyPath(self.name)
+        self.__path = self.__PATH__(_mkdtemp(suffix, prefix, dir))
 
     def __enter__(self):
         return self.path
 
+    def __exit__(self, exc, value, tb):
+        self.delete()
+
+    def __repr__(self):
+        return "<{} {!r}>".format(self.__class__.__name__, self.name)
+
     def __str__(self):
-        return str(self.path)
+        return self.name
+
+    def delete(self):
+        if self.path.exists():
+            _rmtree(self.name)
+
+    @property
+    def name(self):
+        return str(self.__path)
+
+    @property
+    def path(self):
+        return self.__path

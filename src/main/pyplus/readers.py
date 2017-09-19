@@ -1,14 +1,12 @@
 from collections import OrderedDict as _OrderedDict
 from csv import reader as _reader
-from json import load as _load
-from pathlib import Path as _Path
 
 from .parse import create_parser as _create_parser
-from .string import alias2keys as _alias2keys
+from .path import LazyPath as _LazyPath
 
 
 def _csv2dict(path, headers, parse, sep):
-    path, headers, parser = _Path(str(path)).resolve(), bool(headers), _create_parser(parse)
+    path, headers, parser = _LazyPath(path), bool(headers), _create_parser(parse)
     dict_ = _OrderedDict()
 
     with path.open("r") as read_file:
@@ -40,8 +38,8 @@ def _csv2dict(path, headers, parse, sep):
         return dict_
 
 
-def _csv2list(path, headers, parse, sep=","):
-    path, headers, parser = _Path(str(path)).resolve(), bool(headers), _create_parser(parse)
+def _csv2list(path, headers=True, parser=True, sep=","):
+    path, headers, parser = _LazyPath(str(path)), bool(headers), _create_parser(parser)
     list_ = list()
 
     with path.open("r") as read_file:
@@ -69,21 +67,6 @@ def csv2dict(path, headers=True, parse=True):
 
 def csv2list(path, headers=True, parse=True):
     return _csv2list(path, headers, parse, ",")
-
-
-def json2object(path, alias=None):
-    path, alias = _Path(str(path)).resolve(), _alias2keys(alias)
-
-    with path.open("r") as file_io:
-        json = _load(file_io)
-
-    for key in alias:
-        try:
-            json = json[key]
-        except (KeyError, IndexError):
-            return None
-
-    return json
 
 
 def tsv2dict(path, headers=True, parse=True):

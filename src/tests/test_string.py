@@ -1,46 +1,20 @@
 #!/usr/bin/env python
 from pyplus.string import alias2keys, camel_case, snake_case, title_case
+from pytest import raises
 
 STRINGS = [
-    "TestCase",
-    "test_case",
-    "Test Case",
-    "testCase",
-    "_test_case",
-    "test-case",
-    "test+Case",
-    "Test.case",
-    "Test, Case",
-    "0%Test_Case",
-    "#1Test_Case"
+    "TestCase", "test_case", "Test Case", "testCase", "_test_case", "test-case", "test+Case", "Test.case",
+    "Test, Case", "0%Test_Case", "#1Test_Case"
 ]
 
 B_STRINGS = [
-    b"TestCase",
-    b"test_case",
-    b"Test Case",
-    b"testCase",
-    b"_test_case",
-    b"test-case",
-    b"test+Case",
-    b"Test.case",
-    b"Test, Case",
-    b"0%Test_Case",
-    b"#1Test_Case"
+    b"TestCase", b"test_case", b"Test Case", b"testCase", b"_test_case", b"test-case", b"test+Case", b"Test.case",
+    b"Test, Case", b"0%Test_Case", b"#1Test_Case"
 ]
 
 U_STRINGS = [
-    u"TestCase",
-    u"test_case",
-    u"Test Case",
-    u"testCase",
-    u"_test_case",
-    u"test-case",
-    u"test+Case",
-    u"Test.case",
-    u"Test, Case",
-    u"0%Test_Case",
-    u"#1Test_Case"
+    u"TestCase", u"test_case", u"Test Case", u"testCase", u"_test_case", u"test-case", u"test+Case", u"Test.case",
+    u"Test, Case", u"0%Test_Case", u"#1Test_Case"
 ]
 
 
@@ -48,30 +22,36 @@ def test_alias():
     assert ["key1", "key2", "key3"] == alias2keys("key1.key2.key3")
     assert ["key1", "key2", "key3"] == alias2keys("key1/key2/key3")
     assert ["key1", "key2", "key3"] == alias2keys("key1\key2\key3")
+    assert ["key1", "key2", "key3"] == alias2keys("key1>key2>key3")
     assert ["key1", 2, "key3"] == alias2keys("key1[2].key3")
-    assert ["key1", 2, "key3"] == alias2keys("key1[2]/key3")
-    assert ["key1", 2, "key3"] == alias2keys("key1[2]\key3")
-    assert ["key1", 2, "key3"] == alias2keys("key1[2].key3")
-    assert ["key1", 2, "key3"] == alias2keys("key1[2]/key3")
-    assert ["key1", 2, "key3"] == alias2keys("key1[2]\key3")
+    assert ["key1", 2, 3] == alias2keys("key1>2>3")
 
 
 def test_alias_bytes():
     assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1.key2.key3")
     assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1/key2/key3")
     assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1\key2\key3")
+    assert [b"key1", b"key2", b"key3"] == alias2keys(b"key1>key2>key3")
     assert [b"key1", 2, b"key3"] == alias2keys(b"key1[2].key3")
-    assert [b"key1", 2, b"key3"] == alias2keys(b"key1[2]/key3")
-    assert [b"key1", 2, b"key3"] == alias2keys(b"key1[2]\key3")
+    assert [b"key1", 2, 3] == alias2keys(b"key1>2>3")
 
 
 def test_alias_unicode():
     assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1.key2.key3")
     assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1/key2/key3")
     assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1\key2\key3")
+    assert [u"key1", u"key2", u"key3"] == alias2keys(u"key1>key2>key3")
     assert [u"key1", 2, u"key3"] == alias2keys(u"key1[2].key3")
-    assert [u"key1", 2, u"key3"] == alias2keys(u"key1[2]/key3")
-    assert [u"key1", 2, u"key3"] == alias2keys(u"key1[2]\key3")
+    assert [u"key1", 2, 3] == alias2keys(u"key1>2>3")
+
+
+def test_alias_other():
+    assert [] == alias2keys(None)
+    assert [0] == alias2keys(0)
+    assert [1.5] == alias2keys(1.5)
+
+    with raises(TypeError, message="'bool' object is not a string"):
+        alias2keys(True)
 
 
 def test_camel_case():

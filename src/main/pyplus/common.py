@@ -1,4 +1,3 @@
-from sys import version_info as _version
 
 
 def isintlike(obj):

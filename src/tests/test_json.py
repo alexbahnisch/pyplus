@@ -5,8 +5,10 @@ from pytest import raises
 
 DIR = LazyPath(__file__)
 ARRAY_INPUT = LazyPath(DIR.parent, "../resources/json/array.json")
+SUB_ARRAY_OUTPUT = LazyPath(DIR.parent, "../resources/json/sub-array.json")
 ARRAY_OUTPUT = LazyPath(DIR.parent, "../resources/json/array.zzz.json")
 OBJECT_INPUT = LazyPath(DIR.parent, "../resources/json/object.json")
+SUB_OBJECT_INPUT = DIR.parent.joinpath("../resources/json/sub-object.json")
 OBJECT_OUTPUT = LazyPath(DIR.parent, "../resources/json/object.zzz.json")
 
 DICT = {"1": 1, "2": 2}
@@ -17,6 +19,20 @@ MAPPABLE = [("1", 1), ("2", 2)]
 SET = {0, 1, 2, 3, 4}
 STRING = "01234"
 TUPLE = (0, 1, 2, 3, 4)
+
+
+def test_array_alias():
+    obj1 = JSON.from_file(ARRAY_INPUT, 0)
+    obj2 = JSON.from_file(SUB_ARRAY_OUTPUT)
+    assert obj1 == obj2
+    assert obj1 is not obj2
+
+    obj3 = JSON.from_file(ARRAY_INPUT, "[0].array")
+    obj4 = JSON.from_file(SUB_ARRAY_OUTPUT, "array")
+    assert obj3 == obj4
+    assert obj3 is not obj4
+
+    assert JSON.from_file(OBJECT_INPUT, "[0].doesNotExist") is None
 
 
 def test_array_concat():
@@ -117,6 +133,14 @@ def test_array_serialize():
     assert text == obj.serialize()
 
 
+def test_json_io():
+    assert JSON.from_file("dummyPath", errors=False) is None
+    assert JSON.from_file("dummyPath", errors=False) is None
+
+    with raises(FileNotFoundError, message="[Errno 2] No such file or directory: 'dummyPath'"):
+        JSON.from_file("dummyPath")
+
+
 def test_json_parse():
     obj = JSON.parse("string")
     assert obj == "string"
@@ -137,6 +161,20 @@ def test_object():
 
     with raises(TypeError, message="json update sequence element #0 has length 3; 2 is required"):
         Object([(1, 2, 3)])
+
+
+def test_object_alias():
+    obj1 = JSON.from_file(OBJECT_INPUT, "objects")
+    obj2 = JSON.from_file(SUB_OBJECT_INPUT)
+    assert obj1 == obj2
+    assert obj1 is not obj2
+
+    obj3 = JSON.from_file(OBJECT_INPUT, "objects[0]")
+    obj4 = JSON.from_file(SUB_OBJECT_INPUT, 0)
+    assert obj3 == obj4
+    assert obj3 is not obj4
+
+    assert JSON.from_file(OBJECT_INPUT, "objects[0].doesNotExist") is None
 
 
 def test_object_assign():

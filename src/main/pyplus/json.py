@@ -2,7 +2,9 @@ from copy import deepcopy as _deepcopy
 from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads
 
 from . import common as _common
+from .parse import create_lazy_parser
 from .path import LazyPath as _LazyPath
+from .string import alias2keys as _alias2keys
 
 
 class _JsonMixin(object):
@@ -121,9 +123,14 @@ class Object(dict, _JsonMixin):
     def deepcopy(self):
         return self.__deepcopy__({})
 
-    def merge(self, *others):
-        assert all(isinstance(other, type(self)) for other in others)
-        pass  # TODO - finish
+    def items(self, parser=False):
+        if parser is False:
+            return super().items()
+        else:
+            parser = create_lazy_parser(parser)
+            return [(parser(key), value) for key, value in super().items()]
+
+    # TODO - add merge
 
 
 class JSON(object):
@@ -136,9 +143,25 @@ class JSON(object):
         return cls.__OBJECT__({key: cls.from_object(value) for key, value in dict_.items()})
 
     @classmethod
-    def from_file(cls, path):
-        with _LazyPath(str(path)).read() as tmp_file:
-            return cls.from_object(_load(tmp_file))
+    def from_file(cls, path, alias=None, errors=True):
+        path, alias = _LazyPath(path), _alias2keys(alias) if alias is not None else []
+
+        if path.exists():
+            with path.read() as tmp_file:
+                rarg = cls.from_object(_load(tmp_file))
+
+                for key in alias:
+                    rarg = rarg[key]
+                    if rarg is None:
+                        return None
+
+                return rarg
+
+        else:
+            if bool(errors):
+                raise FileNotFoundError("[Errno 2] No such file or directory: '{}'".format(path))
+            else:
+                return None
 
     @classmethod
     def from_list(cls, list_):
@@ -162,9 +185,7 @@ class JSON(object):
                 return cls.from_dict(rarg)
             elif isinstance(rarg, list):
                 return cls.from_list(rarg)
-            else:
-                # TODO - remove this condition if is never entered
-                return rarg
+
         except ValueError as error:
             if bool(errors):
                 raise error

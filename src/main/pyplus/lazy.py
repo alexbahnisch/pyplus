@@ -1,6 +1,6 @@
 from copy import deepcopy as _deepcopy
 
-from . import io as _io
+from . import readers as _io
 from .string import snake_case as _snake_case
 
 
