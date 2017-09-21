@@ -16,6 +16,7 @@ DICT_INT = {1: 1, 2: 2}
 LIST = [0, 1, 2, 3, 4]
 LIST_STR = ["0", "1", "2", "3", "4"]
 MAPPABLE = [("1", 1), ("2", 2)]
+MAPPABLE_INT = [(1, 1), (2, 2)]
 SET = {0, 1, 2, 3, 4}
 STRING = "01234"
 TUPLE = (0, 1, 2, 3, 4)
@@ -280,6 +281,13 @@ def test_object_io():
     text2 = OBJECT_OUTPUT.read_text()
     OBJECT_OUTPUT.delete()
     assert text1 == text2
+
+
+def test_object_items():
+    obj = Object(DICT_INT)
+    assert all(items in MAPPABLE for items in obj.items())
+    assert all(items in MAPPABLE_INT for items in obj.items(parser=True))
+    assert all(items in MAPPABLE_INT for items in obj.items(parser=int))
 
 
 def test_object_ne():

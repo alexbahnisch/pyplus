@@ -20,7 +20,7 @@ parse_bool = _parser(__parse_bool)
 def __parse_none(string, errors=False):
     lower_string = str(string).lower()
 
-    if lower_string in ["", "null", "none", "undefined"]:
+    if lower_string in ["", "#n/a", "null", "none", "undefined"]:
         return None
     else:
         if bool(errors):

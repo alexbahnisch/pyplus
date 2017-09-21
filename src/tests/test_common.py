@@ -1,6 +1,10 @@
 #!/usr/bin/env python
+from decimal import Decimal
+
 from pyplus.common import *
 
+
+DECIMAL = Decimal(1.5)
 DICT = {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
 FLOAT = 1.5
 INT = 1
@@ -130,6 +134,25 @@ def test_islistlike_not():
     assert not islistlike(B_STRING)
     assert not islistlike(U_STRING)
     assert not islistlike(TUPLE)
+
+
+def test_isnumber():
+    assert isnumber(DECIMAL)
+    assert isnumber(INT)
+    assert isnumber(FLOAT)
+
+
+def test_isnumber_not():
+    assert not isnumber(DICT)
+    assert not isnumber(False)
+    assert not isnumber(None)
+    assert not isnumber(LIST)
+    assert not isnumber(OBJECT)
+    assert not isnumber(SET)
+    assert not isnumber(STRING)
+    assert not isnumber(B_STRING)
+    assert not isnumber(U_STRING)
+    assert not isnumber(TUPLE)
 
 
 def test_ispair():

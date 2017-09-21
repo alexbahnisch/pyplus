@@ -7,11 +7,20 @@ def fun(arg):
     return arg
 
 
-def test_create_parse():
-    par = create_parser(False)
-    assert "string" == par("string")
-    assert b"string" == par(b"string")
-    assert u"string" == par(u"string")
+def test_create_lazy_parser():
+    parser = create_lazy_parser(False)
+    assert "string" == parser("string")
+    assert b"string" == parser(b"string")
+    assert u"string" == parser(u"string")
+    assert lazy_parse is create_lazy_parser(True)
+    assert fun is create_lazy_parser(fun)
+
+
+def test_create_parser():
+    parser = create_parser(False)
+    assert "string" == parser("string")
+    assert b"string" == parser(b"string")
+    assert u"string" == parser(u"string")
     assert parse is create_parser(True)
     assert fun is create_parser(fun)
 
@@ -246,6 +255,7 @@ def test_parse_bool_exception_unicode():
 
 def test_parse_none():
     assert None is parse_none("")
+    assert None is parse_none("#N/A")
     assert None is parse_none("None")
     assert None is parse_none("null")
     assert None is parse_none("undefined")
@@ -253,6 +263,7 @@ def test_parse_none():
 
 def test_parse_none_bytes():
     assert None is parse_none(b"")
+    assert None is parse_none(b"#N/A")
     assert None is parse_none(b"None")
     assert None is parse_none(b"null")
     assert None is parse_none(b"undefined")
@@ -260,6 +271,7 @@ def test_parse_none_bytes():
 
 def test_parse_none_unicode():
     assert None is parse_none(u"")
+    assert None is parse_none(u"#N/A")
     assert None is parse_none(u"None")
     assert None is parse_none(u"null")
     assert None is parse_none(u"undefined")

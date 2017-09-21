@@ -1,3 +1,4 @@
+from decimal import Decimal
 
 
 def isintlike(obj):
@@ -14,6 +15,10 @@ def isiterable(obj):
 
 def islistlike(obj):
     return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and hasattr(obj, "__setitem__") and isiterable(obj)
+
+
+def isnumber(obj):
+    return isinstance(obj, (Decimal, float, int)) and not isinstance(obj, bool)
 
 
 def ispair(obj):

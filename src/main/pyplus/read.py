@@ -1,24 +1,22 @@
-from collections import OrderedDict as _OrderedDict
 from csv import reader as _reader
+from collections import defaultdict
 
 from .parse import create_parser as _create_parser
 from .path import LazyPath as _LazyPath
 
 
-def _csv2dict(path, headers, parse, sep):
+def _csv2dict(path, headers, parse, delimiter):
     path, headers, parser = _LazyPath(path), bool(headers), _create_parser(parse)
-    dict_ = _OrderedDict()
+    dict_ = defaultdict(list)
 
-    with path.open("r") as read_file:
-        csv_reader = _reader(read_file, sep=sep)
+    with path.read() as read_file:
+        csv_reader = _reader(read_file, delimiter=delimiter)
 
         if headers:
             for row_index, row in enumerate(csv_reader):
 
                 if row_index == 0:
                     headers = list(row)
-                    for header in headers:
-                        dict_[header] = []
 
                 else:
                     for col_index, cell in enumerate(row):
@@ -26,24 +24,18 @@ def _csv2dict(path, headers, parse, sep):
 
         else:
             for row_index, row in enumerate(csv_reader):
+                for col_index, cell in enumerate(row):
+                    dict_[col_index].append(parser(cell))
 
-                if row == 0:
-                    for col_index, cell in enumerate(row):
-                        dict_[col_index] = [parser(cell)]
-
-                else:
-                    for col_index, cell in enumerate(row):
-                        dict_[col_index].append(parser(cell))
-
-        return dict_
+        return dict(dict_)
 
 
-def _csv2list(path, headers=True, parser=True, sep=","):
+def _csv2list(path, headers=True, parser=True, delimiter=","):
     path, headers, parser = _LazyPath(str(path)), bool(headers), _create_parser(parser)
     list_ = list()
 
     with path.open("r") as read_file:
-        csv_reader = _reader(read_file, sep=sep)
+        csv_reader = _reader(read_file, delimiter=delimiter)
 
         if headers:
             for row_index, row in enumerate(csv_reader):
@@ -56,7 +48,7 @@ def _csv2list(path, headers=True, parser=True, sep=","):
 
         else:
             for row_index, row in enumerate(csv_reader):
-                list_.append(map(parser, row))
+                list_.append([parser(cell) for cell in row])
 
         return list_
 
