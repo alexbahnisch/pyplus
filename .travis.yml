@@ -1,5 +1,9 @@
 language: python
 
+os:
+  - linux
+  - osx
+
 python:
   - 3.5
   - 3.6
@@ -22,7 +26,7 @@ deploy:
     user: alexbahnisch
     password:
       secure: Gb3w5bHwlZaSYIDwEDWth7++rA//T8kMmWA6Ap2H7F6nMRMQ1EAC3HKvVnJudKXKcZe+6sbNmhOaRH0z/DSsm8+5HEvA+YdJ5t7vAXU+A8Myb1ZSAiY2D0Gr1rxaI/OjfK8ybivJkIRY3vnG3PQ5rPOPITRI7s5U5ScToOMcg45vskBnmXKTYtYysNtJR+dGn5M/ebWdD5hyIy8MQ0DarXPEooQPOp6tcYDZYu5gFQoU+YCfu4gpKafUZhTryQyQcKiwmxzS+U8/U1WlhmIi2oh4zmDIA+JmcxZW3ijSk1d2GTWDFz0ruWHJuPfHOBR/HshtO+nOPNcgw1TRw9HU2xQU2sMvedQjlmEvyBKGRkeBAouWqMjqNlWVFeOAXXAYge8Clmg+uMlB2Lk/zInD3yUYqT+PYC1kj2F+zL+Brq18iwAwMVXQSNkzsTBKTaAaGVEgGoAbysuWrHSRNNez/psI0SEjFLSsUeay3taEZ9m6TckN46UFTDhzNcGbvec+0Qv2Y/F74v0G3J71usEywHnsmIuTQejVgYdujP51X4f7P3iDn/w7is06r1garkNYQf9SgkZChF6zM1zoIR7n07BhSgbNKPtV5IeyEMinb2LAc6Yfrae6HRAFNGZqS52YghXx7cTtWmEzNp8bxT/bsoT3iz2E3ewnYcjBzRSzQA8=
-    distributions: sdist bdist_wheel
+    distributions: sdist bdist_wheel --python-tag py35 bdist_wheel --python-tag py36
     on:
       branch: master
       python: 3.6
@@ -33,7 +37,7 @@ deploy:
     user: alexbahnisch
     password:
       secure: Gb3w5bHwlZaSYIDwEDWth7++rA//T8kMmWA6Ap2H7F6nMRMQ1EAC3HKvVnJudKXKcZe+6sbNmhOaRH0z/DSsm8+5HEvA+YdJ5t7vAXU+A8Myb1ZSAiY2D0Gr1rxaI/OjfK8ybivJkIRY3vnG3PQ5rPOPITRI7s5U5ScToOMcg45vskBnmXKTYtYysNtJR+dGn5M/ebWdD5hyIy8MQ0DarXPEooQPOp6tcYDZYu5gFQoU+YCfu4gpKafUZhTryQyQcKiwmxzS+U8/U1WlhmIi2oh4zmDIA+JmcxZW3ijSk1d2GTWDFz0ruWHJuPfHOBR/HshtO+nOPNcgw1TRw9HU2xQU2sMvedQjlmEvyBKGRkeBAouWqMjqNlWVFeOAXXAYge8Clmg+uMlB2Lk/zInD3yUYqT+PYC1kj2F+zL+Brq18iwAwMVXQSNkzsTBKTaAaGVEgGoAbysuWrHSRNNez/psI0SEjFLSsUeay3taEZ9m6TckN46UFTDhzNcGbvec+0Qv2Y/F74v0G3J71usEywHnsmIuTQejVgYdujP51X4f7P3iDn/w7is06r1garkNYQf9SgkZChF6zM1zoIR7n07BhSgbNKPtV5IeyEMinb2LAc6Yfrae6HRAFNGZqS52YghXx7cTtWmEzNp8bxT/bsoT3iz2E3ewnYcjBzRSzQA8=
-    distributions: sdist bdist_wheel
+    distributions: sdist bdist_wheel --python-tag py35 bdist_wheel --python-tag py36
     on:
       branch: master
       python: 3.6

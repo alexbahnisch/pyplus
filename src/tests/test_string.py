@@ -69,6 +69,21 @@ def test_camel_case_unicode():
         assert u"TestCase" == camel_case(string)
 
 
+def test_camel_case_lower():
+    for string in STRINGS:
+        assert "testCase" == camel_case(string, title=False)
+
+
+def test_camel_case_lower_bytes():
+    for string in B_STRINGS:
+        assert b"testCase" == camel_case(string, title=False)
+
+
+def test_camel_case_lower_unicode():
+    for string in U_STRINGS:
+        assert u"testCase" == camel_case(string, title=False)
+
+
 def test_snake_case():
     for string in STRINGS:
         assert "test_case" == snake_case(string)

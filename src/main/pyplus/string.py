@@ -30,12 +30,15 @@ def _base_case(string):
 
 
 @_parser
-def camel_case(string):
+def camel_case(string, title=True):
     string = _base_case(string)
     string = UNDERSCORE.sub(r" ", string)
     string = CAPITALS.sub(r"\1 \2", string).title()
     string = SPACE.sub(r"", string)
-    return INVALID_LEAD.sub(r"", string)
+    string = INVALID_LEAD.sub(r"", string)
+    if not bool(title):
+        string = string[0].lower() + string[1:]
+    return string
 
 
 @_parser
