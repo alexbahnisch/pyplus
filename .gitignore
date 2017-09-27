@@ -10,4 +10,4 @@ dist
 # wildcards:
 !**.gitkeep
 **.egg-info
-***.zzz.*
+***.temp.*

@@ -1,7 +1,22 @@
 from datetime import datetime as _datetime
 from functools import wraps as _wraps
 
+from .singleton import singleton
 
+
+def decorator(method):
+    if callable(method):
+        @_wraps(method)
+        def wrapped(*args, **kwargs):
+            return method(*args, **kwargs)
+
+        return wrapped
+
+    else:
+        raise TypeError("'%s' object is not callable" % type(method))
+
+
+@decorator
 def parser(method):
     @_wraps(method)
     def wrapped(string, **kwargs):
@@ -17,6 +32,7 @@ def parser(method):
     return wrapped
 
 
+@decorator
 def spliter(method):
     @_wraps(method)
     def wrapped(string, **kwargs):
@@ -36,19 +52,52 @@ def spliter(method):
     return wrapped
 
 
-def timer(logger=print, disabled=False):
-    if disabled:
-        def wrapper(method):
-            return method
-        return wrapper
+@singleton
+class Timer:
+    def __init__(self, logger=print, disabled=False):
+        self.__disabled = bool(disabled)
+        self.__level = 0
+        self.__logger = logger
 
-    else:
-        def wrapper(method):
+    def disable(self):
+        self.__disabled = True
+
+    def enable(self):
+        self.__disabled = False
+
+    @decorator
+    def __call__(self, method):
+        if self.__disabled:
+            return method
+
+        else:
             @_wraps(method)
             def wrapped(*args, **kwargs):
                 start = _datetime.now()
                 output = method(*args, **kwargs)
-                logger(_datetime.now() - start)
+                self.__logger(_datetime.now() - start)
                 return output
+
             return wrapped
-        return wrapper
+
+    @decorator
+    def plus(self, method):
+        if self.__disabled:
+            return method
+
+        else:
+            @_wraps(method)
+            def wrapped(*args, **kwargs):
+                start = _datetime.now()
+                self.__logger(self.__level * "  " + "%s starting %s ..." % (start, method.__name__))
+                self.__level += 1
+
+                output = method(*args, **kwargs)
+                self.__level -= 1
+
+                end = _datetime.now()
+                self.__logger(
+                    self.__level * "  " + "... %s finished %s, completed in %s" % (end, method.__name__, end - start))
+                return output
+
+            return wrapped

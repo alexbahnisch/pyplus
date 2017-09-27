@@ -1,3 +1,4 @@
+from collections import OrderedDict as _OrderedDict
 from copy import deepcopy as _deepcopy
 from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads
 
@@ -25,6 +26,18 @@ class Array(list, _JsonMixin):
     def __deepcopy__(self, memo):
         return type(self)(_deepcopy(item) for item in self)
 
+    def __eq__(self, other):
+        if isinstance(other, list) and len(self) == len(other):
+            for index, item in enumerate(self):
+                if item != other[index]:
+                    return False
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __getitem__(self, index):
         if _common.isintlike(index) and 0 <= int(index) < self.length:
             return super(Array, self).__getitem__(int(index))
@@ -34,6 +47,8 @@ class Array(list, _JsonMixin):
     def __setitem__(self, index, value):
         if _common.isintlike(index) and 0 <= int(index) < self.length:
             super(Array, self).__setitem__(int(index), value)
+        elif _common.isintlike(index) and int(index) == self.length:
+            self.append(value)
         elif _common.isintlike(index) and int(index) > self.length:
             self.extend([None] * (int(index) - self.length) + [value])
 
@@ -62,7 +77,8 @@ class Array(list, _JsonMixin):
         return self.length
 
 
-class Object(dict, _JsonMixin):
+# noinspection PyMethodOverriding
+class Object(_OrderedDict, _JsonMixin):
 
     def __init__(self, *args, **kwargs):
         if len(args) > 1:
@@ -97,11 +113,26 @@ class Object(dict, _JsonMixin):
     def __deepcopy__(self, memo):
         return type(self)({key: _deepcopy(value) for key, value in self.items()})
 
+    def __eq__(self, other):
+        if isinstance(other, dict) and self.keys() == other.keys():
+            for key, value in other.items():
+                if self[key] != value:
+                    return False
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __getattr__(self, key):
         return self.__getitem__(str(key))
 
     def __getitem__(self, key):
         return super(Object, self).get(str(key))
+
+    def __repr__(self):
+        return dict.__repr__(self)
 
     def __setattr__(self, key, value):
         self.__setitem__(str(key), value)

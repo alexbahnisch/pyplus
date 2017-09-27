@@ -285,9 +285,9 @@ def test_object_io():
 
 def test_object_items():
     obj = Object(DICT_INT)
-    assert all(items in MAPPABLE for items in obj.items())
-    assert all(items in MAPPABLE_INT for items in obj.items(parser=True))
-    assert all(items in MAPPABLE_INT for items in obj.items(parser=int))
+    assert all(item in MAPPABLE for item in obj.items())
+    assert all(item in MAPPABLE_INT for item in obj.items(parser=True))
+    assert all(item in MAPPABLE_INT for item in obj.items(parser=int))
 
 
 def test_object_ne():
@@ -300,6 +300,12 @@ def test_object_parse():
     text = OBJECT_INPUT.read_text()
     obj = JSON.from_file(OBJECT_INPUT)
     assert obj == JSON.parse(text)
+
+
+def test_object_repr():
+    dict_ = {"key": "value"}
+    obj = Object(dict_)
+    assert repr(dict_) == repr(obj)
 
 
 def test_object_set():

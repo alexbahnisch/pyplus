@@ -1,12 +1,13 @@
 from copy import deepcopy as _deepcopy
 
-from . import read as _io
+from . import table as _io
 from .string import snake_case as _snake_case
 
 
 class LazyObject(object):
 
-    def __init__(self, **kwargs):
+    def __init__(self, __class__="LazyObject", **kwargs):
+        self.__class__.__name__ = __class__
         for key, value in kwargs.items():
             object.__setattr__(self, key, value)
 
@@ -45,7 +46,7 @@ class LazyObject(object):
 
     @classmethod
     def from_list(cls, list_):
-        assert isinstance(list_, dict)
+        assert isinstance(list_, list_)
         return cls(**{"param%s" % index: item for index, item in enumerate(list_)})
 
     @classmethod
