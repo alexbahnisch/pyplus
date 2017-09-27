@@ -1,0 +1,36 @@
+environment:
+  CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
+  TOX_ENV: "pywin"
+
+  matrix:
+    - PYTHON: "C:\\Python35"
+      PYTHON_VERSION: "3.5.4"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python35-x64"
+      PYTHON_VERSION: "3.5.4"
+      PYTHON_ARCH: "64"
+
+    - PYTHON: "C:\\Python36"
+      PYTHON_VERSION: "3.6.2"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_VERSION: "3.6.2"
+      PYTHON_ARCH: "64"
+
+install:
+  - ps: "wget https://github.com/alexbahnisch/pyplus/archive/master.zip -OutFile ./master.zip"
+  - "7z e master.zip */appveyor/* -oappveyor"
+  - "powershell ./appveyor/install.ps1"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+
+build: false
+
+before_test:
+  - "%CMD_IN_ENV% pip install tox"
+
+test_script:
+  - "%CMD_IN_ENV% tox -e %TOX_ENV%"
