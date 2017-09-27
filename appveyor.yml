@@ -22,7 +22,6 @@ environment:
 install:
   - ps: "wget https://github.com/alexbahnisch/pyplus/archive/master.zip -OutFile ./master.zip"
   - "7z e master.zip */appveyor/* -oappveyor"
-  - "powershell ./appveyor/install.ps1"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""

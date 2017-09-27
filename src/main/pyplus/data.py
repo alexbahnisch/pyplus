@@ -28,8 +28,8 @@ class DataObjectsMixin(object):
         self.__objects = []
         self.init()
 
-    def __getitem__(self, item):
-        return self.__objects[item]
+    def __getitem__(self, index):
+        return self.__objects[index]
 
     def __iter__(self):
         return iter(self.__objects)
