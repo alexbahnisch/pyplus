@@ -1,16 +1,13 @@
-from os.path import abspath, dirname, join
 from setuptools import find_packages, setup
-
-directory = abspath(dirname(__file__))
 
 try:
     # noinspection PyUnresolvedReferences
     from pypandoc import convert
 
-    long_description = convert(join(directory, "README.md"), "rst")
+    long_description = convert("README.md", "rst")
 
 except ImportError:
-    with open(join(directory, "README.md"), "r") as file:
+    with open("README.md", "r") as file:
         long_description = file.read()
 
 setup(
