@@ -1,28 +1,32 @@
 environment:
 
   matrix:
-    - PYTHON: "C:\\Python35"
-      PYTHON_VERSION: "3.5.4"
-      PYTHON_ARCH: "32"
+    - PYTHON: C:\\Python35
+      PYTHON_VERSION: 3.5.4
+      PYTHON_ARCH: 32
 
-    - PYTHON: "C:\\Python35-x64"
-      PYTHON_VERSION: "3.5.4"
-      PYTHON_ARCH: "64"
+    - PYTHON: C:\\Python35-x64
+      PYTHON_VERSION: 3.5.4
+      PYTHON_ARCH: 64
 
-    - PYTHON: "C:\\Python36"
-      PYTHON_VERSION: "3.6.2"
-      PYTHON_ARCH: "32"
+    - PYTHON: C:\\Python36
+      PYTHON_VERSION: 3.6.2
+      PYTHON_ARCH: 32
 
-    - PYTHON: "C:\\Python36-x64"
-      PYTHON_VERSION: "3.6.2"
-      PYTHON_ARCH: "64"
+    - PYTHON: C:\\Python36-x64
+      PYTHON_VERSION: 3.6.2
+      PYTHON_ARCH: 64
 
 install:
-  - ps: "wget https://github.com/alexbahnisch/pyplus/archive/master.zip -OutFile ./master.zip"
-  - "7z e master.zip */appveyor/* -oappveyor"
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - ps: wget https://github.com/alexbahnisch/pyplus/archive/master.zip -OutFile ./master.zip
+  - 7z e master.zip */appveyor/* -oappveyor
+  - SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+  - easy_install pip
 
 build: false
 
+before_test:
+  - pip install pytest pytest-runner
+
 test_script:
-  - "python setup.py test"
+  - python setup.py test

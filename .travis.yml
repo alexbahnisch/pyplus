@@ -16,6 +16,9 @@ after_success:
 notifications:
   email: true
 
+before_deploy:
+  - pip install pypandoc
+
 deploy:
   - provider: pypi
     server: https://test.pypi.org/legacy/
