@@ -1,3 +1,4 @@
+from os import curdir, listdir
 from setuptools import find_packages, setup
 
 try:
@@ -8,6 +9,7 @@ try:
     long_description = convert("README.md", "rst")
 
 except (ImportError, OSError):
+    print(listdir(curdir))
     with open("README.md", "r") as file:
         long_description = file.read()
 
