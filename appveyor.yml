@@ -21,12 +21,8 @@ install:
   - ps: "wget https://github.com/alexbahnisch/pyplus/archive/master.zip -OutFile ./master.zip"
   - "7z e master.zip */appveyor/* -oappveyor"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - "easy_install pip"
 
 build: false
 
-before_test:
-  - "pip install tox"
-
 test_script:
-  - "tox"
+  - "python setup.py test"

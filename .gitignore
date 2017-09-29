@@ -6,8 +6,9 @@
 .tox
 build
 dist
+pandoc-*.msi
 
 # wildcards:
 !**.gitkeep
 **.egg-info
-***.temp.*
+**.temp.*

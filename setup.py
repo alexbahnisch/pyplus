@@ -2,11 +2,12 @@ from setuptools import find_packages, setup
 
 try:
     # noinspection PyUnresolvedReferences
-    from pypandoc import convert
+    from pypandoc import convert, download_pandoc
 
+    download_pandoc()
     long_description = convert("README.md", "rst")
 
-except ImportError:
+except (ImportError, OSError):
     with open("README.md", "r") as file:
         long_description = file.read()
 
