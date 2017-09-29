@@ -12,7 +12,7 @@ except (ImportError, OSError):
 
 setup(
     name="pyplus",
-    version="0.0.5.dev4",
+    version="0.0.5.dev5",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",

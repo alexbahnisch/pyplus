@@ -4,6 +4,10 @@ python:
   - 3.5
   - 3.6
 
+os:
+  - linux
+  - osx
+
 install:
   - pip install coveralls tox-travis
 
@@ -29,6 +33,7 @@ deploy:
     on:
       branch: master
       python: 3.6
+      repo: alexbahnisch/pyplus
       tags: false
 
   - provider: pypi
@@ -40,4 +45,5 @@ deploy:
     on:
       branch: master
       python: 3.6
+      repo: alexbahnisch/pyplus
       tags: true
