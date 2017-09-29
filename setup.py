@@ -1,13 +1,21 @@
+from os.path import abspath, dirname, join
 from setuptools import find_packages, setup
 
+directory = abspath(dirname(__file__))
 
-with open("README.rst", "r") as f:
-    long_description = f.read()
+try:
+    # noinspection PyUnresolvedReferences
+    from pypandoc import convert
 
+    long_description = convert(join(directory, "README.md"), "rst")
+
+except ImportError:
+    with open(join(directory, "README.md"), "r") as file:
+        long_description = file.read()
 
 setup(
     name="pyplus",
-    version="0.0.5.dev3",
+    version="0.0.5.dev4",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
@@ -30,7 +38,9 @@ setup(
     packages=find_packages("src/main"),
     package_dir={"": "src/main"},
     python_requires=">=3.5",
-    install_requires=[],
+    setup_requires=[
+        "pypandoc>=1.4"
+    ],
     tests_require=[
         "pytest>=3.2.2",
         "pytest-runner>=2.11.1"

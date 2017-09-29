@@ -4,5 +4,6 @@ verify_ssl = true
 
 [dev-packages]
 tox = "*"
+pypandoc = "*"
 pytest = "*"
 pytest-runner = "*"
