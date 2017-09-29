@@ -21,8 +21,6 @@ install:
   - ps: "wget https://github.com/alexbahnisch/pyplus/archive/master.zip -OutFile ./master.zip"
   - "7z e master.zip */appveyor/* -oappveyor"
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
   - "easy_install pip"
 
 build: false

@@ -7,7 +7,7 @@ with open("README.rst", "r") as f:
 
 setup(
     name="pyplus",
-    version="0.0.5.dev2",
+    version="0.0.5.dev3",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
