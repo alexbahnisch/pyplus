@@ -1,4 +1,3 @@
-from os import curdir, listdir
 from setuptools import find_packages, setup
 
 try:
@@ -9,9 +8,7 @@ try:
     long_description = convert("README.md", "rst")
 
 except (ImportError, OSError):
-    print(listdir(curdir))
-    with open("README.md", "r") as file:
-        long_description = file.read()
+    long_description = "!!! pypandoc and/or pandoc not found, long_description is bad, don't upload this to PyPI !!!"
 
 setup(
     name="pyplus",
