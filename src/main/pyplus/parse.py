@@ -75,19 +75,18 @@ def parse(string, errors=False):
         return string
 
 
-def create_lazy_parser(arg):
+def _create_parser(arg, default_parser):
     if callable(arg):
         return arg
     elif bool(arg):
-        return lazy_parse
+        return default_parser
     else:
         return lambda string: string
+
+
+def create_lazy_parser(arg):
+    return _create_parser(arg, lazy_parse)
 
 
 def create_parser(arg):
-    if callable(arg):
-        return arg
-    elif bool(arg):
-        return parse
-    else:
-        return lambda string: string
+    return _create_parser(arg, parse)
