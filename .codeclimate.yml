@@ -1,2 +1,16 @@
+Python: true
+
+engines:
+  duplication:
+    enabled: true
+  pep8:
+    enabled: true
+  radon:
+    enabled: true
+
+ratings:
+  paths:
+    - ./src/main
+
 exclude_paths:
   - ./src/tests
