@@ -14,6 +14,7 @@ def __parse_bool(string, errors=False):
         else:
             return string
 
+
 parse_bool = _parser(__parse_bool)
 
 
@@ -27,6 +28,7 @@ def __parse_none(string, errors=False):
             raise ValueError("could not convert string to None: '%s'" % string)
         else:
             return string
+
 
 parse_none = _parser(__parse_none)
 
@@ -45,6 +47,7 @@ def __lazy_parse(string, errors=False):
                 raise ValueError("could not parse string: '%s'" % string)
             else:
                 return string
+
 
 lazy_parse = _parser(__lazy_parse)
 

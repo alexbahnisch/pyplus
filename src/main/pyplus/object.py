@@ -5,7 +5,6 @@ from .string import snake_case as _snake_case
 
 
 class LazyObject(object):
-
     def __init__(self, __class__="LazyObject", **kwargs):
         self.__class__.__name__ = __class__
         for key, value in kwargs.items():
@@ -57,6 +56,5 @@ class LazyObject(object):
 
 
 class ImmutableLazyObject(LazyObject):
-
     def __setattr__(self, key, value):
         raise AttributeError("can't set attribute '%s' objects are immutable" % type(self).__name__)

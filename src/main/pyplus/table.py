@@ -1,4 +1,4 @@
-from csv import reader as _reader,  writer as _writer
+from csv import reader as _reader, writer as _writer
 from .json import Array, Object
 from .parse import create_parser as _create_parser
 from .path import LazyPath as _LazyPath
@@ -133,4 +133,3 @@ def tsv2dict(path, headers=True, parse=True):
 
 def tsv2list(path, headers=True, parse=True):
     return table2list(path, headers, parse, "\t")
-

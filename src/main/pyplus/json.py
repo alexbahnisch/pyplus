@@ -9,7 +9,6 @@ from .string import alias2keys as _alias2keys
 
 
 class _JsonMixin(object):
-
     def serialize(self, indent=2, sort_keys=True):
         return _dumps(self, indent=indent, sort_keys=sort_keys)
 
@@ -19,7 +18,6 @@ class _JsonMixin(object):
 
 
 class Array(list, _JsonMixin):
-
     def __copy__(self):
         return type(self)(self)
 
@@ -79,7 +77,6 @@ class Array(list, _JsonMixin):
 
 # noinspection PyMethodOverriding
 class Object(_OrderedDict, _JsonMixin):
-
     def __init__(self, *args, **kwargs):
         if len(args) > 1:
             raise TypeError("json expected at most 1 arguments, got %s" % len(args))
@@ -161,7 +158,7 @@ class Object(_OrderedDict, _JsonMixin):
             parser = create_lazy_parser(parser)
             return [(parser(key), value) for key, value in super().items()]
 
-    # TODO - add merge
+            # TODO - add merge
 
 
 class JSON(object):

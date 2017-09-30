@@ -3,7 +3,6 @@ from re import compile as _compile
 from .decorators import parser as _parser, spliter as _spliter
 from .parse import parse as _parse
 
-
 ALIAS_SPLIT = _compile(r"[\[./\\\]>]")
 CAMEL_CASE_SPACE1 = _compile(r"([A-Z])([A-Z][a-z]+)")
 CAMEL_CASE_SPACE2 = _compile(r"([a-z\d])([A-Z])")

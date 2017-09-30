@@ -11,7 +11,6 @@ class Singleton(type):
 
 
 def singleton(class_):
-
     class Wrapped(class_, metaclass=Singleton):
         __name__ = class_.__name__
 
