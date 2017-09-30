@@ -10,7 +10,7 @@ engines:
 
 ratings:
   paths:
-    - ./src/main
+    - ./src/main/**
 
 exclude_paths:
-  - ./src/tests
+  - ./src/tests/**
