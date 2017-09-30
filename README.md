@@ -8,6 +8,8 @@
 [![Travis Status](https://travis-ci.org/alexbahnisch/pyplus.svg?branch=master)](https://travis-ci.org/alexbahnisch/pyplus)
 [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/upqpx9g2ssxbugu0/branch/master?svg=true)](https://ci.appveyor.com/project/alexbahnisch/pyplus)
 [![Coveralls Coverage](https://coveralls.io/repos/github/alexbahnisch/pyplus/badge.svg)](https://coveralls.io/github/alexbahnisch/pyplus)
+[![Code Climate](https://codeclimate.com/github/alexbahnisch/pyplus/badges/gpa.svg)](https://codeclimate.com/github/alexbahnisch/pyplus)
+[![Issue Count](https://codeclimate.com/github/alexbahnisch/pyplus/badges/issue_count.svg)](https://codeclimate.com/github/alexbahnisch/pyplus)
 
 A library containing a collection of python extensions.
 
