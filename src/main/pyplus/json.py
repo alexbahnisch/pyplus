@@ -81,7 +81,7 @@ class Object(_OrderedDict, _JsonMixin):
         if len(args) > 1:
             raise TypeError("json expected at most 1 arguments, got %s" % len(args))
 
-        if len(args) > 0 and isinstance(args[0], dict):
+        elif len(args) > 0 and isinstance(args[0], dict):
             for key, value in args[0].items():
                 if str(key) not in kwargs:
                     kwargs[str(key)] = value
