@@ -1,16 +1,18 @@
-Python: true
-
 engines:
   duplication:
+    enabled: true
+  fixme:
     enabled: true
   pep8:
     enabled: true
   radon:
     enabled: true
+    config:
+      python_version: 3
 
 ratings:
   paths:
-    - ./src/main/**/*.py
+    - src/main/**/*.py
 
 exclude_paths:
-  - ./src/tests/**
+  - src/tests/**
