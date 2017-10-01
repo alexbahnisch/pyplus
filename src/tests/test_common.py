@@ -2,6 +2,7 @@
 from decimal import Decimal
 
 from pyplus.common import *
+from pyplus.path import LazyPath
 
 
 DECIMAL = Decimal(1.5)
@@ -195,6 +196,24 @@ def test_ismappable_not():
     assert not ismappable(B_STRING)
     assert not ismappable(U_STRING)
     assert not ismappable(TUPLE)
+
+
+def test_ispathlike():
+    assert ispathlike(STRING)
+    assert ispathlike(B_STRING)
+    assert ispathlike(U_STRING)
+    assert ispathlike(LazyPath())
+
+
+def test_ispathlike_not():
+    assert not ispathlike(DICT)
+    assert not ispathlike(False)
+    assert not ispathlike(LIST)
+    assert not ispathlike(None)
+    assert not ispathlike(MAPPABLE)
+    assert not ispathlike(OBJECT)
+    assert not ispathlike(SET)
+    assert not ispathlike(TUPLE)
 
 
 def test_issequence():

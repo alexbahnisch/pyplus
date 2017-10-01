@@ -1,4 +1,5 @@
-from decimal import Decimal
+from decimal import Decimal as _Decimal
+from pathlib import Path as _Path
 
 
 def isintlike(obj):
@@ -18,7 +19,7 @@ def islistlike(obj):
 
 
 def isnumber(obj):
-    return isinstance(obj, (Decimal, float, int)) and not isinstance(obj, bool)
+    return isinstance(obj, (_Decimal, float, int)) and not isinstance(obj, bool)
 
 
 def ispair(obj):
@@ -27,6 +28,10 @@ def ispair(obj):
 
 def ismappable(obj):
     return isinstance(obj, dict) or (isiterable(obj) and all(ispair(item) for item in obj))
+
+
+def ispathlike(obj):
+    return isinstance(obj, (bytes, str, _Path))
 
 
 def issequence(obj):

@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 from collections import OrderedDict
 
+
+def fun(**kwargs):
+    print(kwargs)
+
+
 if __name__ == "__main__":
-    a = {"a": 1, "b": 2}
-    b = OrderedDict({"b": 2, "a": 1})
-    assert a.keys() == b.keys()
-    assert a.values() == b.values()
+    a = {"1": 1, "2": 2}
+    fun(**a)

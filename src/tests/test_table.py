@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from pyplus.json import Array, Object
 from pyplus.path import LazyPath
-from pyplus.table import csv2dict, csv2list, dict2csv, dict2tsv, list2csv, list2tsv, tsv2dict, tsv2list
+from pyplus.table import dict2table, list2table, table2dict, table2list
 
 
 DIR = LazyPath(__file__)
@@ -87,72 +87,72 @@ NO_PARSE_LIST = Array([
 
 
 def test_csv2dict():
-    dict_ = csv2dict(CSV_HEADERS_INPUT)
+    dict_ = table2dict(CSV_HEADERS_INPUT)
     assert HEADERS_DICT == dict_
     assert HEADERS_DICT is not dict_
-    dict2csv(CSV_HEADERS_TEMP, dict_)
+    dict2table(CSV_HEADERS_TEMP, dict_)
     assert CSV_HEADERS_OUTPUT.read_text() == CSV_HEADERS_TEMP.read_text()
 
-    dict_ = csv2dict(CSV_HEADLESS_INPUT, headers=False)
+    dict_ = table2dict(CSV_HEADLESS_INPUT, headers=False)
     assert HEADLESS_DICT == dict_
     assert HEADLESS_DICT is not dict_
-    dict2csv(CSV_HEADLESS_TEMP, dict_, headers=False)
+    dict2table(CSV_HEADLESS_TEMP, dict_, headers=False)
     assert CSV_HEADLESS_OUTPUT.read_text() == CSV_HEADLESS_TEMP.read_text()
 
-    dict_ = csv2dict(CSV_HEADERS_INPUT, parse=False)
+    dict_ = table2dict(CSV_HEADERS_INPUT, parse=False)
     assert NO_PARSE_DICT == dict_
     assert NO_PARSE_DICT is not dict_
 
 
 def test_tsv2dict():
-    dict_ = tsv2dict(TSV_HEADERS_INPUT)
+    dict_ = table2dict(TSV_HEADERS_INPUT, delimiter="\t")
     assert HEADERS_DICT == dict_
     assert HEADERS_DICT is not dict_
-    dict2tsv(TSV_HEADERS_TEMP, dict_)
+    dict2table(TSV_HEADERS_TEMP, dict_, delimiter="\t")
     assert TSV_HEADERS_OUTPUT.read_text() == TSV_HEADERS_TEMP.read_text()
 
-    dict_ = tsv2dict(TSV_HEADLESS_INPUT, headers=False)
+    dict_ = table2dict(TSV_HEADLESS_INPUT, delimiter="\t", headers=False)
     assert HEADLESS_DICT == dict_
     assert HEADLESS_DICT is not dict_
-    dict2tsv(TSV_HEADLESS_TEMP, dict_, headers=False)
+    dict2table(TSV_HEADLESS_TEMP, dict_, delimiter="\t", headers=False)
     assert TSV_HEADLESS_OUTPUT.read_text() == TSV_HEADLESS_TEMP.read_text()
 
-    dict_ = tsv2dict(TSV_HEADERS_INPUT, parse=False)
+    dict_ = table2dict(TSV_HEADERS_INPUT, delimiter="\t", parse=False)
     assert NO_PARSE_DICT == dict_
     assert NO_PARSE_DICT is not dict_
 
 
 def test_csv2list():
-    list_ = csv2list(CSV_HEADERS_INPUT)
+    list_ = table2list(CSV_HEADERS_INPUT)
     assert HEADERS_LIST == list_
     assert HEADERS_LIST is not list_
-    list2csv(CSV_HEADERS_TEMP, list_)
+    list2table(CSV_HEADERS_TEMP, list_)
     assert CSV_HEADERS_OUTPUT.read_text() == CSV_HEADERS_TEMP.read_text()
 
-    list_ = csv2list(CSV_HEADLESS_INPUT, headers=False)
+    list_ = table2list(CSV_HEADLESS_INPUT, headers=False)
     assert HEADLESS_LIST == list_
     assert HEADLESS_LIST is not list_
-    list2csv(CSV_HEADLESS_TEMP, list_, headers=False)
+    list2table(CSV_HEADLESS_TEMP, list_, headers=False)
     assert CSV_HEADLESS_OUTPUT.read_text() == CSV_HEADLESS_TEMP.read_text()
 
-    list_ = csv2list(CSV_HEADERS_INPUT, parse=False)
+    list_ = table2list(CSV_HEADERS_INPUT, parse=False)
     assert NO_PARSE_LIST == list_
     assert NO_PARSE_LIST is not list_
 
 
 def test_tsv2list():
-    list_ = tsv2list(TSV_HEADERS_INPUT)
+    list_ = table2list(TSV_HEADERS_INPUT, delimiter="\t")
     assert HEADERS_LIST == list_
     assert HEADERS_LIST is not list_
-    list2tsv(TSV_HEADERS_TEMP, list_)
+    list2table(TSV_HEADERS_TEMP, list_, delimiter="\t")
     assert TSV_HEADERS_OUTPUT.read_text() == TSV_HEADERS_TEMP.read_text()
 
-    list_ = tsv2list(TSV_HEADLESS_INPUT, headers=False)
+    list_ = table2list(TSV_HEADLESS_INPUT, delimiter="\t", headers=False)
     assert HEADLESS_LIST == list_
     assert HEADLESS_LIST is not list_
-    list2tsv(TSV_HEADLESS_TEMP, list_, headers=False)
+    list2table(TSV_HEADLESS_TEMP, list_, delimiter="\t", headers=False)
     assert TSV_HEADLESS_OUTPUT.read_text() == TSV_HEADLESS_TEMP.read_text()
 
-    list_ = tsv2list(TSV_HEADERS_INPUT, parse=False)
+    list_ = table2list(TSV_HEADERS_INPUT, delimiter="\t", parse=False)
     assert NO_PARSE_LIST == list_
     assert NO_PARSE_LIST is not list_

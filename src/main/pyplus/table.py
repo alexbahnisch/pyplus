@@ -4,9 +4,9 @@ from .parse import create_parser as _create_parser
 from .path import LazyPath as _LazyPath
 
 
-def table2dict(path, headers, parse, delimiter):
+def table2dict(path, headers=True, parse=True, delimiter=","):
     path, headers, parser = _LazyPath(path), bool(headers), _create_parser(parse)
-    dict_ = Object()
+    obj = Object()
 
     with path.read() as read_file:
         csv_reader = _reader(read_file, delimiter=delimiter)
@@ -18,29 +18,29 @@ def table2dict(path, headers, parse, delimiter):
                 if row_index == 0:
                     keys.extend(row)
                     for key in keys:
-                        dict_[key] = Array()
+                        obj[key] = Array()
 
                 else:
                     for col_index, cell in enumerate(row):
-                        dict_[keys[col_index]][row_index - 1] = parser(cell)
+                        obj[keys[col_index]][row_index - 1] = parser(cell)
 
         else:
             for row_index, row in enumerate(csv_reader):
 
                 if row_index == 0:
                     for col_index, cell in enumerate(row):
-                        dict_[col_index] = Array([parser(cell)])
+                        obj[col_index] = Array([parser(cell)])
 
                 else:
                     for col_index, cell in enumerate(row):
-                        dict_[col_index][row_index] = parser(cell)
+                        obj[col_index][row_index] = parser(cell)
 
-        return dict_
+        return obj
 
 
-def table2list(path, headers=True, parser=True, delimiter=","):
-    path, headers, parser = _LazyPath(str(path)), bool(headers), _create_parser(parser)
-    list_ = Array()
+def table2list(path, headers=True, parse=True, delimiter=","):
+    path, headers, parser = _LazyPath(str(path)), bool(headers), _create_parser(parse)
+    array = Array()
 
     with path.read() as read_file:
         csv_reader = _reader(read_file, delimiter=delimiter)
@@ -55,24 +55,16 @@ def table2list(path, headers=True, parser=True, delimiter=","):
                     obj = Object()
                     for col_index, cell in enumerate(row):
                         obj[headers[col_index]] = parser(cell)
-                    list_.append(obj)
+                    array.append(obj)
 
         else:
             for row_index, row in enumerate(csv_reader):
                 obj = Object()
                 for col_index, cell in enumerate(row):
                     obj[col_index] = parser(cell)
-                list_.append(obj)
+                array.append(obj)
 
-        return list_
-
-
-def csv2dict(path, headers=True, parse=True):
-    return table2dict(path, headers, parse, ",")
-
-
-def csv2list(path, headers=True, parse=True):
-    return table2list(path, headers, parse, ",")
+        return array
 
 
 def dict2table(path, dict_, headers=True, delimiter=","):
@@ -86,14 +78,6 @@ def dict2table(path, dict_, headers=True, delimiter=","):
 
         for row in zip(*[value for value in dict_.values()]):
             csv_writer.writerow(row)
-
-
-def dict2csv(path, dict_, headers=True):
-    return dict2table(path, dict_, headers, ",")
-
-
-def dict2tsv(path, dict_, headers=True):
-    return dict2table(path, dict_, headers, "\t")
 
 
 def list2table(path, list_, headers=True, delimiter=","):
@@ -117,19 +101,3 @@ def list2table(path, list_, headers=True, delimiter=","):
 
             for row in rows:
                 csv_writer.writerow(row)
-
-
-def list2csv(path, list_, headers=True):
-    return list2table(path, list_, headers, ",")
-
-
-def list2tsv(path, list_, headers=True):
-    return list2table(path, list_, headers, "\t")
-
-
-def tsv2dict(path, headers=True, parse=True):
-    return table2dict(path, headers, parse, "\t")
-
-
-def tsv2list(path, headers=True, parse=True):
-    return table2list(path, headers, parse, "\t")
