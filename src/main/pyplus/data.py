@@ -1,44 +1,77 @@
-from .abstract import abstractclassmethod as _abstractclassmethod
+from .abstract import abstractclassmethod as _abstractclassmethod, abstractmethod as _abstractmethod
+from .common import ispathlike as _ispathlike
+from .object import LazyObjects as _LazyObjects
+from .path import LazyPath as _LazyPath
+from .table import list2table as _list2table, table2list as _table2list
 
 
 # noinspection PyMethodParameters
-class DataObjectMixin(object):
+class DataObjectMixin:
     __HEADERS__ = []
 
     @classmethod
-    def from_list(cls, list_):
-        assert isinstance(list_, list)
-        return cls(*list_)
-
-    @classmethod
-    def from_dict(cls, dict_):
-        assert isinstance(dict_, dict)
-        return cls(*[dict_[key] for key in cls.__HEADERS__])
+    def from_dict(cls, arg, headers=True):
+        if isinstance(arg, dict):
+            if headers:
+                return cls(*[arg[key] for key in cls.__HEADERS__])
+            else:
+                return cls(*arg.values())
+        else:
+            raise TypeError("'%s' object is not a instance of a dict" % type(arg).__name__)
 
     @_abstractclassmethod
     def from_line(cls, line):
         pass
 
+    @_abstractmethod
+    def to_dict(self):
+        pass
+
+    @_abstractmethod
+    def to_line(self):
+        pass
+
 
 # noinspection PyPropertyDefinition
-class DataObjectsMixin(object):
+class DataObjectsMixin(_LazyObjects):
     __CLASS__ = DataObjectMixin
 
-    def __init__(self):
-        self.__objects = []
+    def __init__(self, iterable=None):
+        super().__init__(iterable)
         self.init()
-
-    def __getitem__(self, index):
-        return self.__objects[index]
-
-    def __iter__(self):
-        return iter(self.__objects)
-
-    def __len__(self):
-        return len(self.__objects)
 
     def init(self):
         pass
+
+    @classmethod
+    def from_table(cls, path, delimiter=",", headers=True, parse=True):
+        if _ispathlike(path):
+            array = _table2list(path, delimiter=delimiter, headers=headers, parse=parse)
+            return cls([cls.__CLASS__.from_dict(obj, headers) for obj in array])
+        else:
+            raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
+
+    @classmethod
+    def from_txt_file(cls, path):
+        if _ispathlike(path):
+            with _LazyPath(path).read() as txt_file:
+                return cls([cls.__CLASS__.from_line(txt_line) for txt_line in txt_file])
+        else:
+            raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
+
+    def to_table(self, path, headers=True, delimiter=","):
+        if _ispathlike(path):
+            _list2table(path, [item.to_dict() for item in self.__objects], headers=headers, delimiter=delimiter)
+        else:
+            raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
+
+    def to_txt_file(self, path):
+        if _ispathlike(path):
+            with _LazyPath(path).write() as txt_file:
+                for obj in self.__objects:
+                    txt_file.writeline(obj.to_line)
+        else:
+            raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
 
 
 def dataobject(*headers):

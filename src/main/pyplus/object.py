@@ -2,7 +2,7 @@ from copy import copy as _copy, deepcopy as _deepcopy
 
 from .table import list2table as _list2table, table2list as _table2list
 from .common import isiterable as _isiterable, ispathlike as _ispathlike
-from .string import snake_case as _snake_case
+from .string import camel_case as _camel_case, snake_case as _snake_case
 
 
 class LazyObject:
@@ -49,7 +49,7 @@ class LazyObject:
         return _deepcopy(self)
 
 
-class ExtendableLazyObject(LazyObject):
+class AssignableLazyObject(LazyObject):
     def __setattr__(self, key, value):
         object.__setattr__(self, key, value)
 
@@ -63,23 +63,26 @@ class ImmutableLazyObject(LazyObject):
 class LazyObjects:
     __CLASS__ = LazyObject
 
-    def __init__(self, iterable):
+    def __init__(self, iterable=None):
         self.__objects = []
 
         if _isiterable(iterable):
             self.push(*iterable)
 
-        else:
+        elif iterable is not None:
             raise TypeError("'%s' object is not iterable" % type(iterable).__name__)
 
     def __contains__(self, item):
-        return item in self.__objects
+        return any(item is obj for obj in self.__objects)
 
     def __eq__(self, other):
         if _isiterable(other):
             return self.__objects == list(other)
         else:
             return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def __getitem__(self, index):
         return self.__objects[index]
@@ -91,7 +94,7 @@ class LazyObjects:
         return len(self.__objects)
 
     def __repr__(self):
-        return list.__repr__(self)
+        return list.__repr__(self.__objects)
 
     @classmethod
     def from_table(cls, path, parse=True, delimiter=","):
@@ -105,12 +108,17 @@ class LazyObjects:
     def push(self, *args):
         for arg in args:
             if not isinstance(arg, self.__CLASS__):
-                raise TypeError("'%s' object is not an instance of LazyObject" % type(arg).__name__)
-            elif arg not in self.__objects:
+                raise TypeError("'%s' object is not an instance of %s" % (type(arg).__name__, self.__CLASS__))
+            elif arg not in self:
                 self.__objects.append(arg)
 
     def to_table(self, path, headers=True, delimiter=","):
         if _ispathlike(path):
-            _list2table(path, [item.__dict__ for item in self.__objects], headers=headers, delimiter=delimiter)
+            _list2table(
+                path,
+                [{_camel_case(key): value for key, value in item.__dict__.items()} for item in self.__objects],
+                headers=headers,
+                delimiter=delimiter
+            )
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")

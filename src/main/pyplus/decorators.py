@@ -13,7 +13,7 @@ def decorator(method):
         return wrapped
 
     else:
-        raise TypeError("'%s' object is not callable" % type(method))
+        raise TypeError("'%s' object is not callable" % type(method).__name__)
 
 
 @decorator

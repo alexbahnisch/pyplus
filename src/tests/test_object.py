@@ -5,9 +5,15 @@ from pytest import raises
 
 DIR = LazyPath(__file__)
 CSV_HEADERS_INPUT = LazyPath(DIR.parent, "../resources/csv/headers.csv")
-CSV_HEADLESS_INPUT = LazyPath(DIR.parent, "../resources/csv/headless.csv")
+CSV_HEADERS_OUTPUT = LazyPath(DIR.parent, "../resources/csv/headers.output.csv")
+CSV_HEADERS_TEMP = LazyPath(DIR.parent, "../resources/csv/headers.temp.csv")
+CSV_HEADLESS_OUTPUT = LazyPath(DIR.parent, "../resources/csv/headless.output.csv")
+CSV_HEADLESS_TEMP = LazyPath(DIR.parent, "../resources/csv/headless.temp.csv")
 TSV_HEADERS_INPUT = LazyPath(DIR.parent, "../resources/tsv/headers.tsv")
-TSV_HEADLESS_INPUT = LazyPath(DIR.parent, "../resources/tsv/headless.tsv")
+TSV_HEADERS_OUTPUT = LazyPath(DIR.parent, "../resources/tsv/headers.output.tsv")
+TSV_HEADERS_TEMP = LazyPath(DIR.parent, "../resources/tsv/headers.temp.tsv")
+TSV_HEADLESS_OUTPUT = LazyPath(DIR.parent, "../resources/tsv/headless.output.tsv")
+TSV_HEADLESS_TEMP = LazyPath(DIR.parent, "../resources/tsv/headless.temp.tsv")
 
 
 # noinspection PyUnresolvedReferences
@@ -33,6 +39,15 @@ def test_lazy_object_eq():
     assert obj1 == {"key1": 1, "key2": 2}
     assert obj1 == obj2
     assert obj1 is not obj2
+
+
+def test_lazy_object_extendable():
+    obj1 = LazyObject(key1=1, key2=2, key3=3)
+    obj2 = AssignableLazyObject(key1=1, key2=2)
+    assert obj1 != obj2
+
+    obj2.key3 = 3
+    assert obj1 == obj2
 
 
 def test_lazy_object_exception():
@@ -76,13 +91,73 @@ def test_lazy_object_repr():
     assert repr(LazyObject(key1=1, key2=2)) == "LazyObject(key1=1, key2=2)" or repr(LazyObject(key1=1, key2=2)) == "LazyObject(key2=2, key1=1)"
 
 
-def test_lazy_objects_headers():
-    objects1 = LazyObjects.from_table(CSV_HEADERS_INPUT, delimiter=",")
+def test_lazy_objects():
+    obj1 = LazyObject(param=1)
+    obj2 = AssignableLazyObject(param=1)
+    obj3 = ImmutableLazyObject(param=1)
+    obj4 = obj1.copy()
+
+    objects = LazyObjects()
+    objects.push(obj1, obj2, obj3)
+
+    assert len(objects) == 3
+    assert obj1 in objects
+    assert obj4 not in objects
+
+    objects.push(obj1)
+    assert len(objects) == 3
+
+    objects.push(obj4)
+    assert len(objects) == 4
+
+    assert objects[0] is obj1
+    assert objects[1] is obj2
+    assert objects[2] is obj3
+    assert objects[3] is obj4
+
+    assert repr(objects) == repr(list(objects))
+
+
+def test_lazy_objects_eq():
+    obj1 = LazyObject(param=1)
+    obj2 = AssignableLazyObject(param=2)
+    obj3 = ImmutableLazyObject(param=3)
+    objects = LazyObjects([obj1, obj2, obj3])
+
+    assert objects == [obj1, obj2, obj3]
+    assert objects == [obj1.copy(), obj2.copy(), obj3.copy()]
+
+
+def test_lazy_objects_exception():
+    with raises(TypeError, message="'NoneType' object is not an instance of LazyObject"):
+        objects = LazyObjects()
+        objects.push(None)
+
+    with raises(TypeError, message="'NoneType' object is not iterable"):
+        LazyObjects(LazyObject(key1=1))
+
+    with raises(TypeError, message="'path' argument must be a bytes or unicode string or pathlib.Path"):
+        objects = LazyObjects()
+        objects.to_table(None)
+
+
+def test_lazy_objects_ne():
+    obj1 = LazyObject(param=1)
+    obj2 = AssignableLazyObject(param=2)
+    obj3 = ImmutableLazyObject(param=3)
+    objects = LazyObjects([obj1, obj2, obj3])
+
+    assert objects != [obj3, obj2, obj1]
+    assert objects != [obj1, obj2]
+    assert objects != obj1
+
+
+def test_lazy_objects_table():
+    objects1 = LazyObjects.from_table(CSV_HEADERS_INPUT)
+    objects1.to_table(CSV_HEADERS_TEMP)
+    assert LazyObjects.from_table(CSV_HEADERS_OUTPUT) == LazyObjects.from_table(CSV_HEADERS_TEMP)
+
     objects2 = LazyObjects.from_table(TSV_HEADERS_INPUT, delimiter="\t")
-    assert objects1 == objects2
-
-
-def test_lazy_objects_headless():
-    objects1 = LazyObjects.from_table(CSV_HEADLESS_INPUT, delimiter=",")
-    objects2 = LazyObjects.from_table(TSV_HEADLESS_INPUT, delimiter="\t")
+    objects2.to_table(TSV_HEADERS_TEMP, delimiter="\t")
+    assert LazyObjects.from_table(TSV_HEADERS_OUTPUT, delimiter="\t") == LazyObjects.from_table(TSV_HEADERS_TEMP, delimiter="\t")
     assert objects1 == objects2
