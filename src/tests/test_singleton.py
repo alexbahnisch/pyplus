@@ -4,7 +4,6 @@ from pyplus.singleton import singleton
 
 @singleton
 class Singleton:
-
     def __init__(self, param):
         self.param = param
 

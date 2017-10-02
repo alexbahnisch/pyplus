@@ -6,13 +6,11 @@ from pytest import raises
 
 
 class Callable:
-
     def __call__(self, *args, **kwargs):
         pass
 
 
 class TimerTest:
-
     def __init__(self):
         self._calls = 0
 
@@ -81,22 +79,6 @@ def test_spliter():
 
     with raises(TypeError, message="'type' object is not a string"):
         split(object)
-
-
-def test_timer_plus():
-    timer_test = TimerTest()
-    timer = Timer(logger=timer_test)
-
-    @timer
-    def fun_test():
-        pass
-
-    @timer.plus
-    def fun_plus_test():
-        pass
-
-    fun_test()
-    fun_plus_test()
 
 
 def test_timer_plus():

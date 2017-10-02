@@ -78,6 +78,7 @@ class Array(list, _JsonMixin):
 # noinspection PyMethodOverriding
 class Object(_OrderedDict, _JsonMixin):
     def __init__(self, *args, **kwargs):
+        kwargs = _OrderedDict(kwargs)
         if len(args) > 1:
             raise TypeError("json expected at most 1 arguments, got %s" % len(args))
 

@@ -4,7 +4,6 @@ from decimal import Decimal
 from pyplus.common import *
 from pyplus.path import LazyPath
 
-
 DECIMAL = Decimal(1.5)
 DICT = {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
 FLOAT = 1.5

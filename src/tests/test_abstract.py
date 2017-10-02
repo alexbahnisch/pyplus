@@ -123,9 +123,3 @@ def test_correct_implementation():
     assert obj.method()
     assert obj.prop
     assert obj.static_method()
-
-
-if __name__ == "__main__":
-    test_abstract()
-    test_no_implementation()
-    test_correct_implementation()

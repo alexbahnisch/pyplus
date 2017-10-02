@@ -75,6 +75,12 @@ class LazyObjects:
     def __contains__(self, item):
         return any(item is obj for obj in self.__objects)
 
+    def __copy__(self):
+        return type(self)(self.__objects)
+
+    def __deepcopy__(self, memo):
+        return type(self)([_deepcopy(obj) for obj in self.__objects])
+
     def __eq__(self, other):
         if _isiterable(other):
             return self.__objects == list(other)
@@ -96,6 +102,12 @@ class LazyObjects:
     def __repr__(self):
         return list.__repr__(self.__objects)
 
+    def copy(self):
+        return _copy(self)
+
+    def deepcopy(self):
+        return _deepcopy(self)
+
     @classmethod
     def from_table(cls, path, parse=True, delimiter=","):
         if _ispathlike(path):
@@ -104,6 +116,9 @@ class LazyObjects:
             return cls([cls.__CLASS__(**{header: dict_[key] for key, header in headers.items()}) for dict_ in list_])
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
+
+    def length(self):
+        return len(self)
 
     def push(self, *args):
         for arg in args:

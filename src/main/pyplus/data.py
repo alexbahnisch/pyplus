@@ -1,7 +1,9 @@
 from .abstract import abstractclassmethod as _abstractclassmethod, abstractmethod as _abstractmethod
 from .common import ispathlike as _ispathlike
+from .json import Object as _Object
 from .object import LazyObjects as _LazyObjects
 from .path import LazyPath as _LazyPath
+from .string import snake_case as _snake_case
 from .table import list2table as _list2table, table2list as _table2list
 
 
@@ -9,13 +11,19 @@ from .table import list2table as _list2table, table2list as _table2list
 class DataObjectMixin:
     __HEADERS__ = []
 
+    def __eq__(self, other):
+        try:
+            return self.__dict__ == other.__dict__
+        except AttributeError:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     @classmethod
-    def from_dict(cls, arg, headers=True):
+    def from_dict(cls, arg):
         if isinstance(arg, dict):
-            if headers:
-                return cls(*[arg[key] for key in cls.__HEADERS__])
-            else:
-                return cls(*arg.values())
+            return cls(*[arg[key] for key in cls.__HEADERS__])
         else:
             raise TypeError("'%s' object is not a instance of a dict" % type(arg).__name__)
 
@@ -23,16 +31,16 @@ class DataObjectMixin:
     def from_line(cls, line):
         pass
 
-    @_abstractmethod
     def to_dict(self):
-        pass
+        temp_dict = {_snake_case(key): value for key, value in self.__dict__.items()}
+        return _Object([(header, temp_dict[header]) for header in self.__HEADERS__])
 
     @_abstractmethod
     def to_line(self):
         pass
 
 
-# noinspection PyPropertyDefinition
+# noinspection PyPropertyDefinition,PyArgumentList
 class DataObjectsMixin(_LazyObjects):
     __CLASS__ = DataObjectMixin
 
@@ -47,7 +55,10 @@ class DataObjectsMixin(_LazyObjects):
     def from_table(cls, path, delimiter=",", headers=True, parse=True):
         if _ispathlike(path):
             array = _table2list(path, delimiter=delimiter, headers=headers, parse=parse)
-            return cls([cls.__CLASS__.from_dict(obj, headers) for obj in array])
+            if headers:
+                return cls([cls.__CLASS__.from_dict(obj) for obj in array])
+            else:
+                return cls([cls.__CLASS__(*obj.values()) for obj in array])
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
 
@@ -59,16 +70,16 @@ class DataObjectsMixin(_LazyObjects):
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
 
-    def to_table(self, path, headers=True, delimiter=","):
+    def to_table(self, path, delimiter=",", headers=True):
         if _ispathlike(path):
-            _list2table(path, [item.to_dict() for item in self.__objects], headers=headers, delimiter=delimiter)
+            _list2table(path, [item.to_dict() for item in self], headers=headers, delimiter=delimiter)
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
 
     def to_txt_file(self, path):
         if _ispathlike(path):
             with _LazyPath(path).write() as txt_file:
-                for obj in self.__objects:
+                for obj in self:
                     txt_file.writeline(obj.to_line)
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
@@ -78,7 +89,7 @@ def dataobject(*headers):
     assert all(isinstance(header, str) for header in headers)
 
     def wrapper(class_):
-        if isinstance(class_, DataObjectMixin):
+        if issubclass(class_, DataObjectMixin):
             class_.__HEADERS__ = list(headers)
             return class_
 
@@ -93,10 +104,10 @@ def dataobject(*headers):
 
 
 def dataobjects(data_object_class):
-    assert issubclass(data_object_class, DataObjectsMixin)
+    assert issubclass(data_object_class, DataObjectMixin)
 
     def wrapper(class_):
-        if issubclass(class_, DataObjectMixin):
+        if issubclass(class_, DataObjectsMixin):
             class_.__CLASS__ = data_object_class
             return class_
 

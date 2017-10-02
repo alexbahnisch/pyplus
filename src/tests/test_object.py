@@ -88,7 +88,8 @@ def test_lazy_object_ne():
 
 def test_lazy_object_repr():
     assert repr(LazyObject(key1=1)) == "LazyObject(key1=1)"
-    assert repr(LazyObject(key1=1, key2=2)) == "LazyObject(key1=1, key2=2)" or repr(LazyObject(key1=1, key2=2)) == "LazyObject(key2=2, key1=1)"
+    assert repr(LazyObject(key1=1, key2=2)) == "LazyObject(key1=1, key2=2)" or repr(
+        LazyObject(key1=1, key2=2)) == "LazyObject(key2=2, key1=1)"
 
 
 def test_lazy_objects():
@@ -100,15 +101,15 @@ def test_lazy_objects():
     objects = LazyObjects()
     objects.push(obj1, obj2, obj3)
 
-    assert len(objects) == 3
+    assert objects.length() == 3
     assert obj1 in objects
     assert obj4 not in objects
 
     objects.push(obj1)
-    assert len(objects) == 3
+    assert objects.length() == 3
 
     objects.push(obj4)
-    assert len(objects) == 4
+    assert objects.length() == 4
 
     assert objects[0] is obj1
     assert objects[1] is obj2
@@ -116,6 +117,25 @@ def test_lazy_objects():
     assert objects[3] is obj4
 
     assert repr(objects) == repr(list(objects))
+
+
+# noinspection PyUnresolvedReferences
+def test_lazy_objects_copy():
+    obj = LazyObject(key1=[1, 2])
+    objects = LazyObjects([obj])
+    objects_copy = objects.copy()
+    objects_deepcopy = objects.deepcopy()
+
+    assert objects == objects_copy
+    assert objects is not objects_copy
+    assert objects[0] is objects_copy[0]
+
+    assert objects == objects_deepcopy
+    assert objects is not objects_deepcopy
+    assert objects[0] == objects_deepcopy[0]
+    assert objects[0] is not objects_deepcopy[0]
+    assert objects[0].key1 == objects_deepcopy[0].key1
+    assert objects[0].key1 is not objects_deepcopy[0].key1
 
 
 def test_lazy_objects_eq():
@@ -159,5 +179,6 @@ def test_lazy_objects_table():
 
     objects2 = LazyObjects.from_table(TSV_HEADERS_INPUT, delimiter="\t")
     objects2.to_table(TSV_HEADERS_TEMP, delimiter="\t")
-    assert LazyObjects.from_table(TSV_HEADERS_OUTPUT, delimiter="\t") == LazyObjects.from_table(TSV_HEADERS_TEMP, delimiter="\t")
+    assert LazyObjects.from_table(TSV_HEADERS_OUTPUT, delimiter="\t") == LazyObjects.from_table(TSV_HEADERS_TEMP,
+                                                                                                delimiter="\t")
     assert objects1 == objects2
