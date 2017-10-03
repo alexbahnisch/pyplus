@@ -1,6 +1,8 @@
+from os import linesep
+
 from .abstract import abstractclassmethod as _abstractclassmethod, abstractmethod as _abstractmethod
 from .common import ispathlike as _ispathlike
-from .json import Object as _Object
+from .json import Array as _Array, Object as _Object
 from .object import LazyObjects as _LazyObjects
 from .path import LazyPath as _LazyPath
 from .string import snake_case as _snake_case
@@ -38,6 +40,10 @@ class DataObjectMixin:
     @_abstractmethod
     def to_line(self):
         pass
+
+    def to_list(self):
+        temp_dict = {_snake_case(key): value for key, value in self.__dict__.items()}
+        return _Array([temp_dict[header] for header in self.__HEADERS__])
 
 
 # noinspection PyPropertyDefinition,PyArgumentList
@@ -80,42 +86,44 @@ class DataObjectsMixin(_LazyObjects):
         if _ispathlike(path):
             with _LazyPath(path).write() as txt_file:
                 for obj in self:
-                    txt_file.writeline(obj.to_line)
+                    txt_file.write(obj.to_line() + "\n")
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
 
 
 def dataobject(*headers):
-    assert all(isinstance(header, str) for header in headers)
+    if all(isinstance(header, str) for header in headers):
+        def wrapper(class_):
+            if issubclass(class_, DataObjectMixin):
+                class_.__HEADERS__ = list(headers)
+                return class_
 
-    def wrapper(class_):
-        if issubclass(class_, DataObjectMixin):
-            class_.__HEADERS__ = list(headers)
-            return class_
+            else:
+                class Wrapped(class_, DataObjectMixin):
+                    __name__ = class_.__name__
+                    __HEADERS__ = list(headers)
 
-        else:
-            class Wrapped(class_, DataObjectMixin):
-                __name__ = class_.__name__
-                __HEADERS__ = list(headers)
+                return Wrapped
 
-            return Wrapped
-
-    return wrapper
+        return wrapper
+    else:
+        raise TypeError("dataobject() arguments must be strings")
 
 
 def dataobjects(data_object_class):
-    assert issubclass(data_object_class, DataObjectMixin)
+    if issubclass(data_object_class, DataObjectMixin):
+        def wrapper(class_):
+            if issubclass(class_, DataObjectsMixin):
+                class_.__CLASS__ = data_object_class
+                return class_
 
-    def wrapper(class_):
-        if issubclass(class_, DataObjectsMixin):
-            class_.__CLASS__ = data_object_class
-            return class_
+            else:
+                class Wrapped(class_, DataObjectsMixin):
+                    __name__ = class_.__name__
+                    __CLASS__ = data_object_class
 
-        else:
-            class Wrapped(class_, DataObjectsMixin):
-                __name__ = class_.__name__
-                __CLASS__ = data_object_class
+                return Wrapped
 
-            return Wrapped
-
-    return wrapper
+        return wrapper
+    else:
+        raise TypeError("dataobjects() argument must be a subclass of 'DataObjectMixin'")

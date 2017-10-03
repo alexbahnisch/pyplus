@@ -102,12 +102,6 @@ class LazyObjects:
     def __repr__(self):
         return list.__repr__(self.__objects)
 
-    def copy(self):
-        return _copy(self)
-
-    def deepcopy(self):
-        return _deepcopy(self)
-
     @classmethod
     def from_table(cls, path, parse=True, delimiter=","):
         if _ispathlike(path):
@@ -119,6 +113,12 @@ class LazyObjects:
 
     def length(self):
         return len(self)
+
+    def copy(self):
+        return _copy(self)
+
+    def deepcopy(self):
+        return _deepcopy(self)
 
     def push(self, *args):
         for arg in args:

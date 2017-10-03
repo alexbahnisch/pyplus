@@ -23,4 +23,8 @@ $ pip install pyplus
 
 ```python
 import pyplus
+# or
+import pyplus.json
+# or
+from pyplus.json import JSON
 ```

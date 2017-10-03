@@ -36,6 +36,35 @@ def test_array_alias():
     assert JSON.from_file(OBJECT_INPUT, "[0].doesNotExist") is None
 
 
+def test_array_assign_mutate():
+    arr1 = Array(["item1", "item2"])
+    arr1_dc = arr1.deepcopy()
+    arr2 = Array(["item1", {"key": "value"}])
+    arr2_dc = arr2.deepcopy()
+    arr3 = arr1.assign(arr2)
+
+    assert arr1 != arr1_dc
+    assert arr2 == arr2_dc
+    assert arr1 == arr2
+    assert arr1 is arr3
+    assert arr2 == arr3
+    assert arr2 is not arr3
+
+
+def test_array_assign_pure():
+    arr1 = Array(["item1", "item2"])
+    arr1_dc = arr1.deepcopy()
+    arr2 = Array(["item1", {"key": "value"}])
+    arr2_dc = arr2.deepcopy()
+    arr3 = Array().assign(arr1, arr2)
+
+    assert arr1 == arr1_dc
+    assert arr2 == arr2_dc
+    assert arr2 == arr3
+    assert arr2 is not arr3
+    assert arr2[1] is arr3[1]
+
+
 def test_array_concat():
     array1, array2, array3 = Array(LIST), Array([0, 1, 2, 3, 4, 5]), Array([0, 1, 2, 3, 4, 5, 6, 7, 8])
     assert array1.concat(5) == array2
@@ -66,6 +95,16 @@ def test_array_deepcopy():
         assert item is not array2[index]
 
 
+def test_array_exceptions():
+    array = JSON.from_file(ARRAY_INPUT)
+
+    with raises(TypeError, message="assign(*others) arguments must be instances of 'list'"):
+        array.assign(None)
+
+    with raises(TypeError, message="merge(*others) arguments must be instances of 'list'"):
+        array.merge(None)
+
+
 def test_array_eq():
     assert Array(LIST) == LIST
     assert Array(SET) == LIST
@@ -88,6 +127,46 @@ def test_array_io():
     text2 = ARRAY_OUTPUT.read_text()
     ARRAY_OUTPUT.delete()
     assert text1 == text2
+
+
+def test_array_merge_mutate():
+    arr1 = JSON.from_collection([{"key1": "value1"}, {"key2": "value2"}])
+    arr1_dc = arr1.deepcopy()
+    arr2 = JSON.from_collection([{"key1": "value1"}, {"key2": "value2"}, {"key3": "value3"}])
+    arr2_dc = arr2.deepcopy()
+    arr3 = JSON.from_collection([{"key1": "value1", "key2": "value2"}])
+    arr3_dc = arr3.deepcopy()
+    arr4 = JSON.from_collection([{"key1": "value1", "key2": "value2"}, {"key2": "value2"}, {"key3": "value3"}])
+    arr5 = arr1.merge(arr2, arr3)
+
+    assert arr1 != arr1_dc
+    assert arr2 == arr2_dc
+    assert arr3 == arr3_dc
+    assert arr1 == arr4
+    assert arr1 is not arr4
+    assert arr1 == arr5
+    assert arr1 is arr5
+    assert arr5[0] == arr3[0]
+    assert arr5[0] is not arr3[0]
+
+
+def test_array_merge_pure():
+    arr1 = JSON.from_collection([{"key1": "value1"}, {"key2": "value2"}])
+    arr1_dc = arr1.deepcopy()
+    arr2 = JSON.from_collection([{"key1": "value1"}, {"key2": "value2"}, {"key3": "value3"}])
+    arr2_dc = arr2.deepcopy()
+    arr3 = JSON.from_collection([{"key1": "value1", "key2": "value2"}])
+    arr3_dc = arr3.deepcopy()
+    arr4 = JSON.from_collection([{"key1": "value1", "key2": "value2"}, {"key2": "value2"}, {"key3": "value3"}])
+    arr5 = Array().merge(arr1, arr2, arr3)
+
+    assert arr1 == arr1_dc
+    assert arr2 == arr2_dc
+    assert arr3 == arr3_dc
+    assert arr4 == arr5
+    assert arr4 is not arr5
+    assert arr5[0] == arr3[0]
+    assert arr5[0] is not arr3[0]
 
 
 def test_array_neq():
@@ -151,10 +230,28 @@ def test_json_parse():
 
 
 def test_object():
+    obj = JSON.from_file(OBJECT_INPUT)
+    assert obj.length() == 2
+    obj.int = 1
+    assert obj.length() == 3
+    obj.array = Array()
+    assert obj.length() == 3
+
+
+def test_object_exceptions():
+    obj = JSON.from_file(OBJECT_INPUT)
+
+    with raises(TypeError, message="assign(*others) arguments must be instances of 'dict'"):
+        obj.assign(None)
+
+    with raises(TypeError, message="merge(*others) arguments must be instances of 'dict'"):
+        obj.merge(None)
+
     with raises(TypeError, message="json expected at most 1 arguments, got 2"):
         Object(1, 2)
 
     with raises(TypeError, message="'int' object is not iterable"):
+
         Object(1)
 
     with raises(TypeError, message="cannot convert json update sequence element #0 to a sequence"):
@@ -205,31 +302,33 @@ def test_object_assign():
 
 
 def test_object_assign_mutate():
-    dict1 = {"key": {"key": "value"}}
-    dict2 = {"key": ["item"]}
-
-    obj1 = Object(dict1)
-    obj2 = Object(dict2)
+    obj1 = Object({"key": "value"})
+    obj1_dc = obj1.deepcopy()
+    obj2 = Object({"key": {"key": "value"}})
+    obj2_dc = obj2.deepcopy()
     obj3 = obj1.assign(obj2)
 
+    assert obj1 != obj1_dc
+    assert obj2 == obj2_dc
     assert obj1 == obj2
     assert obj1 is obj3
     assert obj2 == obj3
     assert obj2 is not obj3
+    assert obj2.key is obj3.key
 
 
 def test_object_assign_pure():
-    dict1 = {"key": {"key": "value"}}
-    dict2 = {"key": ["item"]}
-
-    obj1 = Object(dict1)
-    obj2 = Object(dict2)
+    obj1 = Object({"key": "value"})
+    obj1_dc = obj1.deepcopy()
+    obj2 = Object({"key": {"key": "value"}})
+    obj2_dc = obj2.deepcopy()
     obj3 = Object().assign(obj1, obj2)
 
-    assert obj1 != obj2
-    assert obj1 != obj3
+    assert obj1 == obj1_dc
+    assert obj2 == obj2_dc
     assert obj2 == obj3
     assert obj2 is not obj3
+    assert obj2.key is obj3.key
 
 
 def test_object_contains():
@@ -288,6 +387,46 @@ def test_object_items():
     assert all(item in MAPPABLE for item in obj.items())
     assert all(item in MAPPABLE_INT for item in obj.items(parser=True))
     assert all(item in MAPPABLE_INT for item in obj.items(parser=int))
+
+
+def test_object_merge_mutate():
+    obj1 = JSON.from_collection({"object": {"key1": "value1"}, "array": ["item1"]})
+    obj1_dc = obj1.deepcopy()
+    obj2 = JSON.from_collection({"array": ["item1", "item2"]})
+    obj2_dc = obj2.deepcopy()
+    obj3 = JSON.from_collection({"object": {"key1": "value1", "key2": "value2"}})
+    obj3_dc = obj3.deepcopy()
+    obj4 = JSON.from_collection({"object": {"key1": "value1", "key2": "value2"}, "array": ["item1", "item2"]})
+    obj5 = obj1.merge(obj2, obj3)
+
+    assert obj1 != obj1_dc
+    assert obj2 == obj2_dc
+    assert obj3 == obj3_dc
+    assert obj4 == obj5
+    assert obj4 is not obj5
+    assert obj1 == obj5
+    assert obj1 is obj5
+    assert obj3.object == obj5.object
+    assert obj3.object is not obj5.object
+
+
+def test_object_merge_pure():
+    obj1 = JSON.from_collection({"object": {"key1": "value1"}, "array": ["item1"]})
+    obj1_dc = obj1.deepcopy()
+    obj2 = JSON.from_collection({"array": ["item1", "item2"]})
+    obj2_dc = obj2.deepcopy()
+    obj3 = JSON.from_collection({"object": {"key1": "value1", "key2": "value2"}})
+    obj3_dc = obj3.deepcopy()
+    obj4 = JSON.from_collection({"object": {"key1": "value1", "key2": "value2"}, "array": ["item1", "item2"]})
+    obj5 = Object().merge(obj1, obj2, obj3)
+
+    assert obj1 == obj1_dc
+    assert obj2 == obj2_dc
+    assert obj3 == obj3_dc
+    assert obj4 == obj5
+    assert obj4 is not obj5
+    assert obj3.object == obj5.object
+    assert obj3.object is not obj5.object
 
 
 def test_object_ne():

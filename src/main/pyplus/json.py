@@ -37,22 +37,31 @@ class Array(list, _JsonMixin):
         return not self.__eq__(other)
 
     def __getitem__(self, index):
-        if _common.isintlike(index) and 0 <= int(index) < self.length:
+        if _common.isintlike(index) and 0 <= int(index) < self.length():
             return super(Array, self).__getitem__(int(index))
         else:
             return None
 
     def __setitem__(self, index, value):
-        if _common.isintlike(index) and 0 <= int(index) < self.length:
+        if _common.isintlike(index) and 0 <= int(index) < self.length():
             super(Array, self).__setitem__(int(index), value)
-        elif _common.isintlike(index) and int(index) == self.length:
+        elif _common.isintlike(index) and int(index) == self.length():
             self.append(value)
-        elif _common.isintlike(index) and int(index) > self.length:
-            self.extend([None] * (int(index) - self.length) + [value])
+        elif _common.isintlike(index) and int(index) > self.length():
+            self.extend([None] * (int(index) - self.length()) + [value])
 
-    @property
     def length(self):
         return len(self)
+
+    def assign(self, *others):
+        if all(isinstance(other, list) for other in others):
+            for other in others:
+                for index, item in enumerate(other):
+                    self[index] = item
+
+            return self
+        else:
+            raise TypeError("assign(*others) arguments must be instances a 'list'")
 
     def concat(self, items):
         if _common.isiterable(items):
@@ -70,9 +79,22 @@ class Array(list, _JsonMixin):
     def deepcopy(self):
         return self.__deepcopy__({})
 
+    def merge(self, *others):
+        if all(isinstance(other, list) for other in others):
+            for other in others:
+                for index, item in enumerate(other):
+                    if (isinstance(self[index], Object) and isinstance(item, dict)) or (isinstance(self[index], Array) and isinstance(item, list)):
+                        self[index].merge(item.copy())
+                    else:
+                        self[index] = _deepcopy(item)
+
+            return self
+        else:
+            raise TypeError("merge(*others) arguments must be instances a 'list'")
+
     def push(self, *items):
         self.extend(items)
-        return self.length
+        return self.length()
 
 
 # noinspection PyMethodOverriding
@@ -129,6 +151,9 @@ class Object(_OrderedDict, _JsonMixin):
     def __getitem__(self, key):
         return super(Object, self).get(str(key))
 
+    def __len__(self):
+        return len(self.keys())
+
     def __repr__(self):
         return dict.__repr__(self)
 
@@ -138,13 +163,18 @@ class Object(_OrderedDict, _JsonMixin):
     def __setitem__(self, key, value):
         return super(Object, self).__setitem__(str(key), value)
 
-    def assign(self, *others):
-        assert all(isinstance(other, type(self)) for other in others)
-        for other in others:
-            for keys, values in other.items():
-                self[keys] = values
+    def length(self):
+        return len(self)
 
-        return self
+    def assign(self, *others):
+        if all(isinstance(other, dict) for other in others):
+            for other in others:
+                for key, value in other.items():
+                    self[key] = value
+
+            return self
+        else:
+            raise TypeError("assign(*others) arguments must be instances of 'dict'")
 
     def copy(self):
         return self.__copy__()
@@ -159,7 +189,18 @@ class Object(_OrderedDict, _JsonMixin):
             parser = create_lazy_parser(parser)
             return [(parser(key), value) for key, value in super().items()]
 
-            # TODO - add merge
+    def merge(self, *others):
+        if all(isinstance(other, dict) for other in others):
+            for other in others:
+                for key, value in other.items():
+                    if (isinstance(self[key], Object) and isinstance(value, dict)) or (isinstance(self[key], Array) and isinstance(value, list)):
+                        self[key].merge(value.copy())
+                    else:
+                        self[key] = _deepcopy(value)
+
+            return self
+        else:
+            raise TypeError("merge(*others) arguments must be instances of 'dict'")
 
 
 class JSON(object):
@@ -167,17 +208,12 @@ class JSON(object):
     __OBJECT__ = Object
 
     @classmethod
-    def from_dict(cls, dict_):
-        assert isinstance(dict_, dict)
-        return cls.__OBJECT__({key: cls.from_object(value) for key, value in dict_.items()})
-
-    @classmethod
     def from_file(cls, path, alias=None, errors=True):
         path, alias = _LazyPath(path), _alias2keys(alias) if alias is not None else []
 
         if path.exists():
             with path.read() as tmp_file:
-                rarg = cls.from_object(_load(tmp_file))
+                rarg = cls.from_collection(_load(tmp_file))
 
                 for key in alias:
                     rarg = rarg[key]
@@ -193,27 +229,19 @@ class JSON(object):
                 return None
 
     @classmethod
-    def from_list(cls, list_):
-        assert isinstance(list_, list)
-        return cls.__ARRAY__(cls.from_object(item) for item in list_)
-
-    @classmethod
-    def from_object(cls, obj):
-        if isinstance(obj, dict):
-            return cls.from_dict(obj)
-        elif isinstance(obj, list):
-            return cls.from_list(obj)
+    def from_collection(cls, collection):
+        if isinstance(collection, dict):
+            return cls.__OBJECT__({key: cls.from_collection(value) for key, value in collection.items()})
+        elif isinstance(collection, list):
+            return cls.__ARRAY__(cls.from_collection(item) for item in collection)
         else:
-            return obj
+            return collection
 
     @classmethod
     def parse(cls, string, errors=False):
         try:
             rarg = _loads(str(string))
-            if isinstance(rarg, dict):
-                return cls.from_dict(rarg)
-            elif isinstance(rarg, list):
-                return cls.from_list(rarg)
+            return cls.from_collection(rarg)
 
         except ValueError as error:
             if bool(errors):

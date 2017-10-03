@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-from collections import OrderedDict
-
 from pyplus.data import *
+from pyplus.parse import parse
 from pyplus.path import LazyPath
 from pytest import raises
 
@@ -19,6 +18,9 @@ TSV_HEADERS_TEMP = LazyPath(DIR.parent, "../resources/tsv/headers.temp.tsv")
 TSV_HEADLESS_INPUT = LazyPath(DIR.parent, "../resources/tsv/headless.tsv")
 TSV_HEADLESS_OUTPUT = LazyPath(DIR.parent, "../resources/tsv/headless.output.tsv")
 TSV_HEADLESS_TEMP = LazyPath(DIR.parent, "../resources/tsv/headless.temp.tsv")
+TXT_HEADLESS_INPUT = LazyPath(DIR.parent, "../resources/txt/headless.txt")
+TXT_HEADLESS_OUTPUT = LazyPath(DIR.parent, "../resources/txt/headless.output.txt")
+TXT_HEADLESS_TEMP = LazyPath(DIR.parent, "../resources/txt/headless.temp.txt")
 
 
 # noinspection PyShadowingBuiltins
@@ -30,6 +32,14 @@ class Object1(DataObjectMixin):
         self._float = float
         self._string = string
         self._null = null
+
+    @classmethod
+    def from_line(cls, line):
+        assert isinstance(line, str)
+        return cls(*map(parse, line.split(",")))
+
+    def to_line(self):
+        return ",".join(map(str, self.to_list()))
 
 
 # noinspection PyShadowingBuiltins
@@ -96,6 +106,12 @@ def test_dataobject_ne():
 
 
 def test_dataobjects_exceptions():
+    with raises(TypeError, message="dataobject() arguments must be strings"):
+        dataobject(1)
+
+    with raises(TypeError, message="dataobjects() argument must be a subclass of 'DataObjectMixin'"):
+        dataobjects(object)
+
     with raises(TypeError, message="'path' argument must be a bytes or unicode string or pathlib.Path"):
         Objects1.from_table(None)
 
@@ -129,3 +145,11 @@ def test_dataobjects_table():
     assert CSV_HEADLESS_OUTPUT.read_text() == CSV_HEADLESS_TEMP.read_text()
     assert TSV_HEADERS_OUTPUT.read_text() == TSV_HEADERS_TEMP.read_text()
     assert TSV_HEADLESS_OUTPUT.read_text() == TSV_HEADLESS_TEMP.read_text()
+
+
+def test_dataobjects_txt():
+    objects = Objects1.from_txt_file(TXT_HEADLESS_INPUT)
+    objects.to_txt_file(TXT_HEADLESS_TEMP)
+
+    assert OBJECTS == objects
+    assert TXT_HEADLESS_OUTPUT.read_text() == TXT_HEADLESS_TEMP.read_text()
