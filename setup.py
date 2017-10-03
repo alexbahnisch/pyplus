@@ -20,7 +20,7 @@ setup(
     author_email="alexbahnisch@gmail.com",
     license="MIT",
     classifiers=[
-        "Development Status :: 2 - Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "Natural Language :: English",
