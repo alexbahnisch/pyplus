@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from pyplus.json import Array, Object
 from pyplus.path import LazyPath
-from pyplus.table import dict2table, list2table, table2dict, table2list
+from pyplus.table import list2table, table2list
 
 DIR = LazyPath(__file__)
 CSV_HEADERS_INPUT = LazyPath(DIR.parent, "../resources/csv/headers.csv")
@@ -19,38 +19,6 @@ TSV_HEADERS_TEMP = LazyPath(DIR.parent, "../resources/tsv/headers.temp.tsv")
 TSV_HEADLESS_INPUT = LazyPath(DIR.parent, "../resources/tsv/headless.tsv")
 TSV_HEADLESS_OUTPUT = LazyPath(DIR.parent, "../resources/tsv/headless.output.tsv")
 TSV_HEADLESS_TEMP = LazyPath(DIR.parent, "../resources/tsv/headless.temp.tsv")
-
-HEADERS_DICT = Object({
-    "bool": Array([False, False, True, True, True, True, True, False, True, True]),
-    "int": Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-    "float": Array(
-        [3.387182583, 4.523252832, 1.577410661, 0.861610127, 1.461357371, 1.907316961, 1.214172801, 2.010788362,
-         1.91548151, 0.785592075]),
-    "string": Array(["boring", "royal", "want", "communicate", "perfect", "crack", "ragged", "scribble", "obnoxious",
-                     "incandescent"]),
-    "null": Array([None, None, None, None, None, None, None, None, None, None])
-})
-
-HEADLESS_DICT = Object({
-    0: Array([False, False, True, True, True, True, True, False, True, True]),
-    1: Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-    2: Array([3.387182583, 4.523252832, 1.577410661, 0.861610127, 1.461357371, 1.907316961, 1.214172801, 2.010788362,
-              1.91548151, 0.785592075]),
-    3: Array(["boring", "royal", "want", "communicate", "perfect", "crack", "ragged", "scribble", "obnoxious",
-              "incandescent"]),
-    4: Array([None, None, None, None, None, None, None, None, None, None])
-})
-
-NO_PARSE_DICT = Object({
-    "bool": Array(["FALSE", "FALSE", "TRUE", "TRUE", "TRUE", "TRUE", "TRUE", "FALSE", "TRUE", "TRUE"]),
-    "string": Array(["boring", "royal", "want", "communicate", "perfect", "crack", "ragged", "scribble", "obnoxious",
-                     "incandescent"]),
-    "float": Array(
-        ["3.387182583", "4.523252832", "1.577410661", "0.861610127", "1.461357371", "1.907316961", "1.214172801",
-         "2.010788362", "1.91548151", "0.785592075"]),
-    "null": Array(["", "", "#N/A", "#N/A", "None", "None", "null", "null", "undefined", "undefined"]),
-    "int": Array(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"])
-})
 
 HEADERS_LIST = Array([
     Object({'float': 3.387182583, 'int': 1, 'null': None, 'string': 'boring', 'bool': False}),
@@ -90,42 +58,6 @@ NO_PARSE_LIST = Array([
     Object({'bool': 'TRUE', 'string': 'obnoxious', 'null': 'undefined', 'float': '1.91548151', 'int': '9'}),
     Object({'bool': 'TRUE', 'string': 'incandescent', 'null': 'undefined', 'float': '0.785592075', 'int': '10'})
 ])
-
-
-def test_csv2dict():
-    dict_ = table2dict(CSV_HEADERS_INPUT)
-    assert HEADERS_DICT == dict_
-    assert HEADERS_DICT is not dict_
-    dict2table(CSV_HEADERS_TEMP, dict_)
-    assert CSV_HEADERS_OUTPUT.read_text() == CSV_HEADERS_TEMP.read_text()
-
-    dict_ = table2dict(CSV_HEADLESS_INPUT, headers=False)
-    assert HEADLESS_DICT == dict_
-    assert HEADLESS_DICT is not dict_
-    dict2table(CSV_HEADLESS_TEMP, dict_, headers=False)
-    assert CSV_HEADLESS_OUTPUT.read_text() == CSV_HEADLESS_TEMP.read_text()
-
-    dict_ = table2dict(CSV_HEADERS_INPUT, parse=False)
-    assert NO_PARSE_DICT == dict_
-    assert NO_PARSE_DICT is not dict_
-
-
-def test_tsv2dict():
-    dict_ = table2dict(TSV_HEADERS_INPUT, delimiter="\t")
-    assert HEADERS_DICT == dict_
-    assert HEADERS_DICT is not dict_
-    dict2table(TSV_HEADERS_TEMP, dict_, delimiter="\t")
-    assert TSV_HEADERS_OUTPUT.read_text() == TSV_HEADERS_TEMP.read_text()
-
-    dict_ = table2dict(TSV_HEADLESS_INPUT, delimiter="\t", headers=False)
-    assert HEADLESS_DICT == dict_
-    assert HEADLESS_DICT is not dict_
-    dict2table(TSV_HEADLESS_TEMP, dict_, delimiter="\t", headers=False)
-    assert TSV_HEADLESS_OUTPUT.read_text() == TSV_HEADLESS_TEMP.read_text()
-
-    dict_ = table2dict(TSV_HEADERS_INPUT, delimiter="\t", parse=False)
-    assert NO_PARSE_DICT == dict_
-    assert NO_PARSE_DICT is not dict_
 
 
 def test_csv2list():
