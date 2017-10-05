@@ -1,18 +1,23 @@
+#!/usr/bin/env python
+from sys import argv
 from setuptools import find_packages, setup
 
-try:
-    # noinspection PyUnresolvedReferences
-    from pypandoc import convert, download_pandoc
+long_description = "!!! pypandoc and/or pandoc not found, long_description is bad, don't upload this to PyPI !!!"
 
-    download_pandoc()
-    long_description = convert("README.md", "rst")
+if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
+    try:
+        # noinspection PyUnresolvedReferences
+        from pypandoc import convert, download_pandoc
 
-except (ImportError, OSError):
-    long_description = "!!! pypandoc and/or pandoc not found, long_description is bad, don't upload this to PyPI !!!"
+        download_pandoc()
+        long_description = convert("README.md", "rst")
+
+    except (ImportError, OSError):
+        pass
 
 setup(
     name="pyplus",
-    version="0.1.0",
+    version="0.1.1",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
