@@ -126,8 +126,7 @@ class Object(_OrderedDict, _JsonMixin):
                 kwargs = self.__from_dict(args[0], kwargs)
 
             elif _common.isiterable(args[0]):
-                for index, item in enumerate(args[0]):
-                    kwargs = self.__from_sequence(index, item, kwargs)
+                kwargs = self.__from_mappable(args[0], kwargs)
 
             else:
                 raise TypeError("'%s' object is not iterable" % type(args[0]).__name__)
@@ -184,14 +183,15 @@ class Object(_OrderedDict, _JsonMixin):
         return kwargs
 
     @staticmethod
-    def __from_sequence(index, item, kwargs):
-        if _common.ispair(item):
-            if str(item[0]) not in kwargs:
-                kwargs[str(item[0])] = item[1]
-        elif _common.issequence(item) and len(item) > 2:
-            raise ValueError("json update sequence element #%s has length %s; 2 is required" % index, len(item))
-        else:
-            raise TypeError("cannot convert json update sequence element #%s to a sequence" % index)
+    def __from_mappable(arg, kwargs):
+        for index, item in enumerate(arg):
+            if _common.ispair(item):
+                if str(item[0]) not in kwargs:
+                    kwargs[str(item[0])] = item[1]
+            elif _common.issequence(item) and len(item) > 2:
+                raise ValueError("json update sequence element #%s has length %s; 2 is required" % index, len(item))
+            else:
+                raise TypeError("cannot convert json update sequence element #%s to a sequence" % index)
 
         return kwargs
 

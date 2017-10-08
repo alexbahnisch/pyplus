@@ -1,5 +1,3 @@
-from os import linesep
-
 from .abstract import abstractclassmethod as _abstractclassmethod, abstractmethod as _abstractmethod
 from .common import ispathlike as _ispathlike
 from .json import Array as _Array, Object as _Object
