@@ -4,33 +4,58 @@ from .parse import create_parser as _create_parser
 from .path import LazyPath as _LazyPath
 
 
-def table2list(path, headers=True, parse=True, delimiter=","):
-    path, headers, parser = _LazyPath(str(path)), bool(headers), _create_parser(parse)
+def _table2list_with_headers(csv_reader, parser):
+    array, keys = Array(), []
+
+    for row_index, row in enumerate(csv_reader):
+
+        if row_index == 0:
+            keys = list(row)
+
+        else:
+            obj = Object()
+            for col_index, cell in enumerate(row):
+                obj[keys[col_index]] = parser(cell)
+            array.append(obj)
+
+    return array
+
+
+def _table2list_without_headers(csv_reader, parser):
     array = Array()
+
+    for row_index, row in enumerate(csv_reader):
+        obj = Object()
+        for col_index, cell in enumerate(row):
+            obj[col_index] = parser(cell)
+        array.append(obj)
+
+    return array
+
+
+def table2list(path, headers=True, parse=True, delimiter=","):
+    path, parser = _LazyPath(path), _create_parser(parse)
 
     with path.read() as read_file:
         csv_reader = _reader(read_file, delimiter=delimiter)
 
         if headers:
-            for row_index, row in enumerate(csv_reader):
-
-                if row_index == 0:
-                    headers = list(row)
-
-                else:
-                    obj = Object()
-                    for col_index, cell in enumerate(row):
-                        obj[headers[col_index]] = parser(cell)
-                    array.append(obj)
-
+            return _table2list_with_headers(csv_reader, parser)
         else:
-            for row_index, row in enumerate(csv_reader):
-                obj = Object()
-                for col_index, cell in enumerate(row):
-                    obj[col_index] = parser(cell)
-                array.append(obj)
+            return _table2list_without_headers(csv_reader, parser)
 
-        return array
+
+def _list2table(list_):
+    keys, rows = [], []
+
+    for item in list_:
+        for key in item:
+            if key not in keys:
+                keys.append(key)
+
+        rows.append([item.get(key, "") for key in keys])
+
+    return keys, rows
 
 
 def list2table(path, list_, headers=True, delimiter=","):
@@ -40,14 +65,7 @@ def list2table(path, list_, headers=True, delimiter=","):
         csv_writer = _writer(write_file, delimiter=delimiter, lineterminator="\n")
 
         if len(list_) > 0:
-            keys, rows = [], []
-
-            for item in list_:
-                for key in item:
-                    if key not in keys:
-                        keys.append(key)
-
-                rows.append([item.get(key, "") for key in keys])
+            keys, rows = _list2table(list_)
 
             if headers:
                 csv_writer.writerow(keys)

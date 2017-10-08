@@ -15,6 +15,16 @@ class _JsonMixin(object):
     def __setitem__(self, key, value):
         pass
 
+    def extract(self, alias):
+        rarg, alias = self, _alias2keys(alias)
+
+        for key in alias:
+            rarg = rarg[key]
+            if rarg is None:
+                return None
+
+        return rarg
+
     def _merge(self, index, item):
         if (isinstance(self[index], Object) and isinstance(item, dict)) or (isinstance(self[index], Array) and isinstance(item, list)):
             self[index].merge(item.copy())
@@ -116,7 +126,8 @@ class Object(_OrderedDict, _JsonMixin):
                 kwargs = self.__from_dict(args[0], kwargs)
 
             elif _common.isiterable(args[0]):
-                kwargs = self.__from_mappable(args[0], kwargs)
+                for index, item in enumerate(args[0]):
+                    kwargs = self.__from_sequence(index, item, kwargs)
 
             else:
                 raise TypeError("'%s' object is not iterable" % type(args[0]).__name__)
@@ -173,15 +184,15 @@ class Object(_OrderedDict, _JsonMixin):
         return kwargs
 
     @staticmethod
-    def __from_mappable(arg, kwargs):
-        for inx, items in enumerate(arg):
-            if _common.ispair(items):
-                if str(items[0]) not in kwargs:
-                    kwargs[str(items[0])] = items[1]
-            elif _common.issequence(items) and len(items) > 2:
-                raise ValueError("json update sequence element #%s has length %s; 2 is required" % inx, len(items))
-            else:
-                raise TypeError("cannot convert json update sequence element #%s to a sequence" % inx)
+    def __from_sequence(index, item, kwargs):
+        if _common.ispair(item):
+            if str(item[0]) not in kwargs:
+                kwargs[str(item[0])] = item[1]
+        elif _common.issequence(item) and len(item) > 2:
+            raise ValueError("json update sequence element #%s has length %s; 2 is required" % index, len(item))
+        else:
+            raise TypeError("cannot convert json update sequence element #%s to a sequence" % index)
+
         return kwargs
 
     def length(self):
@@ -226,18 +237,12 @@ class JSON(object):
 
     @classmethod
     def from_file(cls, path, alias=None, errors=True):
-        path, alias = _LazyPath(path), _alias2keys(alias)
+        path = _LazyPath(path)
 
         if path.exists():
             with path.read() as tmp_file:
                 rarg = cls.from_collection(_load(tmp_file))
-
-                for key in alias:
-                    rarg = rarg[key]
-                    if rarg is None:
-                        return None
-
-                return rarg
+                return rarg.extract(alias)
 
         else:
             if bool(errors):
