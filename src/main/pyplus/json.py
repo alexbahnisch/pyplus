@@ -9,6 +9,18 @@ from .string import alias2keys as _alias2keys
 
 
 class _JsonMixin(object):
+    def __getitem__(self, index):
+        pass
+
+    def __setitem__(self, key, value):
+        pass
+
+    def _merge(self, index, item):
+        if (isinstance(self[index], Object) and isinstance(item, dict)) or (isinstance(self[index], Array) and isinstance(item, list)):
+            self[index].merge(item.copy())
+        else:
+            self[index] = _deepcopy(item)
+
     def serialize(self, indent=2, sort_keys=True):
         return _dumps(self, indent=indent, sort_keys=sort_keys)
 
@@ -83,11 +95,7 @@ class Array(list, _JsonMixin):
         if all(isinstance(other, list) for other in others):
             for other in others:
                 for index, item in enumerate(other):
-                    if (isinstance(self[index], Object) and isinstance(item, dict)) or (isinstance(self[index], Array) and isinstance(item, list)):
-                        self[index].merge(item.copy())
-                    else:
-                        self[index] = _deepcopy(item)
-
+                    self._merge(index, item)
             return self
         else:
             raise TypeError("merge(*others) arguments must be instances a 'list'")
@@ -101,26 +109,28 @@ class Array(list, _JsonMixin):
 class Object(_OrderedDict, _JsonMixin):
     def __init__(self, *args, **kwargs):
         kwargs = _OrderedDict(kwargs)
-        if len(args) > 1:
+
+        if len(args) == 1:
+            if isinstance(args[0], dict):
+                for key, value in args[0].items():
+                    if str(key) not in kwargs:
+                        kwargs[str(key)] = value
+
+            elif _common.isiterable(args[0]):
+                for inx, items in enumerate(args[0]):
+                    if _common.ispair(items):
+                        if str(items[0]) not in kwargs:
+                            kwargs[str(items[0])] = items[1]
+                    elif _common.issequence(items) and len(items) > 2:
+                        raise ValueError("json update sequence element #%s has length %s; 2 is required" % inx, len(items))
+                    else:
+                        raise TypeError("cannot convert json update sequence element #%s to a sequence" % inx)
+
+            else:
+                raise TypeError("'%s' object is not iterable" % type(args[0]).__name__)
+
+        elif len(args) > 1:
             raise TypeError("json expected at most 1 arguments, got %s" % len(args))
-
-        elif len(args) > 0 and isinstance(args[0], dict):
-            for key, value in args[0].items():
-                if str(key) not in kwargs:
-                    kwargs[str(key)] = value
-
-        elif len(args) > 0 and hasattr(args[0], "__iter__"):
-            for inx, items in enumerate(args[0]):
-                if _common.ispair(items):
-                    if str(items[0]) not in kwargs:
-                        kwargs[str(items[0])] = items[1]
-                elif _common.issequence(items) and len(items) > 2:
-                    raise ValueError("json update sequence element #%s has length %s; 2 is required" % inx, len(items))
-                else:
-                    raise TypeError("cannot convert json update sequence element #%s to a sequence" % inx)
-
-        elif len(args) > 0:
-            raise TypeError("'%s' object is not iterable" % type(args[0]).__name__)
 
         super(Object, self).__init__(kwargs)
 
@@ -193,11 +203,7 @@ class Object(_OrderedDict, _JsonMixin):
         if all(isinstance(other, dict) for other in others):
             for other in others:
                 for key, value in other.items():
-                    if (isinstance(self[key], Object) and isinstance(value, dict)) or (isinstance(self[key], Array) and isinstance(value, list)):
-                        self[key].merge(value.copy())
-                    else:
-                        self[key] = _deepcopy(value)
-
+                    self._merge(key, value)
             return self
         else:
             raise TypeError("merge(*others) arguments must be instances of 'dict'")
