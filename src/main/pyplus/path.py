@@ -18,19 +18,14 @@ class LazyPath(_Path):
         else:
             raise NotImplementedError("cannot instantiate %r on your system" % (cls.__name__,))
 
-    def delete(self, recursive=False, errors=False):
-        try:
-            if self.is_file():
-                _remove(str(self))
-            elif self.is_dir():
-                if bool(recursive):
-                    _rmtree(str(self))
-                else:
-                    self.rmdir()
-
-        except Exception as error:
-            if bool(errors):
-                raise error
+    def delete(self, recursive=False):
+        if self.is_file():
+            _remove(str(self))
+        elif self.is_dir():
+            if bool(recursive):
+                _rmtree(str(self))
+            else:
+                self.rmdir()
 
     def read(self, mode="r", buffering=-1, encoding=None, errors=None, newline=None):
         return self.open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)

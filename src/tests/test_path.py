@@ -15,10 +15,8 @@ def test_lazy_path():
         with temp_file.write():
             pass
 
-        temp_folder.delete()
-
         with raises(OSError):
-            temp_folder.delete(errors=True)
+            temp_folder.delete()
 
         assert temp_dir.exists()
         assert temp_file.exists()

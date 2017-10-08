@@ -55,12 +55,13 @@ class Array(list, _JsonMixin):
             return None
 
     def __setitem__(self, index, value):
-        if _common.isintlike(index) and 0 <= int(index) < self.length():
-            super(Array, self).__setitem__(int(index), value)
-        elif _common.isintlike(index) and int(index) == self.length():
-            self.append(value)
-        elif _common.isintlike(index) and int(index) > self.length():
-            self.extend([None] * (int(index) - self.length()) + [value])
+        if _common.isintlike(index):
+            if 0 <= int(index) < self.length():
+                super(Array, self).__setitem__(int(index), value)
+            if int(index) == self.length():
+                self.append(value)
+            if int(index) > self.length():
+                self.extend([None] * (int(index) - self.length()) + [value])
 
     def length(self):
         return len(self)
@@ -112,19 +113,10 @@ class Object(_OrderedDict, _JsonMixin):
 
         if len(args) == 1:
             if isinstance(args[0], dict):
-                for key, value in args[0].items():
-                    if str(key) not in kwargs:
-                        kwargs[str(key)] = value
+                kwargs = self.__from_dict(args[0], kwargs)
 
             elif _common.isiterable(args[0]):
-                for inx, items in enumerate(args[0]):
-                    if _common.ispair(items):
-                        if str(items[0]) not in kwargs:
-                            kwargs[str(items[0])] = items[1]
-                    elif _common.issequence(items) and len(items) > 2:
-                        raise ValueError("json update sequence element #%s has length %s; 2 is required" % inx, len(items))
-                    else:
-                        raise TypeError("cannot convert json update sequence element #%s to a sequence" % inx)
+                kwargs = self.__from_mappable(args[0], kwargs)
 
             else:
                 raise TypeError("'%s' object is not iterable" % type(args[0]).__name__)
@@ -173,6 +165,25 @@ class Object(_OrderedDict, _JsonMixin):
     def __setitem__(self, key, value):
         return super(Object, self).__setitem__(str(key), value)
 
+    @staticmethod
+    def __from_dict(arg, kwargs):
+        for key, value in arg.items():
+            if str(key) not in kwargs:
+                kwargs[str(key)] = value
+        return kwargs
+
+    @staticmethod
+    def __from_mappable(arg, kwargs):
+        for inx, items in enumerate(arg):
+            if _common.ispair(items):
+                if str(items[0]) not in kwargs:
+                    kwargs[str(items[0])] = items[1]
+            elif _common.issequence(items) and len(items) > 2:
+                raise ValueError("json update sequence element #%s has length %s; 2 is required" % inx, len(items))
+            else:
+                raise TypeError("cannot convert json update sequence element #%s to a sequence" % inx)
+        return kwargs
+
     def length(self):
         return len(self)
 
@@ -215,7 +226,7 @@ class JSON(object):
 
     @classmethod
     def from_file(cls, path, alias=None, errors=True):
-        path, alias = _LazyPath(path), _alias2keys(alias) if alias is not None else []
+        path, alias = _LazyPath(path), _alias2keys(alias)
 
         if path.exists():
             with path.read() as tmp_file:
