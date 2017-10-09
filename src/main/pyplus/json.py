@@ -214,11 +214,11 @@ class Object(_OrderedDict, _JsonMixin):
     def deepcopy(self):
         return self.__deepcopy__({})
 
-    def items(self, parser=False):
-        if parser is False:
+    def items(self, parse=False):
+        if parse is False:
             return super().items()
         else:
-            parser = create_lazy_parser(parser)
+            parser = create_lazy_parser(parse)
             return [(parser(key), value) for key, value in super().items()]
 
     def merge(self, *others):

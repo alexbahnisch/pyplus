@@ -385,8 +385,8 @@ def test_object_io():
 def test_object_items():
     obj = Object(DICT_INT)
     assert all(item in MAPPABLE for item in obj.items())
-    assert all(item in MAPPABLE_INT for item in obj.items(parser=True))
-    assert all(item in MAPPABLE_INT for item in obj.items(parser=int))
+    assert all(item in MAPPABLE_INT for item in obj.items(parse=True))
+    assert all(item in MAPPABLE_INT for item in obj.items(parse=int))
 
 
 def test_object_merge_mutate():

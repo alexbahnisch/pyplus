@@ -1,53 +1,76 @@
 #!/usr/bin/env python
-from pyplus.path import LazyPath, LazyTempDir
+from pyplus.path import LazyPath
+from pyplus.temp import LazyTempDir
 from pytest import raises
 
 
-# noinspection PyTypeChecker
-def test_lazy_path():
-    with raises(NotImplementedError, message="cannot instantiate object on your system"):
-        LazyPath.__new__(object)
-
+def test_lazy_path_dir():
     with LazyTempDir() as temp_dir:
-        temp_file = LazyPath(temp_dir).joinpath("./temp/temp.txt")
-        temp_folder = LazyPath(temp_dir).joinpath("./temp")
+        lazy_dir = temp_dir.joinpath("./test/test")
+        assert not lazy_dir.exists()
+        lazy_dir.mkdir()
+        assert lazy_dir.exists()
+        assert lazy_dir.is_dir()
+        lazy_dir.delete()
+        assert not lazy_dir.exists()
 
-        with temp_file.write():
-            pass
+
+def test_lazy_path_file():
+    with LazyTempDir() as temp_dir:
+        lazy_file = temp_dir.joinpath("./test/test.txt")
+        assert not lazy_file.exists()
+        lazy_file.touch()
+        assert lazy_file.exists()
+        assert lazy_file.is_file()
+        lazy_file.delete()
+        assert not lazy_file.exists()
+
+
+def test_lazy_path_new_dir():
+    with LazyTempDir() as temp_dir:
+        lazy_dir = LazyPath.new_dir(temp_dir.joinpath("./test/test"))
+        assert lazy_dir.exists()
+        assert lazy_dir.is_dir()
+        lazy_dir.delete()
+        assert not lazy_dir.exists()
+
+    lazy_dir = LazyPath.new_dir()
+    assert lazy_dir.exists()
+    assert lazy_dir.is_dir()
+    lazy_dir.delete()
+    assert not lazy_dir.exists()
+
+
+def test_lazy_path_new_file():
+    with LazyTempDir() as temp_dir:
+        lazy_file = LazyPath.new_file(temp_dir.joinpath("./test/test.txt"))
+        assert lazy_file.exists()
+        assert lazy_file.is_file()
+        lazy_file.delete()
+        assert not lazy_file.exists()
+
+    lazy_file = LazyPath.new_file()
+    assert lazy_file.exists()
+    assert lazy_file.is_file()
+    lazy_file.delete()
+    assert not lazy_file.exists()
+
+
+# noinspection PyTypeChecker
+def test_lazy_path_exception():
+    with LazyTempDir() as temp_dir:
+        lazy_dir = temp_dir.joinpath("./test")
+        lazy_file = temp_dir.joinpath("./test/test.txt")
+        lazy_file.touch()
 
         with raises(OSError):
-            temp_folder.delete()
+            lazy_dir.delete()
 
-        assert temp_dir.exists()
-        assert temp_file.exists()
-        assert temp_folder.exists()
+        with raises(NotImplementedError, message="cannot instantiate object on your system"):
+            LazyPath.__new__(object)
 
-        temp_folder.delete(recursive=True)
+        with raises(TypeError, message="'path 'argument should be a None, path or str object, not 'object'"):
+            LazyPath.new_dir(object())
 
-        assert not temp_file.exists()
-        assert not temp_folder.exists()
-
-    assert not temp_dir.exists()
-
-
-def test_lazy_temp_dir():
-    lazy_temp_dir = LazyTempDir()
-    assert lazy_temp_dir.path.exists()
-    lazy_temp_dir.delete()
-    assert not lazy_temp_dir.path.exists()
-
-
-def test_lazy_temp_dir_context():
-    with LazyTempDir() as temp_dir:
-        assert temp_dir.exists()
-    assert not temp_dir.exists()
-
-
-def test_lazy_temp_dir_name():
-    lazy_temp_dir = LazyTempDir("suffix", "prefix")
-    with lazy_temp_dir:
-        assert "LazyTempDir" in repr(lazy_temp_dir)
-        assert "suffix" in repr(lazy_temp_dir)
-        assert "prefix" in repr(lazy_temp_dir)
-        assert "suffix" in str(lazy_temp_dir)
-        assert "prefix" in str(lazy_temp_dir)
+        with raises(TypeError, message="'path 'argument should be a None, path or str object, not 'object'"):
+            LazyPath.new_file(object())
