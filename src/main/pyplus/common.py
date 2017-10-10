@@ -1,4 +1,5 @@
 from decimal import Decimal as _Decimal
+from os import name as _name
 from pathlib import Path as _Path
 
 
@@ -40,6 +41,10 @@ def issequence(obj):
 
 def istuplike(obj):
     return hasattr(obj, "__len__") and hasattr(obj, "__getitem__") and isiterable(obj)
+
+
+def iswindows():
+    return _name == "nt"
 
 
 def iterable(obj):
