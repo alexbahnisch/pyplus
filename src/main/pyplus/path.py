@@ -23,27 +23,26 @@ class LazyPath(_Path):
     @classmethod
     def new_dir(cls, path=None):
         if path is None:
-            instance = cls(_mkdtemp())
+            lazy_dir = cls(_mkdtemp())
         elif _ispathlike(path):
-            instance = cls(path)
-            instance.mkdir()
+            lazy_dir = cls(path)
+            lazy_dir.mkdir()
         else:
             raise TypeError("'path 'argument should be a None, path or str object, not '%s'" % type(path).__name__)
 
-        return instance.resolve()
+        return lazy_dir.resolve()
 
     @classmethod
     def new_file(cls, path=None):
         if path is None:
-            temp = _mkstemp()
-            instance = cls(temp[1])
+            lazy_file = cls(_mkstemp()[1])
         elif _ispathlike(path):
-            instance = cls(path)
-            instance.touch()
+            lazy_file = cls(path)
+            lazy_file.touch()
         else:
             raise TypeError("'path 'argument should be a None, path or str object, not '%s'" % type(path).__name__)
 
-        return instance.resolve()
+        return lazy_file.resolve()
 
     def delete(self, recursive=False):
         if self.is_file():
@@ -57,8 +56,11 @@ class LazyPath(_Path):
     def mkdir(self, mode=0o777, parents=True, exist_ok=True):
         super().mkdir(mode, parents, exist_ok)
 
-    def read(self, mode="r", buffering=-1, encoding=None, errors=None, newline=None):
+    def open(self, mode="r", buffering=-1, encoding=None, errors=None, newline=None):
         self.touch()
+        return super().open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)
+
+    def read(self, mode="r", buffering=-1, encoding=None, errors=None, newline=None):
         return self.open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)
 
     def touch(self, mode=0o777, parents=True, exist_ok=True):
@@ -66,7 +68,6 @@ class LazyPath(_Path):
         super().touch(mode, exist_ok)
 
     def write(self, mode="w", buffering=-1, encoding=None, errors=None, newline=None):
-        self.touch()
         return self.open(mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline)
 
 
