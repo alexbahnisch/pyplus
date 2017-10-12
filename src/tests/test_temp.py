@@ -24,7 +24,5 @@ def test_lazy_temp_file():
     assert str(lazy_temp_file.path) == str(lazy_temp_file)
     assert repr(lazy_temp_file.path) == repr(lazy_temp_file)
 
-    if not iswindows():
-        # TODO - work out permanent fix for windows
-        lazy_temp_file.delete()
-        assert not lazy_temp_file.path.exists()
+    lazy_temp_file.delete()
+    assert not lazy_temp_file.path.exists()

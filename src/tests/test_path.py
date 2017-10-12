@@ -54,10 +54,8 @@ def test_lazy_path_new_file():
     assert lazy_file.exists()
     assert lazy_file.is_file()
 
-    if not iswindows():
-        # TODO - work out permanent fix for windows
-        lazy_file.delete()
-        assert not lazy_file.exists()
+    lazy_file.delete()
+    assert not lazy_file.exists()
 
 
 # noinspection PyTypeChecker
