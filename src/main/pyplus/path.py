@@ -21,8 +21,15 @@ class LazyPath(_Path):
             raise NotImplementedError("cannot instantiate %r on your system" % (cls.__name__,))
 
     @classmethod
+    def make_dir(cls, dir):
+        if _ispathlike(dir):
+            dir = cls(dir)
+            dir.mkdir()
+
+    @classmethod
     def new_dir(cls, path=None, dir=None, prefix=None, suffix=None):
         if path is None:
+            cls.make_dir(dir)
             lazy_dir = cls(_mkdtemp(dir=dir, prefix=prefix, suffix=suffix))
         elif _ispathlike(path):
             lazy_dir = cls(path)
@@ -35,6 +42,7 @@ class LazyPath(_Path):
     @classmethod
     def new_file(cls, path=None, dir=None, prefix=None, suffix=None, text=True):
         if path is None:
+            cls.make_dir(dir)
             level, path = _mkstemp(dir=dir, prefix=prefix, suffix=suffix, text=text)
             lazy_file = cls(path)
             lazy_file.resolve()

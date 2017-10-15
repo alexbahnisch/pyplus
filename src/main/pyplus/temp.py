@@ -38,6 +38,7 @@ class _LazyTempMixin:
 class LazyTempDir(_LazyTempMixin):
 
     def __init__(self, dir=None, prefix=None, suffix=None):
+        self.__PATH__.make_dir(dir)
         super().__init__(_mkdtemp(dir=dir, prefix=prefix, suffix=suffix))
 
     def delete(self):
@@ -49,6 +50,7 @@ class LazyTempDir(_LazyTempMixin):
 class LazyTempFile(_LazyTempMixin):
 
     def __init__(self, dir=None, prefix=None, suffix=None, text=True):
+        self.__PATH__.make_dir(dir)
         level, path = _mkstemp(dir=dir, prefix=prefix, suffix=suffix, text=text)
         super().__init__(path)
         self._os_level = level

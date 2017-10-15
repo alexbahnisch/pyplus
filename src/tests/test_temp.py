@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from pyplus.common import iswindows
 from pyplus.temp import *
 
 
@@ -9,6 +8,14 @@ def test_lazy_temp_dir():
     assert str(lazy_temp_dir.path) == str(lazy_temp_dir)
     assert repr(lazy_temp_dir.path) == repr(lazy_temp_dir)
     lazy_temp_dir.delete()
+    assert not lazy_temp_dir.path.exists()
+
+
+def test_lazy_temp_dir_mkdir():
+    with LazyTempDir() as lazy_dir:
+        lazy_temp_dir = LazyTempDir(dir=str(lazy_dir.joinpath("./test")))
+        lazy_temp_dir.delete()
+
     assert not lazy_temp_dir.path.exists()
 
 
@@ -26,3 +33,11 @@ def test_lazy_temp_file():
 
     lazy_temp_file.delete()
     assert not lazy_temp_file.path.exists()
+
+
+def test_lazy_temp_file_mkdir():
+    with LazyTempDir() as lazy_dir:
+        lazy_temp_dir = LazyTempFile(dir=str(lazy_dir.joinpath("./test")))
+        lazy_temp_dir.delete()
+
+    assert not lazy_temp_dir.path.exists()

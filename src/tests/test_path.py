@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from pyplus.common import iswindows
 from pyplus.path import LazyPath
 from pyplus.temp import LazyTempDir
 from pytest import raises
@@ -35,6 +34,12 @@ def test_lazy_path_new_dir():
         lazy_dir.delete()
         assert not lazy_dir.exists()
 
+        lazy_dir = LazyPath.new_dir(dir=str(temp_dir.joinpath("./test/test")))
+        assert lazy_dir.exists()
+        assert lazy_dir.is_dir()
+        lazy_dir.delete()
+        assert not lazy_dir.exists()
+
     lazy_dir = LazyPath.new_dir()
     assert lazy_dir.exists()
     assert lazy_dir.is_dir()
@@ -45,6 +50,12 @@ def test_lazy_path_new_dir():
 def test_lazy_path_new_file():
     with LazyTempDir() as temp_dir:
         lazy_file = LazyPath.new_file(temp_dir.joinpath("./test/test.txt"))
+        assert lazy_file.exists()
+        assert lazy_file.is_file()
+        lazy_file.delete()
+        assert not lazy_file.exists()
+
+        lazy_file = LazyPath.new_file(dir=str(temp_dir.joinpath("./test/test")))
         assert lazy_file.exists()
         assert lazy_file.is_file()
         lazy_file.delete()
