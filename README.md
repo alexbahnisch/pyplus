@@ -22,9 +22,9 @@ $ pip install pyplus
 ## Usage
 
 ```python
-import pyplus
-# or
-import pyplus.json
-# or
-from pyplus.json import JSON
+from pyplus.string import snake_case
+
+snake_case("Hello World!")
+
+# hello_world
 ```
