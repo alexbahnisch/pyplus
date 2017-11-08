@@ -4,8 +4,10 @@
 .eggs
 .idea
 .tox
+_book
 build
 dist
+node_modules
 pandoc-*.msi
 
 # wildcards:

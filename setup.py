@@ -6,7 +6,7 @@ long_description = "!!! pypandoc and/or pandoc not found, long_description is ba
 
 if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
     try:
-        # noinspection PyUnresolvedReferences
+        # noinspection PyPackageRequirements
         from pypandoc import convert, download_pandoc
 
         download_pandoc()
@@ -17,7 +17,7 @@ if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
 
 setup(
     name="pyplus",
-    version="0.1.5",
+    version="0.1.6",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
@@ -41,11 +41,11 @@ setup(
     package_dir={"": "src/main"},
     python_requires=">=3.5",
     setup_requires=[
-        "pypandoc>=1.4"
+        "pypandoc>=1.4<2"
     ],
     tests_require=[
-        "pytest>=3.2.2",
-        "pytest-runner>=2.11.1"
+        "pytest>=3.2.2<4",
+        "pytest-runner>=2.11.1<3"
     ],
     test_suite="src.tests"
 )

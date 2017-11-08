@@ -1,3 +1,11 @@
 {
+  "plugins": [
+    "fontsettings"
+  ],
+  "pluginsConfig": {
+    "fontsettings": {
+      "theme": "night"
+    }
+  },
   "root": "./docs"
 }

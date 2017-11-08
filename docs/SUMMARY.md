@@ -1,4 +1,4 @@
 # py+
 
-* [Introduction](../README.md)
+* [Introduction](./README.md)
 
