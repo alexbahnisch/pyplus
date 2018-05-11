@@ -1,16 +1,19 @@
-# root:
+# Root:
 .coverage
 .cache
 .eggs
 .idea
+.pytest_cache
 .tox
-_book
 build
 dist
-node_modules
+site
 pandoc-*.msi
 
-# wildcards:
+# Docs:
+docs/index.md
+
+# Wildcards:
 !**.gitkeep
 **.egg-info
 **.temp.*

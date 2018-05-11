@@ -1,0 +1,22 @@
+site_name: "PyPlus"
+repo_url: "https://github.com/alexbahnisch/pyplus"
+
+extra_css:
+  - "css/code-highlight.css"
+  - "css/dark-theme.css"
+
+markdown_extensions:
+  - admonition:
+  - codehilite:
+      linenums: true
+  - toc:
+      permalink: true
+
+pages:
+  - Home: "index.md"
+
+theme:
+  name: "material"
+  palette:
+    accent: "blue grey"
+    primary: "blue grey"

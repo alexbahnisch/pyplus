@@ -1,0 +1,74 @@
+
+.md-main {
+  color: #F5F5F5 !important;
+  background-color: #212121 !important;
+}
+
+.md-main h1 {
+  color: white !important;
+}
+
+table {
+  background-color: #616161 !important;
+}
+
+tbody {
+  background-color: #484848 !important;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+  background-color: #E0E0E0 !important;
+}
+
+.md-nav {
+  color: #F5F5F5 !important;
+  background-color: #212121 !important;
+}
+
+html .md-nav--primary .md-nav__title:before {
+  color: #FAFAFA !important;
+}
+
+.md-nav__title {
+  color: rgba(255,255,255,1) !important;
+  background-color: #212121 !important;
+}
+
+.md-nav--primary .md-nav__link:after {
+  color: #FAFAFA !important;
+}
+
+.md-nav__list {
+  color: rgba(255,255,255,1) !important;
+  background-color: #212121 !important;
+}
+
+.md-nav__item {
+  color: rgba(255,255,255,1) !important;
+  background-color: #212121 !important;
+}
+
+.md-search__scrollwrap::-webkit-scrollbar-thumb {
+  background-color: #E0E0E0 !important;
+}
+
+.md-search__scrollwrap {
+  background-color: #424242 !important;
+}
+
+.md-search-result__article--document:before {
+  color: #EEEEEE !important;
+}
+
+.md-search-result__list {
+  color: #EEEEEE !important;
+  background-color: #212121 !important;
+}
+
+.md-search-result__meta {
+  background-color: #EEEEEE !important;
+}
+
+.md-search-result__teaser {
+  color: #BDBDBD !important;
+}
