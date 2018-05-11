@@ -15,7 +15,7 @@ tests = [
     "pytest>=3.5.1,<4",
     "pytest-runner>=4.2,<5",
     "tox>=3.0.0,<4"
-],
+]
 travis = [
     "coveralls>=1.3.0,<2",
     "tox-travis>=0.10<1"
