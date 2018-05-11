@@ -5,7 +5,7 @@ python:
   - 3.6
 
 install:
-  - pip install coveralls tox-travis
+  - pip install .[travis]
 
 script:
   - tox
@@ -17,7 +17,7 @@ notifications:
   email: true
 
 before_deploy:
-  - pip install pypandoc
+  - pip install .[dist]
 
 deploy:
   - provider: pypi

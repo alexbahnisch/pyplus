@@ -3,18 +3,6 @@ from sys import argv
 from setuptools import find_packages, setup
 
 long_description = "!!! pypandoc and/or pandoc not found, long_description is bad, don't upload this to PyPI !!!"
-
-if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
-    try:
-        # noinspection PyPackageRequirements, PyUnresolvedReferences
-        from pypandoc import convert, download_pandoc
-
-        download_pandoc()
-        long_description = convert("README.md", "rst")
-
-    except (ImportError, OSError):
-        pass
-
 dist = [
     "pypandoc>=1.4,<2"
 ]
@@ -27,7 +15,22 @@ tests = [
     "pytest>=3.5.1,<4",
     "pytest-runner>=4.2,<5",
     "tox>=3.0.0,<4"
+],
+travis = [
+    "coveralls>=1.3.0,<2",
+    "tox-travis>=0.10<1"
 ]
+
+if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
+    try:
+        # noinspection PyPackageRequirements, PyUnresolvedReferences
+        from pypandoc import convert, download_pandoc
+
+        download_pandoc()
+        long_description = convert("README.md", "rst")
+
+    except (ImportError, OSError):
+        pass
 
 setup(
     name="pyplus",
@@ -55,10 +58,11 @@ setup(
     package_dir={"": "src/main"},
     python_requires=">=3.5",
     extras_require={
-        "all": dist + docs + tests,
+        "develop": dist + docs + tests,
         "dist": dist,
         "docs": docs,
-        "tests": tests
+        "tests": tests,
+        "travis": travis
     },
     test_suite="src.tests"
 )
