@@ -41,6 +41,14 @@ def camel_case(string, title=True):
 
 
 @_parser
+def kebab_case(string):
+    string = _base_case(string)
+    string = UNDERSCORES.sub(r"_", string)
+    string = UNDERSCORE.sub(r"-", string)
+    return INVALID_LEAD.sub(r"", string).lower()
+
+
+@_parser
 def snake_case(string):
     string = _base_case(string)
     string = UNDERSCORES.sub(r"_", string)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from pyplus.string import alias2keys, camel_case, snake_case, title_case
+from pyplus.string import alias2keys, camel_case, kebab_case, snake_case, title_case
 from pytest import raises
 
 STRINGS = [
@@ -84,6 +84,21 @@ def test_camel_case_lower_unicode():
         assert u"testCase" == camel_case(string, title=False)
 
 
+def test_kebab_case():
+    for string in STRINGS:
+        assert "test-case" == kebab_case(string)
+
+
+def test_kebab_case_bytes():
+    for string in B_STRINGS:
+        assert b"test-case" == kebab_case(string)
+
+
+def test_kebab_case_unicode():
+    for string in U_STRINGS:
+        assert u"test-case" == kebab_case(string)
+
+
 def test_snake_case():
     for string in STRINGS:
         assert "test_case" == snake_case(string)
@@ -112,9 +127,3 @@ def test_title_case_bytes():
 def test_title_case_unicode():
     for string in U_STRINGS:
         assert u"Test Case" == title_case(string)
-
-
-if __name__ == "__main__":
-    test_snake_case()
-    test_snake_case_bytes()
-    test_snake_case_unicode()
