@@ -29,7 +29,7 @@ if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
         download_pandoc()
         long_description = convert("README.md", "rst")
 
-    except (ImportError, OSError):
+    except (ImportError, OSError, ValueError):
         pass
 
 setup(
