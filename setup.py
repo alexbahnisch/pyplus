@@ -1,16 +1,16 @@
-#!/usr/bin/env python
+#!/bin/python
 from sys import argv
 from setuptools import find_packages, setup
 
-long_description = "!!! pypandoc and/or pandoc not found, long_description is bad, don't upload this to PyPI !!!"
-dist = [
-    "pypandoc>=1.4,<2"
+long_description = "!!! m2r not found, long_description is bad, don't upload this to PyPI !!!"
+deploy = [
+    "m2r>=0.1.14,<2"
 ]
 docs = [
     "mkdocs>=0.17.3,<1",
     "mkdocs-material>=2.7.3,<3"
 ]
-tests = [
+test = [
     "coverage>=4.5.1,<5",
     "pytest>=3.5.1,<4",
     "pytest-runner>=4.2,<5",
@@ -23,11 +23,10 @@ travis = [
 
 if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
     try:
-        # noinspection PyPackageRequirements, PyUnresolvedReferences
-        from pypandoc import convert, download_pandoc
+        # noinspection PyPackageRequirements
+        from m2r import parse_from_file
 
-        download_pandoc()
-        long_description = convert("README.md", "rst")
+        long_description = parse_from_file("README.md")
 
     except (ImportError, OSError, ValueError):
         pass
@@ -58,11 +57,12 @@ setup(
     package_dir={"": "src/main"},
     python_requires=">=3.5",
     extras_require={
-        "develop": dist + docs + tests,
-        "dist": dist,
+        "deploy": deploy,
+        "develop": deploy + docs + test,
         "docs": docs,
-        "tests": tests,
+        "test": test,
         "travis": travis
     },
+    scripts=["scripts/pydoc2markdown.py"],
     test_suite="src.tests"
 )

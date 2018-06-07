@@ -37,38 +37,31 @@ snake_case("Hello World!")
 To setup the `pyplus` project for development, follow these steps from the root of the project:
 
 ```bash
-$ pip install -r requiremnets.txt
-$ pip install -e . 
+$ make venv
+$ make install
 ```
 
 Then to run the tests:
 
 ```bash
-$ python setup.py test
-# or
-$ tox
+$ make test
 ```
 
-### Philosophies
+Or to run test for multiple python version with tox, run:
 
-* `Break early, Break often` - Always throw exceptions as soon as you know something is invalid, usefully exception 
-messages is also a plus.
-* `Everything in moderation` or `There is a time and place` - Object orientated is great, so is functional, meta and 
-async, however they all have there times and places and should all be used in moderation.
-* `Some types just shouldn't be mixed` - Dynamically typed languages are great for quick development and rapid 
-prototyping, however some types just shouldn't mix, e.g allowing for a `{int}` instead of a `{bool}` is reasonable, 
-allowing for a `{pathlib.Path}` instead of a `{datetime.datetime}` is a little insane. 
+```bash
+$ make tox
+```
 
 ### Nomenclature
 
-* `Lazy` a group of extensions/utilities that are design to do a lot with minimal effort from the programmer and because
-of this they don't really adhere to the `Break early, Break often` philosophy. Because of the intended laziness of the 
-classes and functions they do take control away from the programmer, and may have some undesired side effects e.g. 
-`pyplus.path.LazyPath` automatically creates non-existent parent directories on `touch`. 
+* `Easy` a group of extensions/utilities that are design to do a lot with minimal effort. Because of the intended 
+easiness of the classes and functions they do take control away from the programmer, and may have some undesired side 
+effects e.g. `pyplus.path.EasyPath` automatically creates non-existent parent directories on `touch`. 
 
-#### From the Developer
+### From the Developer
 
 *I am a developer/data scientist creating software solutions for real world business problems. I developed `pyplus` to 
 encapsulate the python code I found my self migrating from project to project. `pyplus` is pure python and has zero 
 installation dependencies. My goal is for `pyplus` to be a stable library for both rapid prototyping and production 
-software, though I recommend care full consideration of the `Lazy` extensions in the later.*
+software, though I recommend care full consideration of the `Easy` extensions in the later.*

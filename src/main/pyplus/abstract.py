@@ -1,7 +1,16 @@
+"""
+A collection of lazy abstract decorators that will only raise an exception when the decorated method is called before
+being overridden, instead of on initiation of a subclass instance.
+"""
 from functools import wraps as _wraps
 
 
 def abstractclassmethod(method):
+    """
+    A lazy alternative to the `abc.abstractclassmethod`.
+    @param method: {classmethod}
+    @return: {classmethod}
+    """
     # noinspection PyUnusedLocal
     @_wraps(method)
     def wrapped(cls, *args, **kwargs):
@@ -13,6 +22,11 @@ def abstractclassmethod(method):
 
 
 def abstractproperty(method):
+    """
+    A lazy alternative to the `abc.abstractproperty`.
+    @param method: {property}
+    @return: {property}
+    """
     @_wraps(method)
     def wrapped(self):
         raise AttributeError(
@@ -23,6 +37,11 @@ def abstractproperty(method):
 
 
 def abstractstaticmethod(method):
+    """
+    A lazy alternative to the `abc.abstractstaticmethod`.
+    @param method: {staticmethod}
+    @return: {staticmethod}
+    """
     # noinspection PyUnusedLocal
     @_wraps(method)
     def wrapped(*args, **kwargs):
@@ -32,6 +51,11 @@ def abstractstaticmethod(method):
 
 
 def abstractmethod(method):
+    """
+    A lazy alternative to the `abc.abstractmethod`.
+    @param method: {method}
+    @return: {method}
+    """
     # noinspection PyUnusedLocal
     @_wraps(method)
     def wrapped(self, *args, **kwargs):

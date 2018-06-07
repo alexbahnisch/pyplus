@@ -5,10 +5,10 @@
 .idea
 .pytest_cache
 .tox
+.venv
 build
 dist
 site
-pandoc-*.msi
 
 # Docs:
 docs/index.md
@@ -17,3 +17,4 @@ docs/index.md
 !**.gitkeep
 **.egg-info
 **.temp.*
+**__pycache__
