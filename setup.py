@@ -3,6 +3,10 @@ from sys import argv
 from setuptools import find_packages, setup
 
 long_description = "!!! m2r not found, long_description is bad, don't upload this to PyPI !!!"
+appveyor = [
+    "pytest>=3.5.1,<4",
+    "pytest-runner>=4.2,<5",
+]
 deploy = [
     "m2r>=0.1.14,<2"
 ]
@@ -12,8 +16,7 @@ docs = [
 ]
 test = [
     "coverage>=4.5.1,<5",
-    "pytest>=3.5.1,<4",
-    "pytest-runner>=4.2,<5",
+    *appveyor,
     "tox>=3.0.0,<4"
 ]
 travis = [
@@ -57,12 +60,12 @@ setup(
     package_dir={"": "src/main"},
     python_requires=">=3.5",
     extras_require={
+        "appveyor": appveyor,
         "deploy": deploy,
         "develop": deploy + docs + test,
         "docs": docs,
         "test": test,
         "travis": travis
     },
-    scripts=["scripts/pydoc2markdown.py"],
     test_suite="src.tests"
 )

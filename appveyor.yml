@@ -26,7 +26,7 @@ install:
 build: false
 
 before_test:
-  - pip install .[tests]
+  - pip install .[appveyor]
 
 test_script:
   - python setup.py test
