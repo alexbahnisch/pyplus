@@ -61,7 +61,7 @@ effects e.g. `pyplus.path.EasyPath` automatically creates non-existent parent di
 
 ### From the Developer
 
-*I am a developer/data scientist creating software solutions for real world business problems. I developed `pyplus` to 
-encapsulate the python code I found my self migrating from project to project. `pyplus` is pure python and has zero 
-installation dependencies. My goal is for `pyplus` to be a stable library for both rapid prototyping and production 
-software, though I recommend care full consideration of the `Easy` extensions in the later.*
+*I am a developer/data scientist creating software solutions for real world business problems. I developed *`pyplus`* to 
+encapsulate the python code I found my self migrating from project to project. *`pyplus`* is pure python and has zero 
+installation dependencies. My goal is for *`pyplus`* to be a stable library for both rapid prototyping and production 
+software, though I recommend care full consideration of the *`Easy`* extensions in the later.*
