@@ -7,7 +7,7 @@ appveyor = [
     "pytest>=3.5.1,<4",
     "pytest-runner>=4.2,<5",
 ]
-deploy = [
+dist = [
     "m2r>=0.1.14,<2"
 ]
 docs = [
@@ -36,7 +36,7 @@ if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
 
 setup(
     name="pyplus",
-    version="0.1.7.dev2",
+    version="0.1.7.dev3",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
@@ -61,8 +61,8 @@ setup(
     python_requires=">=3.5",
     extras_require={
         "appveyor": appveyor,
-        "deploy": deploy,
-        "develop": deploy + docs + test,
+        "develop": dist + docs + test,
+        "dist": dist,
         "docs": docs,
         "test": test,
         "travis": travis
