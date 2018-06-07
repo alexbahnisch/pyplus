@@ -1,15 +1,14 @@
-#!/usr/bin/env python
+#!/bin/python
 from argparse import ArgumentParser
 from inspect import getmembers, isclass, isfunction, ismethod
 from os import getcwd
 from pydoc import ErrorDuringImport, safeimport
 from sys import path
 
-
-MODULE_FORMAT = "# *module* `%s`"
-CLASS_FORMAT = "## *class* `%s`"
-FUNCTION_FORMAT = "## *function* `%s`"
-METHOD_FORMAT = "### *method* `%s`"
+MODULE_FORMAT = "# *module* %s"
+CLASS_FORMAT = "## *class* %s"
+FUNCTION_FORMAT = "## *function* %s"
+METHOD_FORMAT = "### *method* %s"
 PARAMETERS_FORMAT = "**Parameters:**"
 RETURN_FORMAT = "**Return:**"
 
@@ -22,11 +21,16 @@ def get_predicate(module_):
     Creates a predicate function for the inspect.getmembers function.
     The created function will excepts a single arg and returns true if that
     arg is a class, function or method defined within the "module_" module.
-    @param module_: {module} python module
+    @param module_: {module or str} python module
     @return: {function} predicate function
     """
+    if isinstance(module_, str):
+        module_name = module_
+    else:
+        module_name = module_.__name__
+
     def predicate(value):
-        return (isclass(value) or isfunction(value) or ismethod(value)) and value.__module__ == module_.__name__
+        return (isclass(value) or isfunction(value) or ismethod(value)) and value.__module__ == module_name
     return predicate
 
 
