@@ -4,7 +4,7 @@ python:
   - 3.5
   - 3.6
 
-install: make
+install:
   - pip install .[travis]
 
 script:
@@ -17,6 +17,7 @@ notifications:
   email: true
 
 before_deploy:
+  - apt-get make
   - pip install .[dist]
   - pip install .[docs]
   - make docs-deploy
