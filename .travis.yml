@@ -4,6 +4,11 @@ python:
   - 3.5
   - 3.6
 
+addons:
+  apt:
+    packages:
+      - make
+
 install:
   - pip install .[travis]
 
@@ -17,7 +22,6 @@ notifications:
   email: true
 
 before_deploy:
-  - sudo apt-get make -y
   - pip install .[dist]
   - pip install .[docs]
   - make docs-deploy
