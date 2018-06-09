@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from inspect import getmembers, isclass, isfunction, ismethod
 from os import getcwd
+# noinspection PyProtectedMember
 from pydoc import ErrorDuringImport, safeimport
 from sys import path
 

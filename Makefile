@@ -4,15 +4,22 @@ VIRTUAL_ENV=${WORKON_HOME}/PyPlus36
 clean:
 	-rm -rf .venv
 
-docs-make:
-	cp ./README.md ./docs/index.md
-	sed -i -e 's/\[comment\]: <> (DocsUrlPlacemarker)//g' ./docs/index.md
-
-docs-build:
+docs-build: docs-make
 	.venv/Scripts/mkdocs build --clean --strict
 
-docs-serve:
-	.venv/Scripts/mkdocs serve --dev-addr 0.0.0.0:8000 --livereload --strict
+docs-clean:
+	rm -f ./docs/index.md
+	rm -rf ./site
+
+docs-deploy: docs-make
+	.venv/Scripts/mkdocs gh-deploy --clean --force
+
+docs-make: docs-clean
+	cp ./README.md ./docs/index.md
+	sed -i -e '/\[comment\]: <> (DeleteStart)/,/\[comment\]: <> (DeleteEnd)/d' ./docs/index.md
+
+docs-serve: docs-make
+	.venv/Scripts/mkdocs serve --dev-addr localhost:8000 --livereload
 
 install:
 	.venv/Scripts/pip install .[develop]
@@ -20,7 +27,7 @@ install:
 test:
 	.venv/Scripts/python setup.py test
 
-test-tox:
+tox:
 	.venv/Scripts/tox
 
 updgrade:

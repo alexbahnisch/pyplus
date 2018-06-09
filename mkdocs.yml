@@ -1,3 +1,4 @@
+site_author: "alex Bahnisch"
 site_name: "PyPlus"
 repo_url: "https://github.com/alexbahnisch/pyplus"
 
@@ -15,7 +16,7 @@ markdown_extensions:
 pages:
   - Home: "index.md"
   - Modules:
-    - Abstract: "abstract.md"
+    - abstract: "abstract.md"
 
 theme:
   name: "material"

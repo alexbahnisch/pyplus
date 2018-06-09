@@ -18,6 +18,8 @@ notifications:
 
 before_deploy:
   - pip install .[dist]
+  - pip install .[docs]
+  - make docs-deploy
 
 deploy:
   - provider: pypi

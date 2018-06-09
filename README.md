@@ -27,10 +27,16 @@ from pyplus.string import snake_case
 
 snake_case("Hello World!")
 
-# 'hello_world'
+"""
+'hello_world'
+"""
 ```
 
-[comment]: <> (DocsUrlPlacemarker)
+[comment]: <> (DeleteStart)
+
+For more detailed documentation and usages, please visit [https://alexbahnisch.github.io/pyplus/](https://alexbahnisch.github.io/pyplus/).
+
+[comment]: <> (DeleteEnd)
 
 ### Development
 
@@ -55,13 +61,13 @@ $ make tox
 
 ### Nomenclature
 
-* `Easy` a group of extensions/utilities that are design to do a lot with minimal effort. Because of the intended 
+* `Lazy` a group of extensions/utilities that are design to do a lot with minimal effort. Because of the intended 
 easiness of the classes and functions they do take control away from the programmer, and may have some undesired side 
-effects e.g. `pyplus.path.EasyPath` automatically creates non-existent parent directories on `touch`. 
+effects e.g. `pyplus.path.LazyPath` automatically creates non-existent parent directories on `touch`. 
 
 ### From the Developer
 
-*I am a developer/data scientist creating software solutions for real world business problems. I developed* `pyplus` *to 
-encapsulate the python code I found my self migrating from project to project.* `pyplus` *is pure python and has zero 
-installation dependencies. My goal is for* `pyplus` *to be a stable library for both rapid prototyping and production 
-software, though I recommend care full consideration of the* `Easy` *extensions in the later.*
+*I am a developer/data scientist creating software solutions for real world business problems. I developed **pyplus** to 
+encapsulate the python code I found my self migrating from project to project. **pyplus** is pure python and has zero 
+installation dependencies. My goal is for **pyplus** to be a stable library for both rapid prototyping and production 
+software, though I recommend care full consideration of the **Lazy** extensions in the later.*

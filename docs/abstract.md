@@ -1,0 +1,52 @@
+A collection of lazy abstract decorators that will only raise an exception when the decorated method is called before
+being overridden, instead of on initiation of a subclass instance.
+
+## abstractclassmethod
+
+A lazy alternative to the `abc.abstractclassmethod`.
+
+#### parameters:
+* `method` **{classmethod}** an empty class method
+
+#### return 
+* **{classmethod}** an abstract class method that will raise an exception when called
+
+### usage
+```python
+from pyplus.abstract import abstractclassmethod
+
+class AbstractClass:
+    @abstractclassmethod
+    def class_method(cls):
+        pass
+
+AbstractClass.class_method()
+
+"""
+AttributeError: abstract class method 'class_method' has not been overridden 
+for 'AbstractClass' class
+"""
+
+class BadClass(AbstractClass):
+    pass
+
+BadClass.class_method()
+
+"""
+AttributeError: abstract class method 'class_method' has not been overridden 
+for 'BadClass' class
+"""
+
+class GoodClass(AbstractClass):
+    @classmethod
+    def class_method(cls):
+        return "Hello world!"
+    
+
+GoodClass.class_method()
+
+"""
+'Hello world!'
+"""
+
+```
