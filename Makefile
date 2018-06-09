@@ -1,5 +1,4 @@
 IMAGE_NAME=alexbahnisch/pyplus
-VIRTUAL_ENV=${WORKON_HOME}/PyPlus36
 
 clean:
 	-rm -rf .venv
@@ -12,7 +11,7 @@ docs-clean:
 	rm -rf ./site
 
 docs-deploy: docs-make
-	mkdocs gh-deploy --clean --force
+	mkdocs gh-deploy --clean --force --remote-name https://$(GITHUB_TOKEN)@github.com/alexbahnisch/pyplus.git
 
 docs-make: docs-clean
 	cp ./README.md ./docs/index.md
