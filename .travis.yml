@@ -17,7 +17,7 @@ notifications:
   email: true
 
 before_deploy:
-  - apt-get make
+  - sudo apt-get make -y
   - pip install .[dist]
   - pip install .[docs]
   - make docs-deploy
