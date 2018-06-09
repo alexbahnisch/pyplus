@@ -12,7 +12,7 @@ docs-clean:
 	rm -rf ./site
 
 docs-deploy: docs-make
-	.venv/Scripts/mkdocs gh-deploy --clean --force
+	mkdocs gh-deploy --clean --force
 
 docs-make: docs-clean
 	cp ./README.md ./docs/index.md
