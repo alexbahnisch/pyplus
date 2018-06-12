@@ -17,6 +17,7 @@ pages:
   - Home: "index.md"
   - Modules:
     - abstract: "abstract.md"
+    - common: "common.md"
 
 theme:
   name: "material"

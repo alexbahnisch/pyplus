@@ -75,7 +75,8 @@ abstract_instance = AbstractClass()
 abstract_instance.method()
 
 """
-AttributeError: abstract method 'method' has not been overridden for 'AbstractClass' class
+AttributeError: abstract method 'method' has not been overridden for 
+'AbstractClass' class
 """
 
 class BadClass(AbstractClass):
@@ -85,7 +86,8 @@ bad_instance = BadClass()
 bad_instance.method()
 
 """
-AttributeError: abstract method 'method' has not been overridden for 'BadClass' class
+AttributeError: abstract method 'method' has not been overridden for 
+'BadClass' class
 """
 
 class GoodClass(AbstractClass):

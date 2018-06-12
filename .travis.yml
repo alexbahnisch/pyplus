@@ -17,6 +17,7 @@ notifications:
   email: true
 
 before_deploy:
+  if: tag IS present
   - pip install .[dist]
   - pip install .[docs]
   - make docs-deploy
