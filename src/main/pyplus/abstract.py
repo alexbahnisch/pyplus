@@ -8,8 +8,8 @@ from functools import wraps as _wraps
 def abstractclassmethod(method):
     """
     A lazy alternative to the `abc.abstractclassmethod`.
-    @param method: {classmethod}
-    @return: {classmethod}
+    @param method: {classmethod} an empty class method
+    @return: {classmethod} an abstract class method that will raise an exception when called
     """
     # noinspection PyUnusedLocal
     @_wraps(method)
@@ -23,9 +23,7 @@ def abstractclassmethod(method):
 
 def abstractproperty(method):
     """
-    A lazy alternative to the `abc.abstractproperty`.
-    @param method: {property}
-    @return: {property}
+    @deprecated will be remove next minor
     """
     @_wraps(method)
     def wrapped(self):
@@ -38,9 +36,7 @@ def abstractproperty(method):
 
 def abstractstaticmethod(method):
     """
-    A lazy alternative to the `abc.abstractstaticmethod`.
-    @param method: {staticmethod}
-    @return: {staticmethod}
+    @deprecated will be remove next minor
     """
     # noinspection PyUnusedLocal
     @_wraps(method)
@@ -53,8 +49,8 @@ def abstractstaticmethod(method):
 def abstractmethod(method):
     """
     A lazy alternative to the `abc.abstractmethod`.
-    @param method: {method}
-    @return: {method}
+    @param method: {method} an empty method
+    @return: {method} an abstract method that will raise an exception when called
     """
     # noinspection PyUnusedLocal
     @_wraps(method)

@@ -32,11 +32,9 @@ snake_case("Hello World!")
 """
 ```
 
-[comment]: <> (DeleteStart)
-
+<!---StartDelete--->
 For more detailed documentation and usages, please visit [https://alexbahnisch.github.io/pyplus/](https://alexbahnisch.github.io/pyplus/).
-
-[comment]: <> (DeleteEnd)
+<!---EndDelete--->
 
 ### Development
 

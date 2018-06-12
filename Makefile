@@ -15,7 +15,7 @@ docs-deploy: docs-make
 
 docs-make: docs-clean
 	cp ./README.md ./docs/index.md
-	sed -i -e '/\[comment\]: <> (DeleteStart)/,/\[comment\]: <> (DeleteEnd)/d' ./docs/index.md
+	sed -i -e '/<!---StartDelete--->/,/<!---EndDelete--->/d' ./docs/index.md
 
 docs-serve: docs-make
 	.venv/Scripts/mkdocs serve --dev-addr localhost:8000 --livereload
