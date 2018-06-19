@@ -1,7 +1,5 @@
 # py+
 
-*If it is not standard than it is a plus*
-
 [![PyPI version](https://badge.fury.io/py/pyplus.svg)](https://pypi.org/project/pyplus/)
 [![Development Status](https://img.shields.io/pypi/status/pyplus.svg)](https://pypi.org/project/pyplus/)
 [![Python version](https://img.shields.io/pypi/pyversions/pyplus.svg)](https://pypi.org/project/pyplus/)

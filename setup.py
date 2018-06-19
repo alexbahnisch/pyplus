@@ -1,4 +1,5 @@
 #!/bin/python
+from re import sub
 from sys import argv
 from setuptools import find_packages, setup
 
@@ -29,14 +30,14 @@ if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
         # noinspection PyPackageRequirements
         from m2r import parse_from_file
 
-        long_description = parse_from_file("README.md")
+        long_description = sub("<!---.*?--->", "", parse_from_file("README.md"))
 
     except (ImportError, OSError, ValueError):
         pass
 
 setup(
     name="pyplus",
-    version="0.1.7.dev7",
+    version="0.1.7.dev8",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",

@@ -17,12 +17,19 @@ notifications:
   email: true
 
 before_deploy:
-  if: tag IS present
   - pip install .[dist]
   - pip install .[docs]
-  - make docs-deploy
 
 deploy:
+  - provider: script
+    script: make docs-deploy
+    skip_cleanup: true
+    on:
+      branch: master
+      python: 3.6
+      repo: alexbahnisch/pyplus
+      tags: false
+
   - provider: pypi
     server: https://test.pypi.org/legacy/
     user: alexbahnisch
