@@ -1,0 +1,89 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "py+\n\u00b6\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nA python library containing a collection of nice to have python extensions, utilities and wrappers.\n\n\nInstallation\n\u00b6\n\n\n1\n$ pip install pyplus\n\n\n\n\n\n\nBasic Usage\n\u00b6\n\n\n1\n2\n3\n4\n5\n6\n7\nfrom\n \npyplus.string\n \nimport\n \nsnake_case\n\n\n\nsnake_case\n(\n\"Hello World!\"\n)\n\n\n\n\"\"\"\n\n\n'hello_world'\n\n\n\"\"\"\n\n\n\n\n\n\n\nDevelopment\n\u00b6\n\n\nTo setup the \npyplus\n project for development, follow these steps from the root of the project:\n\n\n1\n2\n$ make venv\n$ make install\n\n\n\n\n\n\nThen to run the tests:\n\n\n1\n$ make \ntest\n\n\n\n\n\n\n\nOr to run test for multiple python version with tox, run:\n\n\n1\n$ make tox\n\n\n\n\n\n\nNomenclature\n\u00b6\n\n\n\n\nLazy\n a group of extensions/utilities that are design to do a lot with minimal effort. Because of the intended \neasiness of the classes and functions they do take control away from the programmer, and may have some undesired side \neffects e.g. \npyplus.path.LazyPath\n automatically creates non-existent parent directories on \ntouch\n. \n\n\n\n\nFrom the Developer\n\u00b6\n\n\nI am a developer/data scientist creating software solutions for real world business problems. I developed \npyplus\n to \nencapsulate the python code I found my self migrating from project to project. \npyplus\n is pure python and has zero \ninstallation dependencies. My goal is for \npyplus\n to be a stable library for both rapid prototyping and production \nsoftware, though I recommend care full consideration of the \nLazy\n extensions in the later.",
+            "title": "Home"
+        },
+        {
+            "location": "/#py",
+            "text": "A python library containing a collection of nice to have python extensions, utilities and wrappers.",
+            "title": "py+"
+        },
+        {
+            "location": "/#installation",
+            "text": "1 $ pip install pyplus",
+            "title": "Installation"
+        },
+        {
+            "location": "/#basic-usage",
+            "text": "1\n2\n3\n4\n5\n6\n7 from   pyplus.string   import   snake_case  snake_case ( \"Hello World!\" )  \"\"\"  'hello_world'  \"\"\"",
+            "title": "Basic Usage"
+        },
+        {
+            "location": "/#development",
+            "text": "To setup the  pyplus  project for development, follow these steps from the root of the project:  1\n2 $ make venv\n$ make install   Then to run the tests:  1 $ make  test    Or to run test for multiple python version with tox, run:  1 $ make tox",
+            "title": "Development"
+        },
+        {
+            "location": "/#nomenclature",
+            "text": "Lazy  a group of extensions/utilities that are design to do a lot with minimal effort. Because of the intended \neasiness of the classes and functions they do take control away from the programmer, and may have some undesired side \neffects e.g.  pyplus.path.LazyPath  automatically creates non-existent parent directories on  touch .",
+            "title": "Nomenclature"
+        },
+        {
+            "location": "/#from-the-developer",
+            "text": "I am a developer/data scientist creating software solutions for real world business problems. I developed  pyplus  to \nencapsulate the python code I found my self migrating from project to project.  pyplus  is pure python and has zero \ninstallation dependencies. My goal is for  pyplus  to be a stable library for both rapid prototyping and production \nsoftware, though I recommend care full consideration of the  Lazy  extensions in the later.",
+            "title": "From the Developer"
+        },
+        {
+            "location": "/abstract/",
+            "text": "A collection of lazy abstract decorators that will only raise an exception when the decorated method is called before\nbeing overridden, instead of on initiation of a subclass instance.\n\n\nabstractclassmethod\n\u00b6\n\n\nA lazy alternative to the \nabc.abstractclassmethod\n.\n\n\nparameters:\n\u00b6\n\n\n\n\nmethod\n \n{classmethod}\n an empty class method\n\n\n\n\nreturn\n\u00b6\n\n\n\n\n{classmethod}\n an abstract class method that will raise an exception when called\n\n\n\n\nusage\n\u00b6\n\n\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\nfrom\n \npyplus.abstract\n \nimport\n \nabstractclassmethod\n\n\n\nclass\n \nAbstractClass\n:\n\n    \n@abstractclassmethod\n\n    \ndef\n \nclass_method\n(\ncls\n):\n\n        \npass\n\n\n\nAbstractClass\n.\nclass_method\n()\n\n\n\n\"\"\"\n\n\nAttributeError: abstract class method 'class_method' has not been overridden \n\n\nfor 'AbstractClass' class\n\n\n\"\"\"\n\n\n\nclass\n \nBadClass\n(\nAbstractClass\n):\n\n    \npass\n\n\n\nBadClass\n.\nclass_method\n()\n\n\n\n\"\"\"\n\n\nAttributeError: abstract class method 'class_method' has not been overridden \n\n\nfor 'BadClass' class\n\n\n\"\"\"\n\n\n\nclass\n \nGoodClass\n(\nAbstractClass\n):\n\n    \n@classmethod\n\n    \ndef\n \nclass_method\n(\ncls\n):\n\n        \nreturn\n \n\"Hello world!\"\n\n\n\n\nGoodClass\n.\nclass_method\n()\n\n\n\n\"\"\"\n\n\n'Hello world!'\n\n\n\"\"\"\n\n\n\n\n\n\n\nabstractmethod\n\u00b6\n\n\nA lazy alternative to the \nabc.abstractmethod\n.\n\n\nparameters:\n\u00b6\n\n\n\n\nmethod\n \n{method}\n an empty method\n\n\n\n\nreturn\n\u00b6\n\n\n\n\n{method}\n an abstract method that will raise an exception when called\n\n\n\n\nusage\n\u00b6\n\n\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\nfrom\n \npyplus.abstract\n \nimport\n \nabstractmethod\n\n\n\nclass\n \nAbstractClass\n:\n\n    \n@abstractmethod\n\n    \ndef\n \nmethod\n(\nself\n):\n\n        \npass\n\n\n\nabstract_instance\n \n=\n \nAbstractClass\n()\n\n\nabstract_instance\n.\nmethod\n()\n\n\n\n\"\"\"\n\n\nAttributeError: abstract method 'method' has not been overridden for \n\n\n'AbstractClass' class\n\n\n\"\"\"\n\n\n\nclass\n \nBadClass\n(\nAbstractClass\n):\n\n    \npass\n\n\n\nbad_instance\n \n=\n \nBadClass\n()\n\n\nbad_instance\n.\nmethod\n()\n\n\n\n\"\"\"\n\n\nAttributeError: abstract method 'method' has not been overridden for \n\n\n'BadClass' class\n\n\n\"\"\"\n\n\n\nclass\n \nGoodClass\n(\nAbstractClass\n):\n\n    \ndef\n \nmethod\n(\nself\n):\n\n        \nreturn\n \n\"Hello world!\"\n\n\n\n\ngood_instance\n \n=\n \nGoodClass\n()\n\n\ngood_instance\n.\nmethod\n()\n\n\n\n\"\"\"\n\n\n'Hello world!'\n\n\n\"\"\"",
+            "title": "abstract"
+        },
+        {
+            "location": "/abstract/#abstractclassmethod",
+            "text": "A lazy alternative to the  abc.abstractclassmethod .",
+            "title": "abstractclassmethod"
+        },
+        {
+            "location": "/abstract/#parameters",
+            "text": "method   {classmethod}  an empty class method",
+            "title": "parameters:"
+        },
+        {
+            "location": "/abstract/#return",
+            "text": "{classmethod}  an abstract class method that will raise an exception when called",
+            "title": "return"
+        },
+        {
+            "location": "/abstract/#usage",
+            "text": "1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35 from   pyplus.abstract   import   abstractclassmethod  class   AbstractClass : \n     @abstractclassmethod \n     def   class_method ( cls ): \n         pass  AbstractClass . class_method ()  \"\"\"  AttributeError: abstract class method 'class_method' has not been overridden   for 'AbstractClass' class  \"\"\"  class   BadClass ( AbstractClass ): \n     pass  BadClass . class_method ()  \"\"\"  AttributeError: abstract class method 'class_method' has not been overridden   for 'BadClass' class  \"\"\"  class   GoodClass ( AbstractClass ): \n     @classmethod \n     def   class_method ( cls ): \n         return   \"Hello world!\"  GoodClass . class_method ()  \"\"\"  'Hello world!'  \"\"\"",
+            "title": "usage"
+        },
+        {
+            "location": "/abstract/#abstractmethod",
+            "text": "A lazy alternative to the  abc.abstractmethod .",
+            "title": "abstractmethod"
+        },
+        {
+            "location": "/abstract/#parameters_1",
+            "text": "method   {method}  an empty method",
+            "title": "parameters:"
+        },
+        {
+            "location": "/abstract/#return_1",
+            "text": "{method}  an abstract method that will raise an exception when called",
+            "title": "return"
+        },
+        {
+            "location": "/abstract/#usage_1",
+            "text": "1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37 from   pyplus.abstract   import   abstractmethod  class   AbstractClass : \n     @abstractmethod \n     def   method ( self ): \n         pass  abstract_instance   =   AbstractClass ()  abstract_instance . method ()  \"\"\"  AttributeError: abstract method 'method' has not been overridden for   'AbstractClass' class  \"\"\"  class   BadClass ( AbstractClass ): \n     pass  bad_instance   =   BadClass ()  bad_instance . method ()  \"\"\"  AttributeError: abstract method 'method' has not been overridden for   'BadClass' class  \"\"\"  class   GoodClass ( AbstractClass ): \n     def   method ( self ): \n         return   \"Hello world!\"  good_instance   =   GoodClass ()  good_instance . method ()  \"\"\"  'Hello world!'  \"\"\"",
+            "title": "usage"
+        },
+        {
+            "location": "/common/",
+            "text": "A collection of common helper functions to check if an object has characteristics of other objects.",
+            "title": "common"
+        }
+    ]
+}
