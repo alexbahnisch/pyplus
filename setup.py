@@ -28,16 +28,16 @@ travis = [
 if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
     try:
         # noinspection PyPackageRequirements
-        from m2r import parse_from_file
+        from m2r import convert
 
-        long_description = sub("<!---.*?--->", "", parse_from_file("README.md"))
+        long_description = convert(sub("<!---.*?--->", "", open("README.md").read()))
 
     except (ImportError, OSError, ValueError):
         pass
 
 setup(
     name="pyplus",
-    version="0.1.7.dev8",
+    version="0.1.7.dev9",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
