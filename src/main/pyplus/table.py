@@ -59,7 +59,7 @@ def _list2table(list_):
 
 
 def list2table(path, list_, headers=True, delimiter=","):
-    path, headers = _LazyPath(path), bool(headers)
+    path = _LazyPath(path)
 
     with path.write() as write_file:
         csv_writer = _writer(write_file, delimiter=delimiter, lineterminator="\n")

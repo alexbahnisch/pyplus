@@ -3,13 +3,13 @@ being overridden, instead of on initiation of a subclass instance.
 
 ## abstractclassmethod
 
-A lazy alternative to the `abc.abstractclassmethod`.
+A lazy alternative to the `abc.abstractclassmethod(method)`.
 
 #### parameters:
-* `method` **{classmethod}** an empty class method
+* `method` - *{classmethod}* an empty class method
 
 #### return 
-* **{classmethod}** an abstract class method that will raise an exception when called
+* *{classmethod}* an abstract class method that will raise an exception when called
 
 ### usage
 ```python
@@ -54,13 +54,13 @@ GoodClass.class_method()
 
 ## abstractmethod
 
-A lazy alternative to the `abc.abstractmethod`.
+A lazy alternative to the `abc.abstractmethod(method)`.
 
 #### parameters:
-* `method` **{method}** an empty method
+* `method` - *{method}* an empty method
 
 #### return 
-* **{method}** an abstract method that will raise an exception when called
+* *{method}* an abstract method that will raise an exception when called
 
 ### usage
 ```python

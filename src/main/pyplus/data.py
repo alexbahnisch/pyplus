@@ -23,6 +23,7 @@ class DataObjectMixin:
     @classmethod
     def from_dict(cls, arg):
         if isinstance(arg, dict):
+            # noinspection PyArgumentList
             return cls(*[arg[key] for key in cls.__HEADERS__])
         else:
             raise TypeError("'%s' object is not a instance of a dict" % type(arg).__name__)
@@ -50,9 +51,9 @@ class DataObjectsMixin(_LazyObjects):
 
     def __init__(self, iterable=None):
         super().__init__(iterable)
-        self.init()
+        self._init()
 
-    def init(self):
+    def _init(self):
         pass
 
     @classmethod
@@ -105,7 +106,7 @@ def dataobject(*headers):
 
         return wrapper
     else:
-        raise TypeError("dataobject() arguments must be strings")
+        raise TypeError("dataobject(*headers) arguments must be strings")
 
 
 def dataobjects(data_object_class):
@@ -124,4 +125,4 @@ def dataobjects(data_object_class):
 
         return wrapper
     else:
-        raise TypeError("dataobjects() argument must be a subclass of 'DataObjectMixin'")
+        raise TypeError("dataobjects(data_object_class) argument must be a subclass of 'DataObjectMixin'")

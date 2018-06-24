@@ -14,10 +14,19 @@ markdown_extensions:
       permalink: true
 
 pages:
-  - Home: "index.md"
-  - Modules:
+  - home: "index.md"
+  - modules:
     - abstract: "abstract.md"
     - common: "common.md"
+    - data: "data.md"
+    - decorators: "decorators.md"
+    - json: "json.md"
+    - object: "object.md"
+    - parse: "parse.md"
+    - path: "path.md"
+    - string: "string.md"
+    - table: "table.md"
+    - temp: "temp.md"
 
 theme:
   name: "material"

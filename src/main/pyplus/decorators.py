@@ -5,6 +5,9 @@ from .singleton import singleton
 
 
 def decorator(method):
+    """
+    @deprecated will be changed next minor
+    """
     if callable(method):
         @_wraps(method)
         def wrapped(*args, **kwargs):

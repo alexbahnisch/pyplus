@@ -245,7 +245,7 @@ class JSON(object):
                 return rarg.extract(alias)
 
         else:
-            if bool(errors):
+            if errors:
                 raise FileNotFoundError("[Errno 2] No such file or directory: '{}'".format(path))
             else:
                 return None
@@ -266,7 +266,7 @@ class JSON(object):
             return cls.from_collection(rarg)
 
         except ValueError as error:
-            if bool(errors):
+            if errors:
                 raise error
             else:
                 return string

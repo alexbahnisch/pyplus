@@ -6,7 +6,7 @@ from tempfile import mkdtemp as _mkdtemp, mkstemp as _mkstemp
 from .common import ispathlike as _ispathlike, iswindows as _iswindows
 
 
-# noinspection PyAbstractClass,PyTypeChecker,PyShadowingBuiltins
+# noinspection PyAbstractClass,PyArgumentList,PyTypeChecker,PyShadowingBuiltins
 class LazyPath(_Path):
     __POSIX__ = _PosixPath
     __WINDOWS__ = _WindowsPath

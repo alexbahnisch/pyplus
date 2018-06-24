@@ -1,7 +1,12 @@
-#!/usr/bin/env python
+"""
+@deprecated will be remove next minor
+"""
 
 
 class Singleton(type):
+    """
+    @deprecated will be remove next minor
+    """
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
@@ -11,6 +16,9 @@ class Singleton(type):
 
 
 def singleton(class_):
+    """
+    @deprecated will be remove next minor
+    """
     class WrappedSingleton(class_, metaclass=Singleton):
         __name__ = class_.__name__
 

@@ -35,7 +35,7 @@ def camel_case(string, title=True):
     string = CAPITALS.sub(r"\1 \2", string).title()
     string = SPACE.sub(r"", string)
     string = INVALID_LEAD.sub(r"", string)
-    if not bool(title):
+    if not title:
         string = string[0].lower() + string[1:]
     return string
 

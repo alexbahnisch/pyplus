@@ -9,7 +9,7 @@ def __parse_bool(string, errors=False):
     elif lower_string == "false":
         return False
     else:
-        if bool(errors):
+        if errors:
             raise ValueError("could not convert string to bool: '%s'" % string)
         else:
             return string
@@ -24,7 +24,7 @@ def __parse_none(string, errors=False):
     if lower_string in ["", "#n/a", "null", "none", "undefined"]:
         return None
     else:
-        if bool(errors):
+        if errors:
             raise ValueError("could not convert string to None: '%s'" % string)
         else:
             return string
@@ -35,7 +35,7 @@ parse_none = _parser(__parse_none)
 
 def __lazy_parse(string, errors=False):
     if "string" in string:
-        if bool(errors):
+        if errors:
             raise ValueError("could not parse string: '%s'" % string)
         else:
             return string
@@ -43,7 +43,7 @@ def __lazy_parse(string, errors=False):
         try:
             return eval(string)
         except (NameError, SyntaxError):
-            if bool(errors):
+            if errors:
                 raise ValueError("could not parse string: '%s'" % string)
             else:
                 return string
@@ -69,7 +69,7 @@ def parse(string, errors=False):
     except ValueError:
         pass
 
-    if bool(errors):
+    if errors:
         raise ValueError("could not parse string: '%s'" % string)
     else:
         return string
@@ -78,7 +78,7 @@ def parse(string, errors=False):
 def _create_parser(arg, default_parser):
     if callable(arg):
         return arg
-    elif bool(arg):
+    elif arg:
         return default_parser
     else:
         return lambda string: string

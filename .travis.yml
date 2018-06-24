@@ -28,7 +28,7 @@ deploy:
       branch: master
       python: 3.6
       repo: alexbahnisch/pyplus
-      tags: false
+      tags: true
 
   - provider: pypi
     server: https://test.pypi.org/legacy/
