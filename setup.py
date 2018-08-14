@@ -29,9 +29,7 @@ if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
     try:
         # noinspection PyPackageRequirements
         from m2r import convert
-
         long_description = convert(sub("<!---.*?--->", "", open("README.md").read()))
-
     except (ImportError, OSError, ValueError):
         pass
 

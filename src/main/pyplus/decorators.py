@@ -1,12 +1,10 @@
 from datetime import datetime as _datetime
 from functools import wraps as _wraps
 
-from .singleton import singleton
-
 
 def decorator(method):
     """
-    @deprecated will be changed next minor
+    @deprecated Will be changed next minor.
     """
     if callable(method):
         @_wraps(method)
@@ -21,6 +19,13 @@ def decorator(method):
 
 @decorator
 def parser(method):
+    """
+    Decorator for a parser function.
+    Raises 'TypeError' if the first and only positional arg is not a string.
+    Also guarantees if return is a string, it is the same string as the input arg, i.e. byte or unicode.
+    @param method: {function} Parser function, contains one positional arg and any number of keyword args.
+    @return: {function} Wrapped parser function.
+    """
     @_wraps(method)
     def wrapped(string, **kwargs):
         if isinstance(string, bytes):
@@ -55,7 +60,6 @@ def spliter(method):
     return wrapped
 
 
-@singleton
 class Timer:
     def __init__(self, logger=print, disabled=False):
         self.__disabled = bool(disabled)
@@ -104,3 +108,6 @@ class Timer:
                 return output
 
             return wrapped
+
+
+timer = Timer()

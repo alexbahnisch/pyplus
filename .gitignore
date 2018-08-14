@@ -1,4 +1,4 @@
-# Root:
+# root:
 .coverage
 .cache
 .eggs
@@ -10,10 +10,10 @@ build
 dist
 site
 
-# Docs:
+# docs:
 docs/index.md
 
-# Wildcards:
+# wildcards:
 !**.gitkeep
 **.egg-info
 **.temp.*

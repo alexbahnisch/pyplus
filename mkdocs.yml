@@ -5,6 +5,7 @@ repo_url: "https://github.com/alexbahnisch/pyplus"
 extra_css:
   - "css/code-highlight.css"
   - "css/dark-theme.css"
+  - "css/styles.css"
 
 markdown_extensions:
   - admonition:
@@ -30,6 +31,3 @@ pages:
 
 theme:
   name: "material"
-  palette:
-    accent: "blue grey"
-    primary: "blue grey"

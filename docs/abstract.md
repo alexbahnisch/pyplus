@@ -1,12 +1,12 @@
 A collection of lazy abstract decorators that will only raise an exception when the decorated method is called before
 being overridden, instead of on initiation of a subclass instance.
 
-## abstractclassmethod
+## abstractclassmethod(method)
 
-A lazy alternative to the `abc.abstractclassmethod(method)`.
+A lazy alternative to the `abc.abstractclassmethod`.
 
 #### parameters:
-* `method` - *{classmethod}* an empty class method
+* **method** *{classmethod}*: an empty class method
 
 #### return 
 * *{classmethod}* an abstract class method that will raise an exception when called
@@ -21,21 +21,15 @@ class AbstractClass:
         pass
 
 AbstractClass.class_method()
-
-"""
-AttributeError: abstract class method 'class_method' has not been overridden 
-for 'AbstractClass' class
-"""
+# => AttributeError: abstract class method 'class_method' has not been 
+# overridden for 'AbstractClass' class
 
 class BadClass(AbstractClass):
     pass
 
 BadClass.class_method()
-
-"""
-AttributeError: abstract class method 'class_method' has not been overridden 
-for 'BadClass' class
-"""
+# => AttributeError: abstract class method 'class_method' has not been 
+# overridden 'BadClass' class
 
 class GoodClass(AbstractClass):
     @classmethod
@@ -44,17 +38,14 @@ class GoodClass(AbstractClass):
     
 
 GoodClass.class_method()
-
-"""
-'Hello world!'
-"""
+# => 'Hello world!'
 
 ```
 
 
-## abstractmethod
+## abstractmethod(method)
 
-A lazy alternative to the `abc.abstractmethod(method)`.
+A lazy alternative to the `abc.abstractmethod`.
 
 #### parameters:
 * `method` - *{method}* an empty method
@@ -73,22 +64,16 @@ class AbstractClass:
 
 abstract_instance = AbstractClass()
 abstract_instance.method()
-
-"""
-AttributeError: abstract method 'method' has not been overridden for 
-'AbstractClass' class
-"""
+# => AttributeError: abstract method 'method' has not been overridden for 
+# 'AbstractClass' class
 
 class BadClass(AbstractClass):
     pass
 
 bad_instance = BadClass()
 bad_instance.method()
-
-"""
-AttributeError: abstract method 'method' has not been overridden for 
-'BadClass' class
-"""
+# => AttributeError: abstract method 'method' has not been overridden for 
+# 'BadClass' class
 
 class GoodClass(AbstractClass):
     def method(self):
@@ -97,9 +82,6 @@ class GoodClass(AbstractClass):
 
 good_instance = GoodClass()
 good_instance.method()
-
-"""
-'Hello world!'
-"""
+# => 'Hello world!'
 
 ```

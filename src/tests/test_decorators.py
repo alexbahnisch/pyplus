@@ -83,12 +83,12 @@ def test_spliter():
 
 def test_timer_plus():
     timer_test = TimerTest()
-    timer = Timer(logger=timer_test)
-    timer(func)()
+    test_timer = Timer(logger=timer_test)
+    test_timer(func)()
 
-    timer.disable()
-    assert func == timer(func)
-    assert func == timer.plus(func)
+    test_timer.disable()
+    assert func == test_timer(func)
+    assert func == test_timer.plus(func)
 
-    timer.enable()
-    timer.plus(func)()
+    test_timer.enable()
+    test_timer.plus(func)()
