@@ -1,7 +1,6 @@
-IMAGE_NAME=alexbahnisch/pyplus
 
 clean:
-	-rm -rf .venv
+	-rm -rf .tox .pytest_cache .venv build dist site
 
 docs-build: docs-make
 	.venv/Scripts/mkdocs build --clean --strict
@@ -29,9 +28,9 @@ test:
 tox:
 	.venv/Scripts/tox
 
-updgrade:
-	.venv/Scripts/pip uninstall --yes pyplus
-	.venv/Scripts/pip install .
+upgrade:
+	.venv/Scripts/pip install --upgrade .
 
 venv:
 	python -m venv .venv
+	.venv/Scripts/python -m pip install --upgrade pip

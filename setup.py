@@ -5,23 +5,23 @@ from setuptools import find_packages, setup
 
 long_description = "!!! m2r not found, long_description is bad, don't upload this to PyPI !!!"
 appveyor = [
-    "pytest>=3.5.1,<4",
+    "pytest>=3.7.4,<4",
     "pytest-runner>=4.2,<5",
 ]
 dist = [
-    "m2r>=0.1.14,<2"
+    "m2r>=0.2,<0.3"
 ]
 docs = [
-    "mkdocs>=0.17.3,<1",
-    "mkdocs-material>=2.7.3,<3"
+    "mkdocs>=1.0.3,<2",
+    "mkdocs-material>=3.0.4,<4"
 ]
 test = [
     "coverage>=4.5.1,<5",
     *appveyor,
-    "tox>=3.0.0,<4"
+    "tox>=3.2.1,<4"
 ]
 travis = [
-    "coveralls>=1.3.0,<2",
+    "coveralls>=1.5.0,<2",
     "tox-travis>=0.10<1"
 ]
 
