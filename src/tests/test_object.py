@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from pyplus.object import *
 from pyplus.path import LazyPath
 from pytest import raises

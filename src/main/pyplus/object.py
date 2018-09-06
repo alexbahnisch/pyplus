@@ -1,3 +1,6 @@
+"""
+A collection of easy object classes and containers.
+"""
 from copy import copy as _copy, deepcopy as _deepcopy
 
 from .table import list2table as _list2table, table2list as _table2list
@@ -137,3 +140,11 @@ class LazyObjects:
             )
         else:
             raise TypeError("'path' argument must be a bytes or unicode string or pathlib.Path")
+
+
+class AssignableLazyObjects(LazyObjects):
+    __CLASS__ = AssignableLazyObject
+
+
+class ImmutableLazyObjects(LazyObject):
+    __CLASS__ = ImmutableLazyObject

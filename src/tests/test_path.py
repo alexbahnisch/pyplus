@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from pyplus.path import LazyPath
 from pyplus.temp import LazyTempDir
 from pytest import raises

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from pyplus.data import *
 from pyplus.parse import parse
 from pyplus.path import LazyPath

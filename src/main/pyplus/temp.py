@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from os import close as _close, remove as _remove
 from shutil import rmtree as _rmtree
 from tempfile import mkdtemp as _mkdtemp, mkstemp as _mkstemp

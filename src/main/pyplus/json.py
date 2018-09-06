@@ -1,3 +1,6 @@
+"""
+A collection of easy JSON methods and JavaScript like array and object classes.
+"""
 from collections import OrderedDict as _OrderedDict
 from copy import deepcopy as _deepcopy
 from json import dump as _dump, dumps as _dumps, load as _load, loads as _loads

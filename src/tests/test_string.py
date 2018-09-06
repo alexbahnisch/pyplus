@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from pyplus.string import alias2keys, camel_case, kebab_case, snake_case, title_case
 from pytest import raises
 

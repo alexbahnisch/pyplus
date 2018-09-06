@@ -1,3 +1,6 @@
+"""
+A collection of string helper functions.
+"""
 from re import compile as _compile
 
 from .decorators import parser as _parser, spliter as _spliter

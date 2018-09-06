@@ -1,3 +1,6 @@
+"""
+A collection of table functions for reading, parsing and writing delimited text files.
+"""
 from csv import reader as _reader, writer as _writer
 from .json import Array, Object
 from .parse import create_parser as _create_parser

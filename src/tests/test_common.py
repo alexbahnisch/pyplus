@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from decimal import Decimal
 
 from pyplus.common import *

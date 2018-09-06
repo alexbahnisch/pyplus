@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from pyplus.json import Array, Object
 from pyplus.path import LazyPath
 from pyplus.table import list2table, table2list

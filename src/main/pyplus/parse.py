@@ -1,3 +1,6 @@
+"""
+A collection of easy parser functions.
+"""
 from .decorators import parser as _parser
 
 

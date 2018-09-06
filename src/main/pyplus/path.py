@@ -1,3 +1,6 @@
+"""
+A collection of easy path objects based on pathlib, however even higher level.
+"""
 from os import close as _close, remove as _remove
 from pathlib import Path as _Path, PosixPath as _PosixPath, WindowsPath as _WindowsPath
 from shutil import rmtree as _rmtree
@@ -6,7 +9,7 @@ from tempfile import mkdtemp as _mkdtemp, mkstemp as _mkstemp
 from .common import ispathlike as _ispathlike, iswindows as _iswindows
 
 
-# noinspection PyAbstractClass,PyArgumentList,PyTypeChecker,PyShadowingBuiltins
+# noinspection PyAbstractClass,PyArgumentList,PyProtectedMember,PyShadowingBuiltins,PyTypeChecker,PyUnresolvedReferences
 class LazyPath(_Path):
     __POSIX__ = _PosixPath
     __WINDOWS__ = _WindowsPath
