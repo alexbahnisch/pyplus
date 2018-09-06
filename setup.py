@@ -35,7 +35,7 @@ if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
 
 setup(
     name="pyplus",
-    version="0.1.7.dev9",
+    version="0.1.5.dev0",
     description="A library containing a collection of python extensions.",
     long_description=long_description,
     url="https://github.com/alexbahnisch/pyplus",
@@ -52,6 +52,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: CPython"
     ],
     keywords="collection extensions plus python",
