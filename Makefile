@@ -1,6 +1,9 @@
 
 clean:
-	-rm -rf .tox .pytest_cache .venv build dist site src/main/pyplus.egg-info
+	-rm -rf .pytest_cache build dist site src/main/pyplus.egg-info
+
+clean-all: clean
+	-rm -rf .tox .venv
 
 docs-build: docs-make
 	.venv/Scripts/mkdocs build --clean --strict
