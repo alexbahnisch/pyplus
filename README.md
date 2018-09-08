@@ -24,10 +24,7 @@ $ pip install pyplus
 from pyplus.string import snake_case
 
 snake_case("Hello World!")
-
-"""
-'hello_world'
-"""
+# -> 'hello_world'
 ```
 
 <!---StartDelete--->

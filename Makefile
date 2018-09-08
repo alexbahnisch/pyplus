@@ -1,6 +1,6 @@
 
 clean:
-	-rm -rf .pytest_cache build dist site src/main/pyplus.egg-info
+	-rm -rf .coverage .pytest_cache build dist site src/main/pyplus.egg-info
 
 clean-all: clean
 	-rm -rf .tox .venv
@@ -22,8 +22,12 @@ docs-make: docs-clean
 docs-serve: docs-make
 	.venv/Scripts/mkdocs serve --dev-addr localhost:8000 --livereload
 
+init:
+	python -m venv .venv
+	.venv/Scripts/python -m pip install --upgrade pip
+
 install:
-	.venv/Scripts/pip install .[develop]
+	.venv/Scripts/pip install -e .[develop]
 
 test:
 	.venv/Scripts/python setup.py test
@@ -31,9 +35,5 @@ test:
 tox:
 	.venv/Scripts/tox
 
-upgrade:
-	.venv/Scripts/pip install --upgrade .
-
-venv:
-	python -m venv .venv
-	.venv/Scripts/python -m pip install --upgrade pip
+uninstall:
+	.venv/Scripts/pip uninstall pyplus[develop]

@@ -67,5 +67,8 @@ setup(
         "test": test,
         "travis": travis
     },
-    test_suite="src.tests"
+    test_suite="src.tests",
+    entry_points={
+        "console_scripts": ["pydoc2markdown=pyplus.cli.pydoc2markdown:main"],
+    }
 )

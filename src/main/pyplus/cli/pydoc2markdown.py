@@ -1,15 +1,15 @@
 #!/bin/python
 from argparse import ArgumentParser
-from inspect import getmembers, isclass, isfunction, ismethod
+from inspect import getmembers, isclass, isfunction, ismethod, signature
 from os import getcwd
 # noinspection PyProtectedMember
 from pydoc import ErrorDuringImport, safeimport
 from sys import path
 
-MODULE_FORMAT = "# *module* %s"
-CLASS_FORMAT = "## *class* %s"
-FUNCTION_FORMAT = "## *function* %s"
-METHOD_FORMAT = "### *method* %s"
+MODULE_FORMAT = "# *module* {}"
+CLASS_FORMAT = "## *class* {}"
+FUNCTION_FORMAT = "## *function* {}"
+METHOD_FORMAT = "### *method* {}"
 PARAMETERS_FORMAT = "**Parameters:**"
 RETURN_FORMAT = "**Return:**"
 
@@ -24,6 +24,10 @@ def get_predicate(module_):
     arg is a class, function or method defined within the "module_" module.
     @param module_: {module or str} python module
     @return: {function} predicate function
+
+    ```python
+    import
+    ```
     """
     if isinstance(module_, str):
         module_name = module_
@@ -46,7 +50,7 @@ def member2markdown(name, value, title_format):
     output, prefix, params, returns, suffix = [], [], [], [], []
 
     if value.__doc__ is not None:
-        output.append(title_format % name)
+        output.append(title_format.format(name))
         for line in value.__doc__.split("\n"):
             if PARAM in line:
                 params.append(line.replace(PARAM, "*").strip())
@@ -89,14 +93,14 @@ def class2markdown(name, value):
 
     if not class_ and methods:
         class_.extend(
-            [CLASS_FORMAT % name, ""]
+            [CLASS_FORMAT.format(name), ""]
         )
 
     return [*class_, *methods]
 
 
 def module2markdown(module_):
-    output = [MODULE_FORMAT % module_.__name__]
+    output = [MODULE_FORMAT.format(module_.__name__)]
 
     if module_.__doc__:
         output.append(module_.__doc__)
@@ -119,17 +123,20 @@ def pydoc2markdown(module_):
         path.append(getcwd())
         module_ = safeimport(module_)
         if module_ is None:
-            print("%s module not found" % module_)
+            print("{} module not found".format(module_))
 
         print(module2markdown(module_))
     except ErrorDuringImport:
-        print("Error while importing %s" % module_)
+        print("Error while importing {}".format(module_))
+
+
+def main():
+    parser = ArgumentParser(description="Convert python (pycharm Epytext) docstrings to markdown")
+    parser.add_argument("module", type=str)
+    parser.add_argument("-t", "--title", type=str)
+    args, _ = parser.parse_known_args()
+    pydoc2markdown(args.module)
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description="Convert python (pycharm Epytext) docstrings to markdown")
-    parser.add_argument("module", default="pydoc2markdown", type=str)
-    parser.add_argument("-t", "--title", type=str)
-    args, _ = parser.parse_known_args()
-
-    pydoc2markdown(args.module)
+    main()

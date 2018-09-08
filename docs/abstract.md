@@ -21,14 +21,14 @@ class AbstractClass:
         pass
 
 AbstractClass.class_method()
-# => AttributeError: abstract class method 'class_method' has not been 
+# -> AttributeError: abstract class method 'class_method' has not been 
 # overridden for 'AbstractClass' class
 
 class BadClass(AbstractClass):
     pass
 
 BadClass.class_method()
-# => AttributeError: abstract class method 'class_method' has not been 
+# -> AttributeError: abstract class method 'class_method' has not been 
 # overridden 'BadClass' class
 
 class GoodClass(AbstractClass):
@@ -38,7 +38,7 @@ class GoodClass(AbstractClass):
     
 
 GoodClass.class_method()
-# => 'Hello world!'
+# -> 'Hello world!'
 
 ```
 
@@ -64,7 +64,7 @@ class AbstractClass:
 
 abstract_instance = AbstractClass()
 abstract_instance.method()
-# => AttributeError: abstract method 'method' has not been overridden for 
+# -> AttributeError: abstract method 'method' has not been overridden for 
 # 'AbstractClass' class
 
 class BadClass(AbstractClass):
@@ -72,7 +72,7 @@ class BadClass(AbstractClass):
 
 bad_instance = BadClass()
 bad_instance.method()
-# => AttributeError: abstract method 'method' has not been overridden for 
+# -> AttributeError: abstract method 'method' has not been overridden for 
 # 'BadClass' class
 
 class GoodClass(AbstractClass):
@@ -82,6 +82,6 @@ class GoodClass(AbstractClass):
 
 good_instance = GoodClass()
 good_instance.method()
-# => 'Hello world!'
+# -> 'Hello world!'
 
 ```

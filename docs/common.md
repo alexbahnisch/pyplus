@@ -15,20 +15,20 @@ Checks if an object can be converted to an integer.
 from pyplus.common import isintlike
 
 isintlike(1)
-# => True
+# -> True
 isintlike(True)
-# => True
+# -> True
 isintlike(1.5)
-# => True
+# -> True
 isintlike("1")
-# => True
+# -> True
 
 isintlike("1.5")
-# => False
+# -> False
 isintlike("one")
-# => False
+# -> False
 isintlike("inf")
-# => False
+# -> False
 ```
 
 ## isintlike(value, include_strings=True)
@@ -48,16 +48,16 @@ Checks if an object is iterable.
 from pyplus.common import isiterable
 
 isiterable((0,))
-# => True
+# -> True
 isiterable([0])
-# => True
+# -> True
 isiterable({"key": "value"})
-# => True
+# -> True
 isiterable("string")
-# => True
+# -> True
 
 isiterable(1)
-# => False
+# -> False
 isiterable("string", include_strings=False)
-# => False
+# -> False
 ```
