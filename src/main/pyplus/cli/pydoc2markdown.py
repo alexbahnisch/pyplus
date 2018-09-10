@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 from argparse import ArgumentParser
 from inspect import getmembers, isclass, isfunction, ismethod, signature
 from os import getcwd
@@ -6,136 +6,191 @@ from os import getcwd
 from pydoc import ErrorDuringImport, safeimport
 from sys import path
 
-MODULE_FORMAT = "# *module* {}"
-CLASS_FORMAT = "## *class* {}"
-FUNCTION_FORMAT = "## *function* {}"
-METHOD_FORMAT = "### *method* {}"
-PARAMETERS_FORMAT = "**Parameters:**"
-RETURN_FORMAT = "**Return:**"
+from pyplus.path import LazyPath
+from pyplus.string import extract_between
 
+MODULE_FORMAT = "# {}"
+CLASS_FORMAT = "## {}"
+FUNCTION_FORMAT = "## {}"
+METHOD_FORMAT = "### {}"
+PARAMETERS_HEADER = "#### arguments"
+RETURN_HEADER = "#### return"
+USAGE_HEADER = "### usage"
+
+DEPRECATED = "@deprecated"
 PARAM = "@param"
 RETURN = "@return"
 
 
-def get_predicate(module_):
+def prettify_line(line):
+    name, line = extract_between(line.strip(), "", ":")
+    type_, line = extract_between(line, "{", "}")
+    rarg = ""
+
+    if name:
+        rarg += " **{}**".format(name)
+
+    if type_:
+        rarg += " *{" + type_ + "}*"
+
+    if line and rarg:
+        rarg += ": "
+
+    if line:
+        rarg += line.strip()
+
+    return "*{}".format(rarg).strip()
+
+
+def get_predicate(mod):
     """
     Creates a predicate function for the inspect.getmembers function.
     The created function will excepts a single arg and returns true if that
     arg is a class, function or method defined within the "module_" module.
-    @param module_: {module or str} python module
+    @param mod: {module or str} python module
     @return: {function} predicate function
-
-    ```python
-    import
-    ```
     """
-    if isinstance(module_, str):
-        module_name = module_
+    if isinstance(mod, str):
+        module_name = mod
     else:
-        module_name = module_.__name__
+        module_name = mod.__name__
 
     def predicate(value):
         return (isclass(value) or isfunction(value) or ismethod(value)) and value.__module__ == module_name
+
     return predicate
 
 
-def member2markdown(name, value, title_format):
+def member2markdown(name, usages, value, title_format):
     """
     Creates the markdown for a member of the modules.
     @param name: {str} name of member
+    @param usages: {dict} value of member
     @param value: {any} value of member
     @param title_format: {str} formatted string for the title of the member
     @return: {list} list of markdown strings
     """
-    output, prefix, params, returns, suffix = [], [], [], [], []
+    output, prefix, params, returns = [], [], [], []
 
     if value.__doc__ is not None:
-        output.append(title_format.format(name))
-        for line in value.__doc__.split("\n"):
-            if PARAM in line:
-                params.append(line.replace(PARAM, "*").strip())
+        previous_was_param = False
+        previous_was_return = False
+        output.append(title_format.format(name) + str(signature(value)))
+        for line in value.__doc__.split("\n")[1:]:
+            line = line.replace("__", "\_\_").strip()
+            if DEPRECATED in line:
+                return []
+            elif PARAM in line:
+                previous_was_param, previous_was_return = True, False
+                params.append(prettify_line(line.replace(PARAM, "")))
             elif RETURN in line:
-                returns.append(line.replace(RETURN, "").strip())
-            elif params or returns:
-                suffix.append(line.strip())
+                previous_was_param, previous_was_return = False, True
+                returns.append(prettify_line(line.replace(RETURN, "")))
+            elif previous_was_param:
+                params.append(line)
+            elif previous_was_return:
+                returns.append(line)
             else:
-                prefix.append(line.strip())
+                prefix.append(line)
 
         if prefix:
             output.extend([pre for pre in prefix])
-            output.append("")
 
         if params:
-            output.append("**Parameters:**")
+            if prefix:
+                output.append("")
+
+            output.append(PARAMETERS_HEADER)
             output.extend(params)
-            output.append("")
 
         if returns:
-            output.append("**Return:**")
-            output.extend(returns)
-            output.append("")
+            if prefix or params:
+                output.append("")
 
-        if suffix:
-            output.extend(suffix)
-            output.append("")
+            output.append(RETURN_HEADER)
+            output.extend(returns)
+
+        if name in usages:
+            output.append(USAGE_HEADER)
+            output.append("```python")
+            with usages[name].read() as usage:
+                for line in usage:
+                    output.append(line.replace("\n", ""))
+            output.append("```")
 
     return output
 
 
-def class2markdown(name, value):
-    class_, methods, output = member2markdown(name, value, CLASS_FORMAT), [], []
+def class2markdown(name, usages, value):
+    cls, methods, output = member2markdown(name, usages, value, CLASS_FORMAT), [], []
 
     for name, value in getmembers(value, get_predicate(value.__module__)):
         if name[0] != "_":
             methods.extend(
-                member2markdown(name, value, METHOD_FORMAT)
+                member2markdown(name, usages, value, METHOD_FORMAT)
             )
 
-    if not class_ and methods:
-        class_.extend(
+    if not cls and methods:
+        cls.extend(
             [CLASS_FORMAT.format(name), ""]
         )
 
-    return [*class_, *methods]
+    return [*cls, *methods]
 
 
-def module2markdown(module_):
-    output = [MODULE_FORMAT.format(module_.__name__)]
+def module2markdown(module_, title, usage_dir):
+    output = []
+    usages = {usage.stem: usage for usage in usage_dir if usage.is_file() and usage.suffix == ".py"}
+
+    if title:
+        output.append(MODULE_FORMAT.format(module_.__name__))
 
     if module_.__doc__:
-        output.append(module_.__doc__)
+        output.extend(module_.__doc__.split("\n")[1:])
 
     for name, value in getmembers(module_, get_predicate(module_)):
         if isfunction(value) and name[0] != "_":
             output.extend(
-                member2markdown(name, value, FUNCTION_FORMAT)
+                member2markdown(name, usages, value, FUNCTION_FORMAT)
             )
         elif isclass(value) and name[0] != "_":
             output.extend(
-                class2markdown(name, value)
+                class2markdown(name, usages, value)
             )
 
-    return "\n".join((str(x) for x in output))
+    return output
 
 
-def pydoc2markdown(module_):
+def pydoc2markdown(**args):
     try:
         path.append(getcwd())
-        module_ = safeimport(module_)
-        if module_ is None:
-            print("{} module not found".format(module_))
+        mod = safeimport(args["module"])
+        if mod is None:
+            print("{} module not found".format(mod))
 
-        print(module2markdown(module_))
+        markdown = module2markdown(mod, args["title"], args["usage_dir"])
+
+        if args["output"]:
+            with args["output"].write() as output:
+                for line in markdown:
+                    output.write(line)
+                    output.write("\n")
+        else:
+            for line in markdown:
+                print(line)
+
     except ErrorDuringImport:
-        print("Error while importing {}".format(module_))
+        print("Error while importing {}".format(args["module"]))
 
 
 def main():
     parser = ArgumentParser(description="Convert python (pycharm Epytext) docstrings to markdown")
     parser.add_argument("module", type=str)
-    parser.add_argument("-t", "--title", type=str)
+    parser.add_argument("-o", "--output", type=LazyPath)
+    parser.add_argument("-t", "--title", default=False, type=bool)
+    parser.add_argument("-u", "--usage-dir", type=LazyPath)
     args, _ = parser.parse_known_args()
-    pydoc2markdown(args.module)
+    pydoc2markdown(**vars(args))
 
 
 if __name__ == "__main__":

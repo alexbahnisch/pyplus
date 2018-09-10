@@ -27,7 +27,6 @@ pages:
     - path: "path.md"
     - string: "string.md"
     - table: "table.md"
-    - temp: "temp.md"
 
 theme:
   name: "material"

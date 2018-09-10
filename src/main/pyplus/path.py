@@ -23,6 +23,9 @@ class LazyPath(_Path):
         else:
             raise NotImplementedError("cannot instantiate %r on your system" % (cls.__name__,))
 
+    def __iter__(self):
+        return iter(self.glob("**/*"))
+
     @classmethod
     def make_dir(cls, dir):
         if _ispathlike(dir):

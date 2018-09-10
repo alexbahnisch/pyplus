@@ -43,6 +43,27 @@ def camel_case(string, title=True):
     return string
 
 
+def extract_between(string, start=None, end=None):
+    if start is None:
+        start_index = 0
+    else:
+        start_index = string.find(start)
+        start_index = start_index + len(start) if start_index >= 0 else 0
+
+    if end is None:
+        end_index = len(string)
+        end_start_index = end_index
+    else:
+        end_index = string.find(end)
+        if end_index >= 0:
+            end_start_index = end_index + len(end)
+        else:
+            end_index = 0
+            end_start_index = 0
+
+    return string[start_index:end_index], string[end_start_index:len(string)]
+
+
 @_parser
 def kebab_case(string):
     string = _base_case(string)

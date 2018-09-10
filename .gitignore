@@ -11,7 +11,7 @@ dist
 site
 
 # docs:
-docs/index.md
+docs/*.md
 
 # wildcards:
 !**.gitkeep

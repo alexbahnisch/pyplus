@@ -14,8 +14,8 @@ from .table import list2table as _list2table, table2list as _table2list
 class DataObjectMixin:
     """
     A mixin to create data driven objects that can be easily serialized and deserialized.
-    If used as super class, subclass must override '__HEADER__' attribute with a list of strings that represent an
-    ordered dict key to '__init__' arg mapping.
+    If used as super class, subclass must override '\_\_HEADER\_\_' attribute with a list of strings that represent an
+    ordered dict key to '\_\_init\_\_' arg mapping.
     """
     __HEADERS__ = []
 

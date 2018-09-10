@@ -1,16 +1,15 @@
-A collection of common helper functions to check if an object has characteristics of other objects.
+A collection of common helper functions.
 
 ## isintlike(value)
-
 Checks if an object can be converted to an integer.
 
 #### arguments
 * **value** *{object}*: The value to check.
 
-#### returns
+#### return
 * *{bool}*: Returns if value can be converted to an integer.
 
-### usages
+### usage
 ```python
 from pyplus.common import isintlike
 
@@ -30,20 +29,17 @@ isintlike("one")
 isintlike("inf")
 # -> False
 ```
-
-## isintlike(value, include_strings=True)
-
+## isiterable(value, include_strings=True)
 Checks if an object is iterable.
 
 #### arguments
-* `value {object}`: The object to check.
-* `include_strings {bool}`: Include strings as an iterable type.
+* **value** *{object}*: The value to check.
+* **include_strings** *{bool}*: Include strings as an iterable type.
 
-#### returns
-* `{bool}`: Returns if value can be iterated.
+#### return
+* *{bool}*: Returns if value can be iterated.
 
-### usages
-
+### usage
 ```python
 from pyplus.common import isiterable
 
@@ -61,3 +57,72 @@ isiterable(1)
 isiterable("string", include_strings=False)
 # -> False
 ```
+## islistlike(value)
+Checks if an object has list like properties, i.e has a length, is iterable, can get and set items.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## ismappable(value)
+Checks if an object is mappable, i.e can be passed into a 'dict' constructor.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## isnumber(value)
+Checks if an object is a number, excludes booleans.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## ispair(value)
+Checks if an object is a pair, i.e is iterable and has a length of 2.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## ispathlike(value)
+Checks if an object has path like properties, i.e. is an instance of a string or pathlib.Path.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## issequence(value)
+Checks if an object has a length and is iterable.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## istuplike(value)
+Checks if an object has tuple like properties, i.e has a length, is iterable and can get items.
+
+#### arguments
+* **value** *{object}*: The value to check.
+
+#### return
+* *{bool}*
+
+## iswindows()
+Checks if the current operating system is windows.
+
+#### return
+* *{bool}*
+
