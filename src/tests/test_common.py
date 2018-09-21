@@ -11,6 +11,7 @@ INT = 1
 LIST = [1, 2, 3, 4, 5]
 MAPPABLE = [("1", 1), ("2", 2), ("3", 3), ("4", 4), ("5", 5)]
 OBJECT = object()
+PATH = LazyPath()
 SET = {1, 2, 3, 4, 5}
 STRING = "string"
 B_STRING = b"string"
@@ -85,6 +86,7 @@ def test_isintlike():
     assert isintlike(FLOAT)
     assert isintlike(INT)
     assert isintlike(IsIntLike())
+    assert isintlike(True)
 
 
 def test_isintlike_not():
@@ -114,6 +116,7 @@ def test_isiterable_not():
     assert not isiterable(INT)
     assert not isiterable(None)
     assert not isiterable(OBJECT)
+    assert not isiterable(True)
 
 
 def test_islistlike():
@@ -133,6 +136,7 @@ def test_islistlike_not():
     assert not islistlike(STRING)
     assert not islistlike(B_STRING)
     assert not islistlike(U_STRING)
+    assert not islistlike(True)
     assert not islistlike(TUPLE)
 
 
@@ -152,6 +156,7 @@ def test_isnumber_not():
     assert not isnumber(STRING)
     assert not isnumber(B_STRING)
     assert not isnumber(U_STRING)
+    assert not isnumber(True)
     assert not isnumber(TUPLE)
 
 
@@ -175,6 +180,7 @@ def test_ispair_not():
     assert not ispair(STRING)
     assert not ispair(B_STRING)
     assert not ispair(U_STRING)
+    assert not ispair(True)
     assert not ispair(TUPLE)
 
 
@@ -194,6 +200,7 @@ def test_ismappable_not():
     assert not ismappable(STRING)
     assert not ismappable(B_STRING)
     assert not ismappable(U_STRING)
+    assert not ismappable(True)
     assert not ismappable(TUPLE)
 
 
@@ -201,18 +208,18 @@ def test_ispathlike():
     assert ispathlike(STRING)
     assert ispathlike(B_STRING)
     assert ispathlike(U_STRING)
-    assert ispathlike(LazyPath())
+    assert ispathlike(PATH)
 
 
 def test_ispathlike_not():
     assert not ispathlike(DICT)
-    assert not ispathlike(False)
     assert not ispathlike(LIST)
     assert not ispathlike(None)
     assert not ispathlike(MAPPABLE)
     assert not ispathlike(OBJECT)
     assert not ispathlike(SET)
     assert not ispathlike(TUPLE)
+    assert not ispathlike(True)
 
 
 def test_issequence():
@@ -234,6 +241,27 @@ def test_issequence_not():
     assert not issequence(INT)
     assert not issequence(None)
     assert not issequence(OBJECT)
+    assert not issequence(True)
+
+
+def test_isstring():
+    assert isstring(STRING)
+    assert isstring(B_STRING)
+    assert isstring(U_STRING)
+
+
+def test_isstring_not():
+    assert not isstring(False)
+    assert not isstring(DECIMAL)
+    assert not isstring(DICT)
+    assert not isstring(FLOAT)
+    assert not isstring(INT)
+    assert not isstring(LIST)
+    assert not isstring(MAPPABLE)
+    assert not isstring(OBJECT)
+    assert not isstring(PATH)
+    assert not isstring(True)
+    assert not isstring(TUPLE)
 
 
 def test_istuplike():
@@ -254,6 +282,7 @@ def test_istuplike_not():
     assert not istuplike(INT)
     assert not istuplike(None)
     assert not istuplike(OBJECT)
+    assert not istuplike(True)
 
 
 def test_iterable():
@@ -268,3 +297,4 @@ def test_iterable():
     assert [FLOAT] == iterable(FLOAT)
     assert [INT] == iterable(INT)
     assert [None] == iterable(None)
+    assert [True] == iterable(True)
