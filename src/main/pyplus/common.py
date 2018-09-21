@@ -29,7 +29,7 @@ def isiterable(value, include_strings=True):
     if include_strings:
         return hasattr(value, "__iter__")
     else:
-        return not isinstance(value, str) and hasattr(value, "__iter__")
+        return not isstring(value) and hasattr(value, "__iter__")
 
 
 def islistlike(value):
@@ -84,6 +84,15 @@ def issequence(value):
     @return {bool} Returns true if an object is a sequence.
     """
     return hasattr(value, "__len__") and isiterable(value)
+
+
+def isstring(value):
+    """
+    Checks if an object is either a byte or unicode string.
+    @param value: {object} The object to check.
+    @return {bool} Returns true if an object is a string.
+    """
+    return isinstance(value, (bytes, str))
 
 
 def istuplike(value):
