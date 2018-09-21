@@ -19,11 +19,6 @@ UNDERSCORE = _compile(r"_")
 UNDERSCORES = _compile(r"(_)\1+")
 
 
-@_spliter
-def alias2keys(alias):
-    return [_parse(key, errors=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
-
-
 def _base_case(string):
     string = REPLACEABLE_WITH_UNDERSCORE.sub(r"_", string)
     string = INVALID_CHARS.sub(r"", string)
@@ -31,8 +26,23 @@ def _base_case(string):
     return CAMEL_CASE_SPACE2.sub(r"\1_\2", string)
 
 
+@_spliter
+def alias2keys(alias):
+    """
+    Splits an alias into a list of keys.
+    @param alias: {string} An alias (e.g. 'key0.key1.key2').
+    @return: {list} Returns a list of string keys.
+    """
+    return [_parse(key, errors=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
+
+
 @_parser
 def camel_case(string, title=True):
+    """
+    @param string:
+    @param title:
+    @return:
+    """
     string = _base_case(string)
     string = UNDERSCORE.sub(r" ", string)
     string = CAPITALS.sub(r"\1 \2", string).title()

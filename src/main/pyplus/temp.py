@@ -38,6 +38,9 @@ class _LazyTempMixin:
 
 # noinspection PyShadowingBuiltins
 class LazyTempDir(_LazyTempMixin):
+    """
+    @deprecated Will be removed next minor.
+    """
 
     def __init__(self, dir=None, prefix=None, suffix=None):
         self.__PATH__.make_dir(dir)
@@ -50,6 +53,9 @@ class LazyTempDir(_LazyTempMixin):
 
 # noinspection PyShadowingBuiltins
 class LazyTempFile(_LazyTempMixin):
+    """
+    @deprecated Will be removed next minor.
+    """
 
     def __init__(self, dir=None, prefix=None, suffix=None, text=True):
         self.__PATH__.make_dir(dir)

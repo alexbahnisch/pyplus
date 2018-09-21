@@ -77,7 +77,7 @@ def member2markdown(name, usages, value, title_format):
         previous_was_return = False
         output.append(title_format.format(name) + str(signature(value)))
         for line in value.__doc__.split("\n")[1:]:
-            line = line.replace("__", "\_\_").strip()
+            line = line.replace("\_", "\_").strip()
             if DEPRECATED in line:
                 return []
             elif PARAM in line:
