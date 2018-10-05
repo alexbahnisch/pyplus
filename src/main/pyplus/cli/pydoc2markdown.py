@@ -7,7 +7,7 @@ from pydoc import ErrorDuringImport, safeimport
 from sys import path
 
 from pyplus.path import LazyPath
-from pyplus.string import extract_between
+from pyplus.string import extract_between, snake_case
 
 MODULE_FORMAT = "# {}"
 CLASS_FORMAT = "## {}"
@@ -20,6 +20,12 @@ USAGE_HEADER = "### usage"
 DEPRECATED = "@deprecated"
 PARAM = "@param"
 RETURN = "@return"
+
+SPECIAL = {
+    "__call__": lambda name: snake_case(name),
+    "__init__": lambda name: name,
+    "__new__": lambda name: "new {}".format(name)
+}
 
 
 def prettify_line(line):
@@ -75,9 +81,9 @@ def member2markdown(name, usages, value, title_format):
     if value.__doc__ is not None:
         previous_was_param = False
         previous_was_return = False
-        output.append(title_format.format(name) + str(signature(value)))
+        output.append(title_format.format(name) + str(signature(value)).replace("cls, ", "").replace("self, ", ""))
         for line in value.__doc__.split("\n")[1:]:
-            line = line.replace("\_", "\_").strip()
+            line = line.strip()
             if DEPRECATED in line:
                 return []
             elif PARAM in line:
@@ -121,8 +127,8 @@ def member2markdown(name, usages, value, title_format):
     return output
 
 
-def class2markdown(name, usages, value):
-    cls, methods, output = member2markdown(name, usages, value, CLASS_FORMAT), [], []
+def class2markdown(cls_name, usages, value):
+    cls, methods, output = member2markdown(cls_name, usages, value, CLASS_FORMAT), [], []
 
     for name, value in getmembers(value, get_predicate(value.__module__)):
         if name[0] != "_":
@@ -130,9 +136,14 @@ def class2markdown(name, usages, value):
                 member2markdown(name, usages, value, METHOD_FORMAT)
             )
 
+        if name in SPECIAL:
+            methods.extend(
+                member2markdown(SPECIAL[name](cls_name), usages, value, METHOD_FORMAT)
+            )
+
     if not cls and methods:
         cls.extend(
-            [CLASS_FORMAT.format(name), ""]
+            [CLASS_FORMAT.format(cls_name), ""]
         )
 
     return [*cls, *methods]

@@ -79,7 +79,7 @@ class DataObjectMixin:
 class DataObjectsMixin(_LazyObjects):
     """
     A mixin to create a container of data driven objects that can be easily serialized and deserialized.
-    If used as super class, subclass must override '__CLASS__' attribute with a subclass of DataObjectMixin.
+    If used as super class, subclass must override '\_\_CLASS\_\_' attribute with a subclass of DataObjectMixin.
     """
     __CLASS__ = DataObjectMixin
 
@@ -118,7 +118,7 @@ class DataObjectsMixin(_LazyObjects):
     @classmethod
     def from_txt_file(cls, path):
         """
-        Deserialize object from a text file, from_line of '__CLASS__' needs to be overridden.
+        Deserialize object from a text file, from_line of '\_\_CLASS\_\_' needs to be overridden.
         @param path: {sting or pathlib.Path}
         @return: {pyplus.data.DataObjectsMixin}
         """
@@ -142,7 +142,7 @@ class DataObjectsMixin(_LazyObjects):
 
     def to_txt_file(self, path):
         """
-        Serialize object to a text file, to_line of '__CLASS__' needs to be overridden.
+        Serialize object to a text file, to_line of '\_\_CLASS\_\_' needs to be overridden.
         @param path: {sting or pathlib.Path}
         """
         if _ispathlike(path):
@@ -156,7 +156,7 @@ class DataObjectsMixin(_LazyObjects):
 def dataobject(*headers):
     """
     Class decorator to mixin DataObjectMixin to class.
-    @param headers: {string[]} list of strings that represent an ordered dict key to '__init__' arg mapping.
+    @param headers: {string[]} list of strings that represent an ordered dict key to '\_\_init\_\_' arg mapping.
     @return: {function} decorator that will create a subclass of the decorated class and DataObjectMixin
     """
     if all(isinstance(header, str) for header in headers):
