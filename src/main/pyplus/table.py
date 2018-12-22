@@ -37,6 +37,14 @@ def _table2list_without_headers(csv_reader, parser):
 
 
 def table2list(path, headers=True, parse=True, delimiter=","):
+    """
+    Read data from a delimited txt file to an pyplus.json.Array (subclass of list) of pyplus.json.Objects (subclass of dict).
+    @param path: {string or path} Path of delimited text file to read from.
+    @param headers: {bool} Does table have headers, if true, the object keys will be the column headers, if false, the object keys will be the row column index.
+    @param parse: {bool or (value: string) -> any} Should the values be parsed, or supply a parser function to parse all values.
+    @param delimiter: {string} Delimiter to separate values by.
+    @return: {pyplus.json.Array}
+    """
     path, parser = _LazyPath(path), _create_parser(parse)
 
     with path.read() as read_file:
@@ -61,14 +69,21 @@ def _list2table(list_):
     return keys, rows
 
 
-def list2table(path, list_, headers=True, delimiter=","):
+def list2table(path, array, headers=True, delimiter=","):
+    """
+    Write data from a list of dictionaries to a delimited txt file.
+    @param path: {string or path} Path of delimited text file to read from.
+    @param array: {list} List of dictionaries to write to file.
+    @param headers: {bool} Include dictionary keys as column headers.
+    @param delimiter: {string} Delimiter to separate values by.
+    """
     path = _LazyPath(path)
 
     with path.write() as write_file:
         csv_writer = _writer(write_file, delimiter=delimiter, lineterminator="\n")
 
-        if len(list_) > 0:
-            keys, rows = _list2table(list_)
+        if len(array) > 0:
+            keys, rows = _list2table(array)
 
             if headers:
                 csv_writer.writerow(keys)
