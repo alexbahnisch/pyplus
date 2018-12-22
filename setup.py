@@ -58,7 +58,7 @@ setup(
     keywords="collection extensions plus python",
     packages=find_packages("src/main"),
     package_dir={"": "src/main"},
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     extras_require={
         "appveyor": appveyor,
         "develop": dist + docs + test,
