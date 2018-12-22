@@ -3,18 +3,18 @@
 ifeq ($(shell uname -o), Msys)
 MKDOCS = .venv/Scripts/mkdocs
 PYTHON_ROOT = python
-PYTHON = .venv/Scripts/python
-PIP = .venv/Scripts/pip
+PYTHON_LOCAL = .venv/Scripts/python
+PIP_LOCAL = .venv/Scripts/pip
 else ifeq ($(shell uname -o), MinGW)
 MKDOCS = .venv/Scripts/mkdocs
 PYTHON_ROOT = python
-PYTHON = .venv/Scripts/python
-PIP = .venv/Scripts/pip
+PYTHON_LOCAL = .venv/Scripts/python
+PIP_LOCAL = .venv/Scripts/pip
 else
 MKDOCS = .venv/bin/mkdocs
 PYTHON_ROOT = python3
-PYTHON = .venv/bin/python
-PIP = .venv/bin/pip
+PYTHON_LOCAL = .venv/bin/python
+PIP_LOCAL = .venv/bin/pip
 endif
 
 .PHONY: default
@@ -71,17 +71,17 @@ docs-serve: docs-make
 ## Initialise local virtual environment
 init:
 	$(PYTHON_ROOT) -m venv .venv
-	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON_LOCAL) -m pip install --upgrade pip
 
 .PHONY: install
 ## Install this package and all develop dependencies to locally virtual environment in development mode
 install:
-	$(PIP) install -e .[develop]
+	$(PIP_LOCAL) install -e .[develop]
 
 .PHONY: test
 ## Run tests virtual environment
 test:
-	$(PYTHON) setup.py test
+	$(PYTHON_LOCAL) setup.py test
 
 .PHONY: tox
 ## Run tests in tox on all target environments
@@ -91,7 +91,7 @@ tox:
 .PHONY: uninstall
 ## Uninstall this package from local virtual environment
 uninstall:
-	$(PIP) uninstall pyplus[develop]
+	$(PIP_LOCAL) uninstall pyplus[develop]
 
 ################################ HELPER TARGETS - DO NOT EDIT #############################
 ## `help` target will show description of each target
