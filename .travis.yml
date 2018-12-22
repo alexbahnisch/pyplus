@@ -1,8 +1,6 @@
 dist: xenial
 
-os:
-  - linux
-  - osx
+os: linux
 
 language: python
 
@@ -12,12 +10,12 @@ python:
 
 matrix:
   include:
-  - os: osx
-    language: generic
-    env: PYTHON=3.6.7
-  - os: osx
-    language: generic
-    env: PYTHON=3.7.1
+    - os: osx
+      language: generic
+      env: PYTHON=3.6.7
+    - os: osx
+      language: generic
+      env: PYTHON=3.7.1
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
