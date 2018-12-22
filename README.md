@@ -33,23 +33,10 @@ For more detailed documentation and usages, please visit [https://alexbahnisch.g
 
 ### Development
 
-To setup the `pyplus` project for development, follow these steps from the root of the project:
+A local development environment can be setup, ran and tested using `make`, to view the make targets run:
 
 ```bash
-$ make venv
-$ make install
-```
-
-Then to run the tests:
-
-```bash
-$ make test
-```
-
-Or to run test for multiple python version with tox, run:
-
-```bash
-$ make tox
+$ make
 ```
 
 ### Nomenclature
