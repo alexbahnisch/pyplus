@@ -19,6 +19,11 @@ class _JsonMixin(object):
         pass
 
     def extract(self, alias):
+        """
+        Extract value from json array/object
+        @param alias: {string} The alias/path of the property to get.
+        @return: {object} Returns the resolved value, will be return 'None' if alias does not exist in object.
+        """
         rarg, alias = self, _alias2keys(alias)
 
         for key in alias:
@@ -35,9 +40,21 @@ class _JsonMixin(object):
             self[index] = _deepcopy(item)
 
     def serialize(self, indent=2, sort_keys=True):
+        """
+        Serialize json array/object into a string.
+        @param indent: {int} Indent level for new lines.
+        @param sort_keys: {bool} Sort keys alphabetically before serializing.
+        @return: {string} Serialized string.
+        """
         return _dumps(self, indent=indent, sort_keys=sort_keys)
 
     def to_file(self, path, indent=2, sort_keys=True):
+        """
+        Serialize json array/object and write to a text file.
+        @param path: {string or path} Output path to write serialized text to.
+        @param indent: {int} Indent level for new lines.
+        @param sort_keys: {bool} Sort keys alphabetically before serializing.
+        """
         with _LazyPath(str(path)).write() as tmp_file:
             _dump(self, tmp_file, indent=indent, sort_keys=sort_keys)
 

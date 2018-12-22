@@ -45,6 +45,13 @@ def parser(method):
 
 @decorator
 def spliter(method):
+    """
+    Decorator for a string splitting function.
+    Raises 'TypeError' if the first and only positional arg is not a string.
+    Also guarantees if items in the return value list are strings, they are the same string as the input arg, i.e. byte or unicode.
+    @param method: {function} Spliter function, contains one positional arg and any number of keyword args.
+    @return: {function} Wrapped splitter function.
+    """
     @_wraps(method)
     def wrapped(string, **kwargs):
         if string is None:
@@ -64,6 +71,9 @@ def spliter(method):
 
 
 class Timer:
+    """
+
+    """
     def __init__(self, logger=print, disabled=False):
         self.__disabled = bool(disabled)
         self.__level = 0

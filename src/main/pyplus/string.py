@@ -39,9 +39,10 @@ def alias2keys(alias):
 @_parser
 def camel_case(string, title=True):
     """
-    @param string:
-    @param title:
-    @return:
+    Convert string to 'camelCase'.
+    @param string: {string} The string to convert.
+    @param title: {bool} Return 'PascalCase' instead of camelcase
+    @return: {string} Returns the 'camelCased' string.
     """
     string = _base_case(string)
     string = UNDERSCORE.sub(r" ", string)
@@ -76,6 +77,11 @@ def extract_between(string, start=None, end=None):
 
 @_parser
 def kebab_case(string):
+    """
+    Convert string to 'kebab-case'.
+    @param string: {string} The string to convert.
+    @return: {string} Returns the 'kebab-case' string.
+    """
     string = _base_case(string)
     string = UNDERSCORES.sub(r"_", string)
     string = UNDERSCORE.sub(r"-", string)
@@ -84,6 +90,11 @@ def kebab_case(string):
 
 @_parser
 def snake_case(string):
+    """
+    Convert string to 'snake_case'.
+    @param string: {string} The string to convert.
+    @return: {string} Returns the 'snake_case' string.
+    """
     string = _base_case(string)
     string = UNDERSCORES.sub(r"_", string)
     return INVALID_LEAD.sub(r"", string).lower()
@@ -91,6 +102,11 @@ def snake_case(string):
 
 @_parser
 def title_case(string):
+    """
+    Convert string to 'Title Case'.
+    @param string: {string} The string to convert.
+    @return: {string} Returns the 'Title Case' string.
+    """
     string = _base_case(string)
     string = UNDERSCORE.sub(r" ", string)
     string = CAPITALS.sub(r"\1 \2", string).title()
