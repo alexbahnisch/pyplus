@@ -81,7 +81,8 @@ def member2markdown(name, usages, value, title_format):
     if value.__doc__ is not None:
         previous_was_param = False
         previous_was_return = False
-        output.append(title_format.format(name) + str(signature(value)).replace("cls, ", "").replace("self, ", ""))
+        # output.append(title_format.format(name) + str(signature(value)).replace("cls, ", "").replace("self, ", ""))
+        output.append(title_format.format(name))
         for line in value.__doc__.split("\n")[1:]:
             line = line.strip()
             if DEPRECATED in line:

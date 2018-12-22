@@ -12,6 +12,7 @@ dist = [
     "m2r>=0.2,<0.3"
 ]
 docs = [
+    "Markdown>=3.0.1,<4",
     "mkdocs>=1.0.3,<2",
     "mkdocs-material>=3.0.4,<4"
 ]
@@ -25,7 +26,7 @@ travis = [
     "tox-travis>=0.10<1"
 ]
 
-if any(arg in argv for arg in ["sdist", "bdist_wheel"]):
+if any(arg in argv for arg in ["sdist", "bmake installdist_wheel"]):
     try:
         # noinspection PyPackageRequirements
         from m2r import convert

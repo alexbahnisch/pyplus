@@ -31,10 +31,28 @@ def _base_case(string):
 def alias2keys(alias):
     """
     Splits an alias into a list of keys.
-    @param alias: {string} An alias (e.g. 'key0.key1.key2').
+    @param alias: {string} An alias/path (e.g. 'key0.key1.key2').
     @return: {list} Returns a list of string keys.
     """
     return [_parse(key, errors=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
+
+
+@_parser
+def camel_case(string, title=True):
+    """
+    Convert string to 'camelCase'.
+    @param string: {string} The string to convert.
+    @param title: {bool} Return 'PascalCase' instead of camelcase
+    @return: {string} Returns the 'camelCased' string.
+    """
+    string = _base_case(string)
+    string = UNDERSCORE.sub(r" ", string)
+    string = CAPITALS.sub(r"\1 \2", string).title()
+    string = SPACE.sub(r"", string)
+    string = INVALID_LEAD.sub(r"", string)
+    if not title:
+        string = string[0].lower() + string[1:]
+    return string
 
 
 def extract_between(string, start=None, end=None):
@@ -63,25 +81,7 @@ def extract_between(string, start=None, end=None):
             end_index = 0
 
     value = string[start_index:end_index]
-    return value, string.replace(start or "", "").replace(end or "", "").replace(value, "")
-
-
-@_parser
-def camel_case(string, title=True):
-    """
-    Convert string to 'camelCase'.
-    @param string: {string} The string to convert.
-    @param title: {bool} Return 'PascalCase' instead of camelcase
-    @return: {string} Returns the 'camelCased' string.
-    """
-    string = _base_case(string)
-    string = UNDERSCORE.sub(r" ", string)
-    string = CAPITALS.sub(r"\1 \2", string).title()
-    string = SPACE.sub(r"", string)
-    string = INVALID_LEAD.sub(r"", string)
-    if not title:
-        string = string[0].lower() + string[1:]
-    return string
+    return value, string.replace((start or "") + value + (end or ""), "")
 
 
 @_parser

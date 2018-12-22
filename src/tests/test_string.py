@@ -85,43 +85,43 @@ def test_camel_case_lower_unicode():
 
 
 def test_extract_between():
-    line = "@param name: {bool} Description."
+    line = "@param name: {bool} Description of bool."
     value, line = extract_between(line, "{", "}")
 
-    assert line == "@param name:  Description."
+    assert line == "@param name:  Description of bool."
     assert value == "bool"
 
 
 def test_extract_before():
-    line = "@param name: {bool} Description."
+    line = "@param name: {bool} Description of bool."
     value, line = extract_between(line, None, ":")
 
-    assert line == " {bool} Description."
+    assert line == " {bool} Description of bool."
     assert value == "@param name"
 
 
 def test_extract_after():
-    line = "@param name: {bool} Description."
+    line = "@param name: {bool} Description of bool."
     value, line = extract_between(line, ":", None)
 
     assert line == "@param name"
-    assert value == " {bool} Description."
+    assert value == " {bool} Description of bool."
 
 
 def test_extract_none():
-    line = "@param name: {bool} Description."
+    line = "@param name: {bool} Description of bool."
     value, line = extract_between(line, "1", "2")
 
-    assert line == "@param name: {bool} Description."
+    assert line == "@param name: {bool} Description of bool."
     assert value == ""
 
 
 def test_extract_all():
-    line = "@param name: {bool} Description."
+    line = "@param name: {bool} Description of bool."
     value, line = extract_between(line)
 
     assert line == ""
-    assert value == "@param name: {bool} Description."
+    assert value == "@param name: {bool} Description of bool."
 
 
 def test_extract_exception():

@@ -85,7 +85,7 @@ class DataObjectsMixin(_LazyObjects):
 
     def __init__(self, iterable=None):
         """
-        @param iterable: {*DataObjectMixin} A iterable collection of DataObjectMixin instances.
+        @param iterable: {DataObjectMixin} A iterable collection of DataObjectMixin instances.
         """
         super().__init__(iterable)
         self._init()
