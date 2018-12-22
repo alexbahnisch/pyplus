@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pyplus.string import alias2keys, camel_case, kebab_case, snake_case, title_case
+from pyplus.string import alias2keys, extract_between, camel_case, kebab_case, snake_case, title_case
 from pytest import raises
 
 STRINGS = [
@@ -82,6 +82,53 @@ def test_camel_case_lower_bytes():
 def test_camel_case_lower_unicode():
     for string in U_STRINGS:
         assert u"testCase" == camel_case(string, title=False)
+
+
+def test_extract_between():
+    line = "@param name: {bool} Description."
+    value, line = extract_between(line, "{", "}")
+
+    assert line == "@param name:  Description."
+    assert value == "bool"
+
+
+def test_extract_before():
+    line = "@param name: {bool} Description."
+    value, line = extract_between(line, None, ":")
+
+    assert line == " {bool} Description."
+    assert value == "@param name"
+
+
+def test_extract_after():
+    line = "@param name: {bool} Description."
+    value, line = extract_between(line, ":", None)
+
+    assert line == "@param name"
+    assert value == " {bool} Description."
+
+
+def test_extract_none():
+    line = "@param name: {bool} Description."
+    value, line = extract_between(line, "1", "2")
+
+    assert line == "@param name: {bool} Description."
+    assert value == ""
+
+
+def test_extract_all():
+    line = "@param name: {bool} Description."
+    value, line = extract_between(line)
+
+    assert line == ""
+    assert value == "@param name: {bool} Description."
+
+
+def test_extract_exception():
+    line = "123456789"
+
+    with raises(TypeError, message="'string' args must be a string and 'start' and 'end' kwargs be strings or None"):
+        extract_between(line, 2, 8)
 
 
 def test_kebab_case():

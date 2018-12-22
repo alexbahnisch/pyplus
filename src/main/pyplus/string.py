@@ -3,6 +3,7 @@ A collection of string helper functions.
 """
 from re import compile as _compile
 
+from .common import isstring as _isstring
 from .decorators import parser as _parser, spliter as _spliter
 from .parse import parse as _parse
 
@@ -36,6 +37,35 @@ def alias2keys(alias):
     return [_parse(key, errors=False) for key in filter(None, ALIAS_SPLIT.split(alias))]
 
 
+def extract_between(string, start=None, end=None):
+    """
+    Extracts text between the first instances of 'start' and 'end', returns the remaining string and the extracted text
+    @param string: {string} String to extract text between.
+    @param start: {string} Extract text after this value, if 'None' extract all text from and including the start of the string.
+    @param end: {string} Extract text before this value, if 'None' extract all text up to and including the end of the string.
+    @return: {string} Extracted string.
+    @return: {string} Remaining text from the input 'string'.
+    """
+    if not all([_isstring(string), _isstring(start) or start is None, _isstring(end) or end is None]):
+        raise TypeError("'string' args must be a string and 'start' and 'end' kwargs be strings or None")
+
+    if start is None:
+        start_index = 0
+    else:
+        start_index = string.find(start)
+        start_index = start_index + len(start) if start_index >= 0 else 0
+
+    if end is None:
+        end_index = len(string)
+    else:
+        end_index = string.find(end)
+        if end_index < 0:
+            end_index = 0
+
+    value = string[start_index:end_index]
+    return value, string.replace(start or "", "").replace(end or "", "").replace(value, "")
+
+
 @_parser
 def camel_case(string, title=True):
     """
@@ -52,27 +82,6 @@ def camel_case(string, title=True):
     if not title:
         string = string[0].lower() + string[1:]
     return string
-
-
-def extract_between(string, start=None, end=None):
-    if start is None:
-        start_index = 0
-    else:
-        start_index = string.find(start)
-        start_index = start_index + len(start) if start_index >= 0 else 0
-
-    if end is None:
-        end_index = len(string)
-        end_start_index = end_index
-    else:
-        end_index = string.find(end)
-        if end_index >= 0:
-            end_start_index = end_index + len(end)
-        else:
-            end_index = 0
-            end_start_index = 0
-
-    return string[start_index:end_index], string[end_start_index:len(string)]
 
 
 @_parser
