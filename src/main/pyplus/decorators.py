@@ -72,21 +72,36 @@ def spliter(method):
 
 class Timer:
     """
-
+    Timer objects that can be used as decorators for functions which will log the start time, end time and duration of a function call.
     """
     def __init__(self, logger=print, disabled=False):
+        """
+        @param logger: {(arg: string) -> void} Function used to log timer information, by default it is 'print' so all information will go to std out.
+        @param disabled: {bool} Is the initiated instance currently disabled.
+        """
         self.__disabled = bool(disabled)
         self.__level = 0
         self.__logger = logger
 
     def disable(self):
+        """
+        Disable the timer.
+        """
         self.__disabled = True
 
     def enable(self):
+        """
+        Enable the timer.
+        """
         self.__disabled = False
 
     @decorator
     def __call__(self, method):
+        """
+        Decorates a function with basic timer logging, which will log the function call duration on completion.
+        @param method: {function} Function/method to decorate with basic timer functionality.
+        @return: {function} Wrapped function/method.
+        """
         if self.__disabled:
             return method
 
@@ -102,6 +117,12 @@ class Timer:
 
     @decorator
     def plus(self, method):
+        """
+        Decorates a function with more advanced timer logging, which will log the start and end times, the function call duration on completion
+        and will indent logs in relation to function scope.
+        @param method: {function} Function/method to decorate with advanced timer functionality.
+        @return: {function} Wrapped function/method.
+        """
         if self.__disabled:
             return method
 
